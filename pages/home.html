@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Empregos CG</title>
+    <link rel="stylesheet" href="../public/slick/slick.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container-site row">
+            <div class="logo col-md-3">
+                <img class="ml-4" src="/public/images/img-logo.png">
+                <p>Empregos CG</p>
+            </div>
+    
+            <nav class="menu-desktop col-md-9 text-right">
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Vagas</a></li>
+                    <li><a href="#">Contato</a></li>
+                    <li><a href="#">Quem Somos</a></li>
+                </ul>
+            </nav><!-- menu-desktop -->
+        </div><!-- container-site -->
+    </header>
+
+    <section class="apresentacao">
+        <div class="container-site d-md-flex">
+            <div class="frase-apresentacao">
+                <h1>Conectando candidatos a emprego e empregadores em Campina Grande</h1>
+                <p>Empregos CG é uma plataforma de busca de emprego projetada para ajudá-lo a 
+                    encontrar a vaga que procura. Com nosso mecanismo que permite busca e visualização
+                    dessas vagas, conectamos quem procura emprego com os principais empregadores de Campina Grande.
+                </p>
+            </div><!-- frase-apresentacao -->
+
+            <div class="img-apresentacao">
+                <img src="/public/images/img_aperto_de_maos.jpg">
+            </div><!-- imagem-apresentacao -->
+        </div><!-- container site -->
+        
+    </section><!-- apresentacao -->
+
+    <section class="vagas">
+        <div class="container">
+            <h3 class="text-center pl-2 pr-2 mt-5">Confira as vagas mais recentes disponíveis:</h3>
+
+            <div class="row mt-5">
+                <div class="filtro-tipo-vaga col-md-6 text-left">
+                    <p class="d-md-inline-block">Filtrar por tipo de vaga:</p>
+                    <select id="filtro-vaga" name="filtro-vaga">
+                        <option>Geral</option>
+                        <option>Recepcionista</option>
+                        <option>Recepcionista</option>
+                    </select>
+                </div><!-- filtro-tipo-vaga -->
+    
+                <div class="search-vaga col-md-6 text-right pr-2">
+                    <p class="d-md-inline-block">Buscar uma vaga específica:</p>
+                    <div class="form-busca">
+                        <form action="/">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            <input name="buscar-vaga" id="buscar-vaga" type="text" placeholder="Buscar vagas..." />
+                        </form>
+                    </div><!--formbusca-->
+                </div><!-- search-vaga -->
+            </div><!-- row -->
+        </div><!-- container -->
+
+        <div class="container-site">
+            <div class="num-pages mt-4">
+                <a href="#"><</a><p>Página <span id="pagina_atual">1</span> de <span id="paginas_totais">1</span></p><a href="#">></a>
+            </div><!-- num-pages -->
+
+            <div class="box-vagas">
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button type="button" data-toggle="modal" data-target="#vaga_recepcionista">Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+
+                <div class="vaga-single mt-4">
+                    <div class="img-vaga"><img src=""></div><!-- img-vaga -->
+                    <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                    <button>Ver detalhes</button>
+                </div><!-- vaga-single -->
+            </div><!-- box-vagas -->
+
+            <div class="num-pages mt-4">
+                <a href="#"><</a><p>Página <span id="pagina_atual">1</span> de <span id="paginas_totais">1</span></p><a href="#">></a>
+            </div><!-- num-pages -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="vaga_recepcionista" tabindex="-1" role="dialog" aria-labelledby="vaga_recepcionista" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="TituloModalCentralizado">Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-left">
+                        <img src="/public/images/img_vaga_recepcionista.jpg">
+                        <p>Categoria: <span id="categoria_vaga">Recepcionista</span></p>
+                        <p id="experiencia_vaga">Com ou sem experiência</p>
+                        <p>contato: (xx)x xxxx-xxxx ou email@email.com</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
+                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
+                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
+                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
+                            pulvinar ac nulla.</p>
+
+                    </div><!-- modal-body -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div><!-- modal-footer -->
+                </div>
+                </div>
+            </div>
+        </div><!-- container-site -->
+        
+    </section><!-- vagas -->
+
+    <section class="dicas text-right mt-5">
+        <div class="container d-md-flex">
+            <div class="img-curriculo">
+                <img src="/public/images/img-curriculo.jpg">
+            </div><!-- img-curriculo -->
+            <div class="box-dicas text-left">
+                <h4 data-toggle="modal" data-target="#dicas_emprego">Dicas para conseguir seu emprego</h4>
+                <p data-toggle="modal" data-target="#dicas_emprego">Clique aqui e confira dicas valiosas para aumentar suas chances de conseguir um emprego desejado.
+                    Aprenda a se destacar durante o processo seletivo e conquistar sua vaga.
+                </p>
+            </div><!-- box-dicas -->
+
+
+            
+            <!-- Modal -->
+            <div class="modal fade" id="dicas_emprego" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="TituloModalCentralizado">Título do modal</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-left">
+                        <h5 class="mt-3">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
+                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
+                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
+                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
+                            pulvinar ac nulla.</p>
+
+                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
+                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
+                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
+                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
+                            pulvinar ac nulla.</p>
+                        
+                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
+                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
+                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
+                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
+                            pulvinar ac nulla.</p>
+
+                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
+                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
+                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
+                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
+                            pulvinar ac nulla.</p>
+
+                    </div><!-- modal-body -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div><!-- modal-footer -->
+                </div>
+                </div>
+            </div>
+        </div><!-- container -->
+        
+    </section><!-- dicas -->
+
+
+    <section class="apoiadores mt-5">
+        <div class="container">
+            <div class="text-apoiadores text-center">
+                <h2>Nossos apoiadores:</h2>
+            </div><!-- text-apoiadores -->
+
+            <div class="box-apoiadores">
+
+                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
+                </div><!-- apoiador-single -->
+
+            </div><!-- box-apoiadores -->
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+        </div><!-- container -->
+    </section><!-- apoiadores -->
+
+    <section class="contato">
+        <div class="container">
+            <h4 class="text-center mt-5">Deseja anunciar sua vaga ou ser nosso apoiador? Entre em contato agora mesmo!</h4>
+            <p class="mt-4"><i class="fa fa-whatsapp" aria-hidden="true"></i> Link Whatsapp: <a href="#">Clique aqui</a></p>
+            <p class="mt-4"><i class="fa fa-whatsapp" aria-hidden="true"></i> Numero: <span>(00) 00000-0000</span></p>
+            <p class="mt-4"><i class="fa fa-envelope" aria-hidden="true"></i> email: <span>emailemail@email.com</span></p>
+            <p class="mt-4">Para você que necessita anunciar sua vaga oferecemos 2 formas de serviço......</p>
+        </div><!-- container -->
+    </section><!-- contato -->
+
+    <section class="comentarios mt-5">
+        <div class="container">
+            <h4>Veja o que comentam:</h4>
+
+            <div class="comentario-single">
+                <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
+                <h6>Ana Julia</h6>
+                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+            </div><!-- comentario-single -->
+
+            <div class="comentario-single">
+                <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
+                <h6>Ana Julia</h6>
+                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+            </div><!-- comentario-single -->
+
+            <div class="comentario-single">
+                <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
+                <h6>Ana Julia</h6>
+                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+            </div><!-- comentario-single -->
+
+            <div class="comentario-single">
+                <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
+                <h6>Ana Julia</h6>
+                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+            </div><!-- comentario-single -->
+
+        </div><!-- container -->
+    </section><!-- comentarios -->
+
+
+    <section class="quem-somos mt-5">
+        <div class="container">
+            <h4 class="text-center">Conheça nosso trabalho...</h4>
+            <p class="text-left mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut iaculis lacus nec tincidunt 
+                commodo. Duis tincidunt cursus laoreet. Orci varius natoque penatibus et magnis dis 
+                parturient montes, nascetur ridiculus mus. Nam tempor purus nec mauris cursus, at 
+                tincidunt mauris fermentum. Quisque suscipit convallis diam. Nam et pellentesque odio. 
+                Proin vitae neque quis sapien ultrices viverra vitae non ligula. Integer a vestibulum 
+                sem. Aliquam venenatis ac lorem nec volutpat. Ut fringilla quis tellus et facilisis.
+                Orci varius natoque penatibus et magnis dis 
+                parturient montes, nascetur ridiculus mus. Nam tempor purus nec mauris cursus, at 
+                tincidunt mauris fermentum. Quisque suscipit convallis diam. Nam et pellentesque odio. 
+                Proin vitae neque quis sapien ultrices viverra vitae non ligula.
+            </p>
+        </div><!-- container -->
+    </section><!-- quem-somos -->
+
+
+    <footer>
+        <p>Todos os direitos reservados. @2023</p>
+        <a href="/admin/login">Area restrita</a>
+    </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="../public/slick/slick.min.js"></script>
+    <script src="../public/js/sliders_apoiadores.js"></script>
+    <!-- <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
+</body>
+</html>

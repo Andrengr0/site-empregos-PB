@@ -1,0 +1,351 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+html, body{
+    height: 100%;
+}
+
+.container-site{
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+header{
+    padding: 30px 0 10px 0;
+}
+
+header .logo img{
+    width: 70px;
+    height: 60px;
+    cursor: pointer;
+}
+
+header .logo p{
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+header nav ul li{
+    list-style: none;
+    display: inline-block;
+    line-height: 60px;
+    margin-left: 25px;
+}
+
+header nav a{
+    text-decoration: none !important;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000;
+    padding: 5px 10px;
+}
+
+/* ---------------------------------------------- */
+
+section.apresentacao {
+    width: 100%;
+    background-color: #282D30;
+    padding: 30px 0;
+    color: #ffffff;
+}
+
+.apresentacao .container-site{
+    padding: 0 2%;
+    align-items: center;
+}
+
+.apresentacao .frase-apresentacao{
+    width: 50%;
+}
+
+.apresentacao .frase-apresentacao h1{
+    font-weight: 700;
+    font-size: 50px;
+    padding: 0 2%;
+}
+
+.apresentacao .frase-apresentacao p{
+    padding: 0 2%;
+    margin-top: 30px;
+    font-size: 15px;
+    line-height: 25px;
+    color: #dfdfdf;
+}
+
+.apresentacao .img-apresentacao{
+    width: 50%;
+}
+
+.img-apresentacao img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/* ---------------------------------------------------- */
+
+
+section.vagas .search-vaga .form-busca,
+.search-vaga p{
+    display: inline-block;
+}
+
+.vagas .search-vaga .form-busca form{
+    display: inline-block;
+    position: relative;
+    
+}
+
+.form-busca form i{
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    font-size: 18px;
+    color: #535353;
+}
+
+.form-busca form input{
+    font-size: 15px;
+    border-radius: 8px;
+    padding: 3px 6px 3px 27px;
+}
+
+section.vagas .container-site{
+    padding: 0 2%;
+}
+
+.vagas .container-site .num-pages{
+    text-align: center;
+    vertical-align: text-bottom;
+    height: 25px;
+}
+
+.num-pages a, .num-pages p{
+    display: inline-block;
+}
+
+.num-pages p{
+    color: #454545;
+    padding: 0 2%;
+}
+
+.num-pages a{
+    padding: 5px;
+}
+
+.vagas .box-vagas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.vagas .box-vagas .vaga-single{
+    width: calc(90% / 4);
+    text-align: center;
+    padding: 1%;
+    background-color: #0D1B2B;
+    color: #ffffff;
+    border-radius: 10px;
+}
+
+.vaga-single .img-vaga{
+    width: 100%;
+}
+
+.vaga-single .img-vaga img{
+    width: 100%;
+    height: 250px;
+}
+
+.vaga-single h5{
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.vaga-single button{
+    border: 0;
+    background-color: #CC6223;
+    border-radius: 8px;
+    padding: 5px 10px;
+    color: #ffffff;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+
+.vagas .modal .modal-header{
+    background-color: #0D1B2B;
+    color: #ffffff;
+}
+
+.vagas .modal .modal-header button{
+    background-color: #ffffff;
+    padding: 8px 12px !important;
+}
+
+.vagas .modal .modal-body img{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.vagas .modal .modal-body p{
+    margin-top: 30px;
+}
+
+
+/* --------------------------------------------------------------- */
+
+section.dicas{
+    width: 100%;
+}
+
+.dicas .d-md-flex{
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.dicas .box-dicas{
+    width: 100%;
+    max-width: 500px;
+    padding: 40px 0;
+}
+
+.dicas .img-curriculo img{
+    max-width: 400px;
+}
+
+.box-dicas h4{
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.box-dicas p{
+    color: #686868;
+    cursor: pointer;
+}
+
+
+#dicas_emprego h4{
+    font-weight: bold;
+    font-size: 23px;
+}
+
+
+/* ######################################################## */
+
+
+section.apoiadores{
+    width: 100%;
+}
+
+.apoiadores .container{
+    padding: 20px 0;
+    background-color: #282D30;
+    color: #eaeaea;
+    position: relative;
+}
+
+
+section.apoiadores .box-apoiadores{
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+.box-apoiadores .apoiador-single{
+    margin: 0 20px;
+    width: 40px;
+    height: 220px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+section.apoiadores .container i{
+    font-size: 70px;
+    color: #282D30;
+    position: absolute;
+    bottom: -42px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+/* ################################################################## */
+
+
+section.contato .container p{
+    margin: 0 5%;
+}
+
+.contato .container i{
+    font-size: 30px;
+    margin-right: 6px;
+}
+
+
+/* ############################################################ */
+
+
+section.comentarios .container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.comentarios .container h4{
+    margin-left: 10%;
+    width: 100%;
+}
+
+.comentarios .container .comentario-single{
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 20px;
+    background-color: #fef8f3;
+    margin: 15px 10%;
+
+}
+
+.comentario-single .estrelas i{
+    color: #cbaa00;
+    font-size: 20px;
+}
+
+
+/* ############################################################################### */
+
+
+section.quem-somos{
+    width: 100%;
+    background-color: #0D1B2B;
+    color: #ffffff;
+}
+
+.quem-somos .container{
+    padding: 40px;
+}
+
+.quem-somos .container p{
+    line-height: 30px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+
+
+/* -------------------------------------------------------- */
+
+footer{
+    padding: 40px;
+    background-color: #F3E5D6;
+    text-align: center;
+}

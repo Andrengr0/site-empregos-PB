@@ -1,0 +1,551 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+html, body{
+    height: 100%;
+}
+
+header{
+    position: fixed;
+    background-color: #ffffff;
+    width: 100%;
+    z-index: 3;
+    padding: 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+header img,
+header h3{
+    display: inline-block;
+}
+
+header img{
+    margin-right: 30px;
+    width: 60px;
+}
+
+header h3{
+    font-size: 23px;
+    line-height: 45px;
+}
+
+header .user{
+    float: right;
+    padding-right: 20px;
+}
+
+header .user span{
+    padding: 0 8px;
+}
+
+
+.content-painel{
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+}
+
+.content-painel aside{
+    position: fixed;
+    height: 100%;
+    width: 15%;
+    margin-top: 80px;
+    background-color: #24282D;
+}
+
+.content-painel aside nav{
+    margin-top: 20px;
+}
+
+.content-painel .box-content-painel{
+    width: 85%;
+    margin-left: 15%;
+    margin-top: 80px;
+}
+
+.content-painel aside li{
+    width: 100%;
+    color: #ebebeb;
+    padding: 15px 10px;
+    position: relative;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.content-painel aside li a{
+    text-decoration: none;
+    color: #ebebeb;
+}
+
+.content-painel aside li a span{
+    font-size: 20px;
+    padding: 0 8px;
+}
+
+.content-painel aside li > i{
+    position: absolute;
+    right: -1px;
+    top: 18px;
+    font-size: 30px;
+    color: #ffffff;
+    display: none;
+}
+
+
+
+
+
+
+
+.container-site{
+    width: 100%;
+    max-width: 1280px;
+}
+
+section.vagas-cadastradas .container-site{
+    padding: 0 2%;
+}
+
+.vagas-cadastradas .container-site .num-pages{
+    text-align: center;
+    vertical-align: text-bottom;
+    height: 25px;
+}
+
+.num-pages a, .num-pages p{
+    display: inline-block;
+}
+
+.num-pages a{
+    padding: 5px;
+}
+
+.num-pages p{
+    color: #454545;
+    padding: 0 2%;
+}
+
+.vagas-cadastradas .box-vagas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.vagas-cadastradas .box-vagas .vaga-single{
+    width: calc(90% / 4);
+    text-align: center;
+    padding: 1%;
+    background-color: #0D1B2B;
+    color: #ffffff;
+    border-radius: 10px;
+}
+
+.vaga-single .img-vaga{
+    width: 100%;
+}
+
+.vaga-single .img-vaga img{
+    width: 100%;
+    height: 250px;
+}
+
+.vaga-single h5{
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.vaga-single button{
+    border: 0;
+    background-color: #CC6223;
+    border-radius: 8px;
+    padding: 5px 10px;
+    color: #ffffff;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+
+.vagas-cadastradas .modal .modal-header{
+    background-color: #0D1B2B;
+    color: #ffffff;
+}
+
+.vagas-cadastradas .modal .modal-header button{
+    background-color: #ffffff;
+    padding: 8px 12px !important;
+}
+
+.vagas-cadastradas .modal .modal-body img{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.vagas-cadastradas .modal .modal-body p{
+    margin-top: 30px;
+}
+
+
+/* ############################################################# */
+
+.box-cadastrar-vaga{
+    padding: 0 3% 40px 3%;
+}
+
+.box-cadastrar-vaga form label{
+    display: block;
+    font-weight: 500;
+}
+
+.box-cadastrar-vaga form label span{
+    font-size: 14px;
+    color: #7c7c7c;
+}
+
+.box-cadastrar-vaga form input{
+    padding: 4px 8px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.box-cadastrar-vaga form #btn-adicionar-categoria{
+    position: relative;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.box-cadastrar-vaga form .categorias{
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-width: 250px;
+    background-color: #ccc;
+    height: 100%;
+    max-height: 320px;
+    padding: 10px;
+    overflow: scroll;
+    left: 17%;
+    top: 50%;
+}
+
+.box-cadastrar-vaga .box-categorias-add{
+    display: inline-block;
+}
+
+.box-categorias-add span{
+    font-size: 14px;
+    padding: 4px 6px;
+    margin-left: 5px;
+    background-color: #e3e3e3;
+    line-height: 30px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* Customize the label (the container) */
+.container-label {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    
+  }
+  
+  /* Hide the browser's default checkbox */
+  .container-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #858585;
+  }
+  
+/* On mouse-over, add background color */
+.container-label:hover{
+    background-color: #ffffff;
+}
+
+.container-label:hover input ~ .checkmark {
+background-color: #24282D;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container-label input:checked ~ .checkmark {
+background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+content: "";
+position: absolute;
+display: none;
+}
+
+/* Show the checkmark when checked */
+.container-label input:checked ~ .checkmark:after {
+display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-label .checkmark:after {
+left: 9px;
+top: 5px;
+width: 5px;
+height: 10px;
+border: solid #0D1B2B;
+border-width: 0 3px 3px 0;
+-webkit-transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+transform: rotate(45deg);
+}
+
+
+.box-cadastrar-vaga .custom-select{
+    max-width: 230px;
+    font-weight: 500;
+}
+
+.box-cadastrar-vaga textarea{
+    width: 100%;
+    max-width: 570px;
+    padding: 10px;
+    min-height: 150px;
+}
+
+
+.box-cadastrar-vaga .input-group{
+    max-width: 400px;
+}
+
+#cadastrar_vaga{
+    margin-top: 30px;
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #0D1B2B;
+    color: #ffffff;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+
+
+
+section.usuarios{
+    max-width: 100%;
+}
+
+.usuarios .btn-adicionar-usuario{
+    margin-left: 8%;
+    padding: 4px 6px;
+    border: none;
+    background-color: #cacaca;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.usuario-head{
+    display: flex;
+    border: 2px solid #000;
+    align-items: center;
+    border-left: none;
+    border-right: none;
+}
+
+.usuario-head .box-buttons-usuario{
+    display: none;
+}
+
+.usuario-body{
+    display: flex;
+    border: 1px solid #000;
+    align-items: center;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+.usuario-head h6{
+    font-weight: bold;
+}
+
+.usuario-body h6{
+    font-size: 14px;
+}
+
+.usuario-head .usuario-nome, 
+.usuario-body .usuario-nome{
+    width: 26%;
+    padding: 8px;
+    height: 100%;
+}
+
+.usuario-head .usuario-email,
+.usuario-body .usuario-email{
+    width: 34%;
+    padding: 8px;
+}
+
+.box-buttons-usuario{
+    width: 40%;
+}
+
+.box-buttons-usuario a{
+    text-decoration: none;
+}
+
+.btn-ver-vagas-usuario{
+    color: #eeeeee;
+    background-color: #1b395c;
+    padding: 4px 5px;
+    border-radius: 6px;
+}
+
+.btn-resetar-senha{
+    margin-left: 10px;
+    background-color: #cacaca;
+    color: #000;
+    border: none;
+    padding: 3px 5px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-remover-usuario{
+    margin-left: 10px;
+    background-color: #ff8b8b;
+    color: #0D1B2B;
+    padding: 3px 5px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+
+
+
+
+
+section.apoiadores .adicionar-apoiador{
+    display: inline-block;
+    margin-top: 30px;
+    margin-left: 10%;
+    text-decoration: none;
+    background-color: #c8c8c8;
+    color: #000;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+section.apoiadores .table-apoiadores{
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+}
+
+.table-apoiadores .apoiadores-head{
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    align-items: center;
+    height: 50px;
+    padding: 0 10px;
+}
+
+.apoiadores-head h6,
+.apoiadores-body h6{
+    padding: 0px 8px 0px 8px;
+}
+
+.apoiadores-head h6{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.apoiadores-body h6{
+    font-size: 14px;
+}
+
+.apoiadores-head .remover-apoiador{
+    display: none;
+}
+
+.apoiadores-body{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dotted #000;
+    height: 50px;
+    padding: 0 10px;
+}
+
+.apoiadores-body a{
+    text-decoration: none;
+    font-weight: 500;
+    background-color: #ff8b8b;
+    color: #0D1B2B;
+    padding: 3px 6px;
+    border-radius: 6px;
+}
+
+
+
+
+section.dados-pessoais{
+    padding: 0 3%;
+}
+
+.dados-pessoais h6{
+    color: #303030;
+}
+
+.dados-pessoais a{
+    margin-top: 20px;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 10px;
+    display: inline-block;
+}
+
+.dados-pessoais .resetar-senha{
+    background-color: #cacaca;
+    color: #000;
+    font-weight: 500;
+}
+
+.dados-pessoais .ver-minhas-vagas{
+    background-color: #0D1B2B;
+    color: #e5e5e5;
+}
+
+
+
+#cadastrar-vaga,
+#usuarios,
+#apoiadores,
+#dados-pessoais{
+    display: none;
+}
