@@ -79,7 +79,7 @@ $('#cadastrar_vaga').click(function () {
                 data: $("#form-vaga").serialize(), // Serialize o formulário para enviar os dados corretamente
                 success: function (data) {
                     console.log("Sucesso ao cadastrar");
-                    // location.reload();
+                    location.reload();
                 },
                 error: function (error) {
                     console.error("Erro:", error);

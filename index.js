@@ -71,7 +71,23 @@ app.get('/admin/login',(req,res)=>{
     if(req.session.login == null){
         res.render('admin-login')
     }else{
-		res.render('admin-panel', {});
+		
+        Vagas.find({}).sort({'_id': 1}).then(function(vagas){
+            vagas = vagas.map(function(val){
+                // let linkImage = (val.imagem).split("/");
+                // let formatLinkImage = linkImage[linkImage.length - 1];
+                return {
+                    id: val._id,
+                    titulo: val.titulo,
+                    categoria: val.categoria,
+                    experiencia: val.experiencia,
+                    descricao: val.descricao,
+                    imagem: val.imagem,
+                    dataCriada: val.dataCriada
+                }
+            })
+            res.render('admin-panel', {vagas: vagas});
+        })
         
     }
 })

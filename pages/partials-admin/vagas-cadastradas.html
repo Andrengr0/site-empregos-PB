@@ -1,82 +1,43 @@
 <div class="container-site">
     <div class="num-pages mt-4">
-        <a href="#"><</a><p>Página <span id="pagina_atual">1</span> de <span id="paginas_totais">1</span></p><a href="#">></a>
+        <a class="voltar_page" href="#"><</a><p>Página <span id="pagina_atual">1</span> de <span id="paginas_totais">1</span></p><a class="avancar_page" href="#">></a>
     </div><!-- num-pages -->
 
     <div class="box-vagas">
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button type="button" data-toggle="modal" data-target="#vaga_recepcionista">Ver detalhes</button>
-        </div><!-- vaga-single -->
+
+        <% for(let i=0; i < vagas.length; i++){ %>
 
         <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
+            <div class="img-vaga"><img src="<%= vagas[i].imagem%>"></div><!-- img-vaga -->
+            <h5><%= vagas[i].titulo%></h5>
+            <button type="button" data-toggle="modal" data-target="#vaga_recepcionista<%=[i]%>">Ver detalhes</button>
         </div><!-- vaga-single -->
 
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
-        </div><!-- vaga-single -->
+    <% } %>
 
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
-        </div><!-- vaga-single -->
-
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
-        </div><!-- vaga-single -->
-
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
-        </div><!-- vaga-single -->
-
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
-        </div><!-- vaga-single -->
-
-        <div class="vaga-single mt-4">
-            <div class="img-vaga"><img src=""></div><!-- img-vaga -->
-            <h5>Titulo da vaga aqui, estabelecimento loremipsum</h5>
-            <button>Ver detalhes</button>
-        </div><!-- vaga-single -->
     </div><!-- box-vagas -->
 
     <div class="num-pages mt-4">
         <a href="#"><</a><p>Página <span id="pagina_atual">1</span> de <span id="paginas_totais">1</span></p><a href="#">></a>
     </div><!-- num-pages -->
 
+    <% for(let i=0; i < vagas.length; i++){ %>
     <!-- Modal -->
-    <div class="modal fade" id="vaga_recepcionista" tabindex="-1" role="dialog" aria-labelledby="vaga_recepcionista" aria-hidden="true">
+    <div class="modal fade" id="vaga_recepcionista<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="vaga_recepcionista" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="TituloModalCentralizado">Titulo da vaga aqui, estabelecimento loremipsum</h5>
+                <h5 class="modal-title" id="TituloModalCentralizado"><%= vagas[i].titulo%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-left">
-                <img src="/public/images/img_vaga_recepcionista.jpg">
-                <p>Categoria: <span id="categoria_vaga">Recepcionista</span></p>
-                <p id="experiencia_vaga">Com ou sem experiência</p>
+                <img src="<%= vagas[i].imagem%>">
+                <p>Categoria: <span id="categoria_vaga"><%= vagas[i].categoria.join(', ')%></span></p>
+                <p id="experiencia_vaga"><%= vagas[i].experiencia%></p>
                 <p>contato: (xx)x xxxx-xxxx ou email@email.com</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
-                    sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
-                    efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
-                    enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
-                    pulvinar ac nulla.</p>
+                <p class="descriacao"><%= vagas[i].descricao%></p>
 
             </div><!-- modal-body -->
             <div class="modal-footer">
@@ -85,4 +46,5 @@
         </div>
         </div>
     </div>
+<% } %>
 </div><!-- container-site -->
