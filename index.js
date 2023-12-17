@@ -71,24 +71,78 @@ app.get('/admin/login',(req,res)=>{
     if(req.session.login == null){
         res.render('admin-login')
     }else{
-		
-        Vagas.find({}).sort({'_id': 1}).then(function(vagas){
+		res.redirect('/vagas-cadastradas');
+    }
+})
+
+app.post('/vagas-cadastradas',(req,res)=>{
+    res.redirect('/admin/login');
+})
+app.post('/cadastrar-vaga',(req,res)=>{
+    res.redirect('/admin/login');
+})
+app.post('/dados-pessoais',(req,res)=>{
+    res.redirect('/admin/login');
+})
+app.post('/usuarios',(req,res)=>{
+    res.redirect('/admin/login');
+})
+app.post('/apoiadores',(req,res)=>{
+    res.redirect('/admin/login');
+})
+
+app.get('/vagas-cadastradas',(req,res)=>{
+    if(req.session.login == null){
+        res.render('admin-login')
+    }else{
+        Vagas.find({}).sort({'_id': -1}).then(function(vagas){
             vagas = vagas.map(function(val){
                 // let linkImage = (val.imagem).split("/");
                 // let formatLinkImage = linkImage[linkImage.length - 1];
                 return {
                     id: val._id,
                     titulo: val.titulo,
-                    categoria: val.categoria,
-                    experiencia: val.experiencia,
-                    descricao: val.descricao,
                     imagem: val.imagem,
                     dataCriada: val.dataCriada
                 }
             })
-            res.render('admin-panel', {vagas: vagas});
+            res.render('vagas-cadastradas', {vagas: vagas});
         })
-        
+    }
+})
+
+app.get('/cadastrar-vaga',(req,res)=>{
+    if(req.session.login == null){
+        res.render('admin-login')
+    }else{
+        res.render('cadastrar-vaga', {});
+    }
+})
+
+
+app.get('/usuarios',(req,res)=>{
+    if(req.session.login == null){
+        res.render('admin-login')
+    }else{
+        res.render('usuarios', {});
+    }
+})
+
+
+app.get('/apoiadores',(req,res)=>{
+    if(req.session.login == null){
+        res.render('admin-login')
+    }else{
+        res.render('apoiadores', {});
+    }
+})
+
+
+app.get('/dados-pessoais',(req,res)=>{
+    if(req.session.login == null){
+        res.render('admin-login')
+    }else{
+        res.render('dados-pessoais', {});
     }
 })
 
@@ -107,13 +161,13 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             experiencia: req.body.experiencia_vaga,
             descricao: req.body.descricao_vaga,
             imagem: imagem,
-            dataCriada: new Date().toLocaleString('pt-br')
+            dataCriada: new Date().toLocaleString('pt-br').substr(0, 10)
         });
 
         // Imprime todos os atributos da vaga
         // console.log('Vaga cadastrada:', vaga);
 
-        res.render('admin-panel', {});
+        res.redirect('/admin/login');
     } catch (err) {
         console.error('Erro ao cadastrar a vaga:', err);
         res.status(500).send('Erro ao cadastrar a vaga.');
@@ -148,6 +202,19 @@ app.post('/admin/cadastro/imagem', (req, res) => {
 });
 
 
+
+app.get('/deletar/vaga/:id/:imagem', (req, res) => {
+    // console.log(req.params.imagem)
+    fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
+        if (err) {
+            console.error('Erro ao excluir o arquivo:', err);
+        }
+        Vagas.deleteOne({ _id: req.params.id }).then(function () {
+            res.redirect('/admin/login');
+            // console.log('excluido com sucesso')
+        });
+    });
+})
 
 
 

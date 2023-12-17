@@ -64,7 +64,7 @@ header .user span{
 .content-painel .box-content-painel{
     width: 85%;
     margin-left: 15%;
-    margin-top: 80px;
+    margin-top: 110px;
 }
 
 .content-painel aside li{
@@ -110,63 +110,93 @@ section.vagas-cadastradas .container-site{
     padding: 0 2%;
 }
 
-.vagas-cadastradas .container-site .num-pages{
-    text-align: center;
-    vertical-align: text-bottom;
-    height: 25px;
-}
-
-.num-pages a, .num-pages p{
-    display: inline-block;
-}
-
-.num-pages a{
-    padding: 5px;
-}
-
-.num-pages p{
-    color: #454545;
-    padding: 0 2%;
-}
 
 .vagas-cadastradas .box-vagas{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-.vagas-cadastradas .box-vagas .vaga-single{
-    width: calc(90% / 4);
-    text-align: center;
-    padding: 1%;
-    background-color: #0D1B2B;
-    color: #ffffff;
-    border-radius: 10px;
-}
-
-.vaga-single .img-vaga{
     width: 100%;
 }
 
-.vaga-single .img-vaga img{
-    width: 100%;
-    height: 250px;
+.box-vagas .vaga-single{
+    border: 2px dashed #363636;
 }
 
 .vaga-single h5{
     font-size: 16px;
-    margin-top: 8px;
+    font-weight: bold;
+    margin-top: 14px;
+}
+
+.vaga-single h5 > span{
+    font-weight: 400;
+    color: #585858;
+    margin-left: 10px;
 }
 
 .vaga-single button{
     border: 0;
     background-color: #CC6223;
+    margin-bottom: 5px;
     border-radius: 8px;
-    padding: 5px 10px;
+    padding: 4px 8px;
     color: #ffffff;
-    margin-top: 5px;
     cursor: pointer;
 }
+
+.vaga-single .deletar-vaga{
+    background-color: transparent;
+    color: #2196F3;
+    margin-left: 25px;
+}
+
+.vaga-single button i{
+    font-size: 28px;
+}
+
+
+.janela-float{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.float-box{
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 300px;
+    height: 150px;
+    padding: 10px;
+    margin-top: 100px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.float-box h4{
+    font-weight: 500;
+    letter-spacing: 0.7px;
+}
+
+.float-box button, .float-box a{
+    margin-top: 20px;
+    margin-left: 20%;
+    padding: 8px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+}
+
+a#btn-excluir{
+    background-color: #fd9e9e;
+    text-decoration: none;
+    color: #000;
+}
+button#btn-cancelar{
+    background-color: #f9ea60;
+}
+
 
 
 .vagas-cadastradas .modal .modal-header{
@@ -539,13 +569,4 @@ section.dados-pessoais{
 .dados-pessoais .ver-minhas-vagas{
     background-color: #0D1B2B;
     color: #e5e5e5;
-}
-
-
-
-#cadastrar-vaga,
-#usuarios,
-#apoiadores,
-#dados-pessoais{
-    display: none;
 }

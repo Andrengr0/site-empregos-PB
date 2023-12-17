@@ -1,4 +1,15 @@
+$(()=>{
 
+    $('.vaga-single .deletar-vaga').click(function(){
+        let idPalestra = $(this).attr('id');
+        $('.'+idPalestra).css('display','block');
+
+        $('#btn-cancelar').click(function(){
+            $('.'+idPalestra).css('display','none');
+        })
+        return false;
+    })
+})
 
 // alert("Funcionou o custom.js")
 var redimensionar = $('#preview').croppie({
@@ -78,6 +89,7 @@ $('#cadastrar_vaga').click(function () {
                 url: "/admin/cadastro/vaga",
                 data: $("#form-vaga").serialize(), // Serialize o formulário para enviar os dados corretamente
                 success: function (data) {
+                    redimensionar.croppie('destroy');
                     console.log("Sucesso ao cadastrar");
                     location.reload();
                 },
