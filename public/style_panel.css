@@ -380,8 +380,10 @@ transform: rotate(45deg);
 
 
 section.usuarios{
-    max-width: 100%;
+    width: 100%;
+    max-width: 1280px;
 }
+
 
 .usuarios .btn-adicionar-usuario{
     margin-left: 8%;
@@ -391,6 +393,13 @@ section.usuarios{
     border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
+}
+
+.usuarios .tabela-usuarios{
+    margin: 0 auto;
+    width: 97%;
+    max-width: 1100px;
+    border: 2px solid #000;
 }
 
 .usuario-head{

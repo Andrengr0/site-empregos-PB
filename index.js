@@ -18,6 +18,7 @@ app.use(session({
 }));
 
 const Vagas = require('./Vagas.js');
+const Usuarios = require('./Usuarios.js');
 
 mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
     console.log('Conectado com sucesso!');
@@ -50,49 +51,31 @@ app.get('/', async (req, res) => {
   });
 
 
+const bcrypt = require('bcrypt');
 
-var usuarios = [
-    {
-        login: "Andre",
-        senha: "12345"
-    }
-];
+app.post("/admin/login", async (req, res) => {
+    try {
+        const { email, senha } = req.body;
+        const usuario = await Usuarios.findOne({ email });
 
-app.post("/admin/login", (req,res)=>{
-    usuarios.map(function(val){
-        if(val.login == req.body.login && val.senha == req.body.senha){
-            req.session.login = "André";
+        if (usuario && await bcrypt.compare(senha, usuario.senha)) {
+            // Autenticação bem-sucedida
+            req.session.email = usuario.email;
+            res.redirect('/admin/login');
+        } else {
+            // Credenciais inválidas
+            res.status(401).send("Credenciais inválidas.");
         }
-    })
-    res.redirect('/admin/login')
+    } catch (err) {
+        console.error("Ocorreu um erro:", err);
+        res.status(500).send("Erro ao autenticar o usuário.");
+    }
 })
+
 
 app.get('/admin/login',(req,res)=>{
-    if(req.session.login == null){
-        res.render('admin-login')
-    }else{
-		res.redirect('/vagas-cadastradas');
-    }
-})
-
-app.post('/vagas-cadastradas',(req,res)=>{
-    res.redirect('/admin/login');
-})
-app.post('/cadastrar-vaga',(req,res)=>{
-    res.redirect('/admin/login');
-})
-app.post('/dados-pessoais',(req,res)=>{
-    res.redirect('/admin/login');
-})
-app.post('/usuarios',(req,res)=>{
-    res.redirect('/admin/login');
-})
-app.post('/apoiadores',(req,res)=>{
-    res.redirect('/admin/login');
-})
-
-app.get('/vagas-cadastradas',(req,res)=>{
-    if(req.session.login == null){
+    if(req.session.email == null){
+        // console.log("Não logou")
         res.render('admin-login')
     }else{
         Vagas.find({}).sort({'_id': -1}).then(function(vagas){
@@ -111,8 +94,13 @@ app.get('/vagas-cadastradas',(req,res)=>{
     }
 })
 
+
+app.post('/cadastrar-vaga', (req, res)=>{
+    res.redirect('admin/login')
+})
+
 app.get('/cadastrar-vaga',(req,res)=>{
-    if(req.session.login == null){
+    if(req.session.email == null){
         res.render('admin-login')
     }else{
         res.render('cadastrar-vaga', {});
@@ -120,17 +108,32 @@ app.get('/cadastrar-vaga',(req,res)=>{
 })
 
 
+app.post('/usuarios', (req, res)=>{
+    res.redirect('admin/login')
+})
+
 app.get('/usuarios',(req,res)=>{
-    if(req.session.login == null){
+    if(req.session.email == null){
         res.render('admin-login')
     }else{
-        res.render('usuarios', {});
+        Usuarios.find({}).sort({'_id': -1}).then(function(usuarios){
+            usuarios = usuarios.map(function(val){
+                // let linkImage = (val.imagem).split("/");
+                // let formatLinkImage = linkImage[linkImage.length - 1];
+                return {
+                    id: val._id,
+                    nome: val.nome,
+                    email: val.email,
+                }
+            })
+            res.render('usuarios', {usuarios: usuarios});
+        })
     }
 })
 
 
 app.get('/apoiadores',(req,res)=>{
-    if(req.session.login == null){
+    if(req.session.email == null){
         res.render('admin-login')
     }else{
         res.render('apoiadores', {});
@@ -139,7 +142,7 @@ app.get('/apoiadores',(req,res)=>{
 
 
 app.get('/dados-pessoais',(req,res)=>{
-    if(req.session.login == null){
+    if(req.session.email == null){
         res.render('admin-login')
     }else{
         res.render('dados-pessoais', {});
@@ -200,6 +203,35 @@ app.post('/admin/cadastro/imagem', (req, res) => {
         }
     });
 });
+
+
+app.post('/admin/cadastrar/usuario/form', async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.senha, 10); // corrigido para req.body.senha
+        const usuario = await Usuarios.create({
+            nome: req.body.nome,
+            email: req.body.email,
+            senha: hashedPassword
+        });
+
+        res.send({ success: true, message: 'Usuário cadastrado com sucesso.' });
+    } catch (err) {
+        console.error('Erro ao cadastrar o usuário:', err);
+        res.status(500).send('Erro ao cadastrar o usuário.');
+    }
+});
+
+
+app.post('/admin/adicionar/usuario', (req, res)=>{
+    const idUsuario = new Date().getTime();
+    let link = 'http://localhost:3000/cadastrar/usuario/'+idUsuario;
+    res.json({ success: true, link });
+})
+
+app.get('/cadastrar/usuario/:id', (req, res)=>{
+    // console.log("Funcionou a busca do link")
+    res.render('cadastrar-usuario', {})
+})
 
 
 
