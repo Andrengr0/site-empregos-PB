@@ -8,7 +8,9 @@ var vagaSchema = new Schema({
     experiencia: String,
     descricao: String,
     imagem: String,
-    dataCriada: String
+    dataCriada: String,
+    slug: String,
+    idUsuario: String
 },{collection:'vagas'})
 
 var Vagas = mongoose.model("Vagas",vagaSchema);

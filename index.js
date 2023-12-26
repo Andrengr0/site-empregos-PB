@@ -164,7 +164,9 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             experiencia: req.body.experiencia_vaga,
             descricao: req.body.descricao_vaga,
             imagem: imagem,
-            dataCriada: new Date().toLocaleString('pt-br').substr(0, 10)
+            dataCriada: new Date().toLocaleString('pt-br').substr(0, 10),
+            slug: new Date().getTime(),
+            idUsuario: req.body.idUsuario
         });
 
         // Imprime todos os atributos da vaga
