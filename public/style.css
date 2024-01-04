@@ -164,19 +164,23 @@ section.vagas .container-site{
     height: 250px;
 }
 
+.vaga-single h6{
+    font-size: 15px;
+    color: #d4d4d4;
+}
+
 .vaga-single h5{
     font-size: 16px;
     margin-top: 8px;
 }
 
-.vaga-single button{
-    border: 0;
+.vaga-single a{
+    text-decoration: none;
     background-color: #CC6223;
     border-radius: 8px;
     padding: 5px 10px;
     color: #ffffff;
     margin-top: 5px;
-    cursor: pointer;
 }
 
 

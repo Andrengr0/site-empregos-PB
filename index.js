@@ -3,10 +3,14 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
 const fs = require('fs')
+const multer = require('multer');
 var mongoose = require("mongoose");
 
 
 const app = express()
+
+const storage = multer.memoryStorage(); // Você pode ajustar isso para armazenar os arquivos no disco se preferir
+const upload = multer({ storage: storage });
 
 var session = require('express-session');
 
@@ -19,6 +23,7 @@ app.use(session({
 
 const Vagas = require('./Vagas.js');
 const Usuarios = require('./Usuarios.js');
+const Cargos = require('./Cargos.js')
 
 mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
     console.log('Conectado com sucesso!');
@@ -42,7 +47,17 @@ app.get('/', async (req, res) => {
     try {
       if (req.query.busca == null) {
   
-        res.render('home', {});   
+        const vagas = await Vagas.find({}).sort({data: 1});
+            var vagasReturn= vagas.map(function(val){
+                return {
+                    titulo: val.titulo,
+                    cidade: val.cidade,
+                    imagem: val.imagem,
+                    slug: val.slug 
+                }
+            })
+            
+        res.render('home', {vagas: vagasReturn});  
       } 
     } catch (err) {
         console.error("Ocorreu um erro:", err);
@@ -73,11 +88,23 @@ app.post("/admin/login", async (req, res) => {
 })
 
 
-app.get('/admin/login',(req,res)=>{
+app.get('/admin/login', async (req,res)=>{
     if(req.session.email == null){
         // console.log("Não logou")
         res.render('admin-login')
     }else{
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o nome do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+
         Vagas.find({}).sort({'_id': -1}).then(function(vagas){
             vagas = vagas.map(function(val){
                 // let linkImage = (val.imagem).split("/");
@@ -89,7 +116,7 @@ app.get('/admin/login',(req,res)=>{
                     dataCriada: val.dataCriada
                 }
             })
-            res.render('vagas-cadastradas', {vagas: vagas});
+            res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome});
         })
     }
 })
@@ -99,23 +126,60 @@ app.post('/cadastrar-vaga', (req, res)=>{
     res.redirect('admin/login')
 })
 
-app.get('/cadastrar-vaga',(req,res)=>{
-    if(req.session.email == null){
-        res.render('admin-login')
-    }else{
-        res.render('cadastrar-vaga', {});
+app.get('/cadastrar-vaga', async (req, res) => {
+    try {
+        if (req.session.email == null) {
+            res.render('admin-login');
+        } else {
+            // Recupere o ID do usuário da sessão
+            const emailUsuario = req.session.email;
+
+            // Realize uma consulta ao banco de dados para obter o _id do usuário
+            const usuario = await Usuarios.findOne({ email: emailUsuario });
+            
+            if (!usuario) {
+                // Trate o caso em que o usuário não foi encontrado
+                res.status(404).send('Usuário não encontrado');
+                return;
+            }
+
+            Cargos.find({}).sort({ cargo: 1 }).then(function(cargos){
+                cargos = cargos.map(function(val){
+                    return {
+                        cargo: val.cargo
+                    }
+                })
+                res.render('cadastrar-vaga', {idUsuario: usuario._id, cargos: cargos, nomeUsuario: usuario.nome});
+            })
+        }
+    } catch (err) {
+        console.error('Erro ao buscar o usuário:', err);
+        res.status(500).send('Erro ao buscar o usuário.');
     }
-})
+});
+
 
 
 app.post('/usuarios', (req, res)=>{
     res.redirect('admin/login')
 })
 
-app.get('/usuarios',(req,res)=>{
+app.get('/usuarios', async (req,res)=>{
     if(req.session.email == null){
         res.render('admin-login')
     }else{
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o _id do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+        
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+
         Usuarios.find({}).sort({'_id': -1}).then(function(usuarios){
             usuarios = usuarios.map(function(val){
                 // let linkImage = (val.imagem).split("/");
@@ -126,29 +190,106 @@ app.get('/usuarios',(req,res)=>{
                     email: val.email,
                 }
             })
-            res.render('usuarios', {usuarios: usuarios});
+            res.render('usuarios', {usuarios: usuarios, nomeUsuario: usuario.nome});
         })
     }
 })
 
+app.post('/apoiadores', (req, res)=>{
+    res.redirect('admin/login')
+})
 
-app.get('/apoiadores',(req,res)=>{
+app.get('/apoiadores', async (req,res)=>{
     if(req.session.email == null){
         res.render('admin-login')
     }else{
-        res.render('apoiadores', {});
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o _id do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+        
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+        res.render('apoiadores', {nomeUsuario: usuario.nome});
     }
 })
 
 
-app.get('/dados-pessoais',(req,res)=>{
+app.post('/dados-pessoais', (req, res)=>{
+    res.redirect('admin/login')
+})
+
+app.get('/dados-pessoais', async (req,res)=>{
     if(req.session.email == null){
         res.render('admin-login')
     }else{
-        res.render('dados-pessoais', {});
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o _id do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+        
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+        res.render('dados-pessoais', {nomeUsuario: usuario.nome});
     }
 })
 
+
+app.post('/cargos-vagas', (req, res)=>{
+    res.redirect('admin/login')
+})
+
+app.get('/cargos-vagas', async (req,res)=>{
+    if(req.session.email == null){
+        // console.log("Não logou")
+        res.render('admin-login')
+    }else{
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o nome do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+
+        Cargos.find({}).sort({ cargo: 1 }).then(function(cargos){
+            cargos = cargos.map(function(val){
+                return {
+                    id: val._id,
+                    cargo: val.cargo
+                }
+            })
+            res.render('cargos-vagas', {cargos: cargos, nomeUsuario: usuario.nome});
+        })
+    }
+})
+
+// Cadastro Cargo
+app.post('/admin/cadastro/cargo', upload.single('form_cargo'), async (req, res) => {
+    try {
+
+        const cargo = await Cargos.create({
+            cargo: req.body.cargo_vaga
+        });
+
+        res.redirect('/cargos-vagas');
+    } catch (err) {
+        console.error('Erro ao cadastrar o cargo:', err);
+        res.status(500).send('Erro ao cadastrar o cargo.');
+    }
+});
 
 
 
@@ -160,13 +301,19 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
 
         const vaga = await Vagas.create({
             titulo: req.body.titulo_vaga,
+            empresa: req.body.empresa_vaga,
+            cidade: req.body.cidade_vaga,
+            quantidade: req.body.quant_vaga,
             categoria: req.body.checks,
             experiencia: req.body.experiencia_vaga,
+            modelo: req.body.modelo_vaga,
             descricao: req.body.descricao_vaga,
+            salario: req.body.salario_vaga,
+            contato: req.body.contato_vaga,
             imagem: imagem,
             dataCriada: new Date().toLocaleString('pt-br').substr(0, 10),
             slug: new Date().getTime(),
-            idUsuario: req.body.idUsuario
+            idUsuario: req.body.id_usuario
         });
 
         // Imprime todos os atributos da vaga
@@ -250,6 +397,81 @@ app.get('/deletar/vaga/:id/:imagem', (req, res) => {
     });
 })
 
+app.get('/deletar/cargo/:id', (req, res) => {
+    
+    Cargos.deleteOne({ _id: req.params.id }).then(function () {
+        res.redirect('/cargos-vagas');
+        // console.log('excluido com sucesso')
+    });
+})
+
+
+
+app.get('/:slug', async (req, res) => {
+    const requestVagaSlug = req.params.slug;
+
+    try {
+        // Consulta a vaga com base no slug
+        const vaga = await Vagas.findOne({ slug: requestVagaSlug });
+
+        if (!vaga) {
+            // Se a vaga não for encontrada, pode renderizar uma página de erro ou redirecionar, conforme necessário
+            res.send('Página não existente!'); // Página de erro 404, ajuste conforme necessário
+            return;
+        }
+
+        // Renderiza a página 'vaga-single' com os detalhes da vaga
+        res.render('vaga-single', { vaga });
+    } catch (err) {
+        console.error("Ocorreu um erro:", err);
+        res.status(500).send("Erro ao buscar a vaga.");
+    }
+});
+
+
+app.get('/resetar/senha', async (req, res) => {
+    // Renderiza a página para o usuário inserir o e-mail
+    res.render('resetar-senha');
+});
+
+// Adicione esta rota para processar o e-mail inserido e enviar o código
+app.post('/resetar/senha', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const usuario = await Usuarios.findOne({ email });
+
+        if (!usuario) {
+            // Usuário não encontrado, trate conforme necessário (pode redirecionar ou exibir mensagem de erro)
+            return res.render('resetar-senha', { error: 'E-mail não encontrado.' });
+        }
+
+        // Gerar código de recuperação e salvá-lo no banco de dados
+        const codigoRecuperacao = Math.floor(100000 + Math.random() * 900000).toString();
+        usuario.codigoRecuperacao = codigoRecuperacao;
+        await usuario.save();
+
+        // Envie o código por e-mail (você precisa implementar esta função)
+        // Exemplo: enviarCodigoPorEmail(usuario.email, codigoRecuperacao);
+
+        // Renderiza a página de confirmação
+        res.render('codigo-recuperacao-enviado');
+    } catch (err) {
+        console.error('Erro ao resetar a senha:', err);
+        res.status(500).send('Erro ao resetar a senha.');
+    }
+});
+
+
+app.get('/admin/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Erro ao encerrar a sessão:', err);
+        res.status(500).send('Erro ao encerrar a sessão.');
+      } else {
+        res.redirect('/'); // Redirecione para a página inicial ou qualquer outra página desejada
+      }
+    });
+});  
 
 
 

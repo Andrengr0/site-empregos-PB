@@ -54,12 +54,7 @@
             font-weight: 500;
         }
 
-        #senha{
-            width: 100%;
-            max-width: 300px;
-        }
-
-        #btn_logar{
+        button{
             width: 150px;
             margin: 20px auto 0 auto;
             display: block;
@@ -70,42 +65,31 @@
             border: 0;
             transition: 0.6s;
             padding: 5px 10px;
+            font-size: 16px;
         }
 
-        #btn_logar:hover{
+        button:hover{
             background-color: #0d009c;
-        }
-
-        form .btn-resetar-senha{
-            display: block;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .btn-cadastro{
-            margin-top: 14px;
         }
     </style>
 </head>
 <body>
-    <form method="post">
-        <img src="../public/images/img-logo.png">
-        <h3>Faça o login para acessar o painel administrativo</h3>
+    <section class="resetar-senha">
+    
+        <form action="/resetar/senha" method="post">
+            <img src="../public/images/img-logo.png">
+        <h3>Recuperar/mudar senha</h3>
 
-        <label for="email">Digite seu E-mail:</label>
-        <input id="email" type="text" name="email">
+            <label for="email">Digite seu e-mail cadastrado:</label>
+            <input type="email" name="email" required>
 
-        <label for="senha">Digite sua senha:</label>
-        <input id="senha" type="password" name="senha">
-
-        <a class="btn-resetar-senha" href="/resetar/senha">Esqueci minha senha</a>
-
-
-        <input id="btn_logar" type="submit" name="acao" value="Logar!">
-
-        <p style="margin-top: 15px; margin-bottom: 4px;"><span style="font-weight: bold;">Ainda não é cadastrado?</span> Simples e prático:</p>
-        <a class="btn-cadastro" href="/cadastrar/usuario/00">Clique e faça agora mesmo seu cadastro!</a>
-    </form>
+            <% if (error) { %>
+                <p class="error" style="margin-top: 15px;display: block;text-align: center;"><%= error %></p>
+            <% } %>
+    
+            <button type="submit">Enviar Código</button>
+        </form>
+    </section>
     
 </body>
 </html>

@@ -1,0 +1,37 @@
+<%- include('partials-admin/header.html') %>
+
+<div class="container-site" style="padding: 20px;">
+    <div class="cadastrar-cargo">
+        <form id="form_cargo" name="form_cargo" enctype="multipart/form-data" method="post" action="/admin/cadastro/cargo">
+            <label for="cargo_vaga">Nome do cargo:</label>
+            <input type="text" name="cargo_vaga" placeholder="Ex.: Recepcionista de clínica etc..." maxlength="50" required style="width: 100%;max-width: 260px;padding: 4px;">
+
+            <input type="submit" value="Cadastrar Cargo" style="padding: 3px 5px;background-color: #282D30;color: #f5f5f5;border-radius: 6px;border: none;cursor: pointer;">
+        </form>
+    </div><!-- cadastrar-cargo -->
+
+    <h4 class="mt-5">Lista de Cargos:</h4>
+
+    <div class="lista-cargos mt-4">
+        
+        <% for(let i=0; i<cargos.length; i++) {%>
+        <div class="cargo-single mt-1" style="display: block;">
+            <h6 style="display: inline-block;"><%=cargos[i].cargo%></h6>
+            <button class="deletar-cargo" id="<%=cargos[i].id%>" style="margin-left: 20px;border: none;background-color: #ffffff;color: #2d8de7;cursor: pointer;"><i class="fa fa-trash" aria-hidden="true" style="font-size: 22px;"></i></button>
+
+            <div class="janela-float <%=cargos[i].id%>" style="display: none;">
+                <div class="float-box">
+                    <h4>Deseja realmente excluir esse cargo?</h4>
+                    <a href="/deletar/cargo/<%=cargos[i].id%>" id="btn-excluir">Excluir</a>   <button id="btn-cancelar">Cancelar</button>
+                </div>
+            </div>
+        </div><!-- cargo-single -->
+    <%  } %>
+
+    </div><!-- lista-cargos -->
+
+
+    
+</div><!-- container-site -->
+
+<%- include('partials-admin/footer.html') %>
