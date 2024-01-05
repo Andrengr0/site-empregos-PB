@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 var mongoose = require("mongoose");
 
 
@@ -238,7 +239,7 @@ app.get('/dados-pessoais', async (req,res)=>{
             res.status(404).send('Usuário não encontrado');
             return;
         }
-        res.render('dados-pessoais', {nomeUsuario: usuario.nome});
+        res.render('dados-pessoais', {nomeUsuario: usuario.nome, emailUsuario: usuario.email});
     }
 })
 
@@ -429,9 +430,37 @@ app.get('/:slug', async (req, res) => {
 });
 
 
+// Configuração do Nodemailer (configure conforme o seu provedor de e-mail)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'andre.negreiros@dcx.ufpb.br',
+        pass: 'aNDRENGR123'
+    }
+});
+
+// Função para enviar o código por e-mail
+function enviarCodigoPorEmail(destinatario, codigo) {
+    const mailOptions = {
+        from: 'andre.negreiros@dcx.ufpb.br',
+        to: destinatario,
+        subject: 'Código de Recuperação de Senha',
+        text: `Seu código de recuperação é: ${codigo}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Erro ao enviar o e-mail:', error);
+        } else {
+            console.log('E-mail enviado:', info.response);
+        }
+    });
+}
+
+
 app.get('/resetar/senha', async (req, res) => {
     // Renderiza a página para o usuário inserir o e-mail
-    res.render('resetar-senha');
+    res.render('resetar-senha', { error: null });
 });
 
 // Adicione esta rota para processar o e-mail inserido e enviar o código
@@ -451,10 +480,76 @@ app.post('/resetar/senha', async (req, res) => {
         await usuario.save();
 
         // Envie o código por e-mail (você precisa implementar esta função)
-        // Exemplo: enviarCodigoPorEmail(usuario.email, codigoRecuperacao);
+        // Envie o código por e-mail
+        enviarCodigoPorEmail(usuario.email, codigoRecuperacao);
 
         // Renderiza a página de confirmação
-        res.render('codigo-recuperacao-enviado');
+        // console.log('Email enviado, renderizar pagina agora!')
+        res.render('codigo-recuperacao-enviado', {emailUsuario: usuario.email, error: null});
+    } catch (err) {
+        console.error('Erro ao resetar a senha:', err);
+        res.status(500).send('Erro ao resetar a senha.');
+    }
+});
+
+
+app.post('/verificar/codigo', async (req, res) => {
+    try {
+        const email = req.body.email_usuario;
+        const usuario = await Usuarios.findOne({ email });
+
+        if (!usuario) {
+            return res.render('codigo-recuperacao-enviado', {emailUsuario: usuario.email, error: 'Usuário não encontrado.' });
+        }
+
+        let codigo = req.body.codigo;
+
+        if (usuario.codigoRecuperacao && codigo == usuario.codigoRecuperacao) {
+            res.render('nova-senha', { emailUsuario: usuario.email });
+        } else {
+            return res.render('codigo-recuperacao-enviado', { error: 'Código de verificação inválido.' });
+        }
+    } catch (err) {
+        console.error('Erro ao resetar a senha:', err);
+        res.status(500).send('Erro ao resetar a senha.');
+    }
+});
+
+
+app.get('/admin/cadastrar/nova/senha', async (req, res) => {
+    try {
+        const email = req.session.email;
+
+        const usuario = await Usuarios.findOne({ email });
+
+        if (!usuario) {
+            console.log("Usuário não existe!");
+        }
+
+        return res.render('nova-senha', { emailUsuario: usuario.email });
+    } catch (err) {
+        console.error('Erro ao acessar a página para mudar senha:', err);
+        res.status(500).send('Erro ao resetar a senha.');
+    }
+});
+
+
+
+app.post('/admin/cadastrar/nova/senha', async (req, res) => {
+    try {
+        const email = req.body.email;
+        const usuario = await Usuarios.findOne({ email });
+
+        if (!usuario) {
+            // Usuário não encontrado, trate conforme necessário (pode redirecionar ou exibir mensagem de erro)
+            return res.render('nova-senha', { error: 'E-mail não encontrado.' });
+        }
+        const hashedPassword = await bcrypt.hash(req.body.senha, 10);
+
+        usuario.senha = hashedPassword;
+        await usuario.save();
+
+        res.send({ success: true, message: 'Senha cadastrada com sucesso.' });
     } catch (err) {
         console.error('Erro ao resetar a senha:', err);
         res.status(500).send('Erro ao resetar a senha.');

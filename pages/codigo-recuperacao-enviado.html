@@ -18,6 +18,7 @@
         }
 
         form{
+            text-align: center;
             width: 100%;
             max-width: 600px;
             margin: 10% auto;
@@ -43,6 +44,7 @@
 
         form input{
             width: 100%;
+            max-width: 200px;
             padding: 4px 8px;
             font-size: 17px;
             margin-top: 8px;
@@ -76,20 +78,29 @@
 <body>
     <section class="resetar-senha">
     
-        <form action="/resetar/senha" method="post">
-            <img src="../public/images/img-logo.png">
-        <h3>Recuperar/mudar senha</h3>
+        <form action="/verificar/codigo" method="post">
+            <div style="text-align: left;">
+                <img src="../public/images/img-logo.png">
+                <h3>Recuperar/mudar senha</h3>
+            </div>
 
-            <label for="email">Digite seu e-mail cadastrado:</label>
-            <input type="email" name="email" required>
+            <input type="hidden" id="email_usuario" name="email_usuario" value="<%=emailUsuario%>">
+
+            <label for="codigo">Digite o código enviado para seu e-mail:</label>
+            <input type="text" name="codigo" required>
 
             <% if (error) { %>
                 <p class="error" style="margin-top: 15px;display: block;text-align: center;color: #ff0000;"><%= error %></p>
             <% } %>
     
-            <button type="submit">Enviar Código</button>
+            <button type="submit">Verificar Código</button>
         </form>
     </section>
+
+    <script>
+        let email = document.querySelector('#email_usuario')
+        console.log(email.value)
+    </script>
     
 </body>
 </html>
