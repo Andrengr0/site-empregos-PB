@@ -28,12 +28,26 @@
             <aside>
                 <nav>
                     <ul>
+                        <% if(autUsuario == 3){%>
                         <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <li><a class="a1" href="/filtro/vagas"><span><i class="fa fa-home" aria-hidden="true"></i></span>Filtro de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/cadastrar-vaga"><span><i class="fa fa-plus" aria-hidden="true"></i></span>Cadastrar vaga</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/usuarios"><span><i class="fa fa-user" aria-hidden="true"></i></span>Usuários</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/apoiadores"><span><i class="fa fa-handshake-o" aria-hidden="true"></i></span>Apoiadores</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/cargos-vagas"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Cargos de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <% } else if(autUsuario == 2){%>
+                            <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/filtro/vagas"><span><i class="fa fa-home" aria-hidden="true"></i></span>Filtro de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/cadastrar-vaga"><span><i class="fa fa-plus" aria-hidden="true"></i></span>Cadastrar vaga</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/usuarios"><span><i class="fa fa-user" aria-hidden="true"></i></span>Usuários</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/cargos-vagas"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Cargos de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <% } else { %>
+                        <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <li><a class="a1" href="/cadastrar-vaga"><span><i class="fa fa-plus" aria-hidden="true"></i></span>Cadastrar vaga</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <% } %>
                     </ul>
                 </nav>
             </aside>

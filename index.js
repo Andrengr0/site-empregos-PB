@@ -17,7 +17,7 @@ var session = require('express-session');
 
 app.use(session({ 
     secret: 'keyboard cat', 
-    cookie: { maxAge: 360000 },
+    cookie: { maxAge: 720000 },
     resave: false,  // Adicionado para resolver o aviso de depreciação
     saveUninitialized: true  // Adicionado para resolver o aviso de depreciação
 }));
@@ -25,6 +25,7 @@ app.use(session({
 const Vagas = require('./Vagas.js');
 const Usuarios = require('./Usuarios.js');
 const Cargos = require('./Cargos.js')
+const Switch = require('./Switch.js')
 
 mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
     console.log('Conectado com sucesso!');
@@ -106,7 +107,84 @@ app.get('/admin/login', async (req,res)=>{
             return;
         }
 
-        Vagas.find({}).sort({'_id': -1}).then(function(vagas){
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
+
+        if(usuario.adm == 'super' || usuario.adm == 'med'){
+            Vagas.find({'__v': 1}).sort({'_id': -1}).then(function(vagas){
+                vagas = vagas.map(function(val){
+                    // let linkImage = (val.imagem).split("/");
+                    // let formatLinkImage = linkImage[linkImage.length - 1];
+                    return {
+                        id: val._id,
+                        titulo: val.titulo,
+                        imagem: val.imagem,
+                        dataCriada: val.dataCriada
+                    }
+                })
+                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
+            })
+        }else{
+            Vagas.find({'idUsuario': usuario._id}).sort({'_id': -1}).then(function(vagas){
+                vagas = vagas.map(function(val){
+                    // let linkImage = (val.imagem).split("/");
+                    // let formatLinkImage = linkImage[linkImage.length - 1];
+                    return {
+                        id: val._id,
+                        titulo: val.titulo,
+                        imagem: val.imagem,
+                        dataCriada: val.dataCriada
+                    }
+                })
+                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
+            })
+        }
+    }
+})
+
+
+app.post('/filtro/vagas', (req, res)=>{
+    res.redirect('/admin/login')
+})
+
+app.get('/filtro/vagas', async (req,res)=>{
+    if(req.session.email == null){
+        // console.log("Não logou")
+        res.render('admin-login')
+    }else{
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o nome do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+        if (usuario.adm !== 'super' && usuario.adm !== 'med') {
+            res.send('Não permitido o acesso a essa página!');
+            return; // Adicione um return para garantir que não haja envio de múltiplas respostas
+        }
+
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
+
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+
+        Vagas.find({'__v': 0}).sort({'_id': -1}).then(function(vagas){
             vagas = vagas.map(function(val){
                 // let linkImage = (val.imagem).split("/");
                 // let formatLinkImage = linkImage[linkImage.length - 1];
@@ -114,17 +192,55 @@ app.get('/admin/login', async (req,res)=>{
                     id: val._id,
                     titulo: val.titulo,
                     imagem: val.imagem,
+                    descricao: val.descricao,
                     dataCriada: val.dataCriada
                 }
             })
-            res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome});
+            res.render('filtro-vagas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
         })
     }
 })
 
 
+// Rota para obter o estado atual
+app.get('/api/obterEstadoSwitch', async (req, res) => {
+    try {
+        const switchState = await Switch.findOne();
+        res.json({ estadoAtivo: switchState ? switchState.estado === '1' : false });
+    } catch (error) {
+        console.error('Erro ao obter o estado do switch:', error);
+        res.status(500).json({ error: 'Erro ao obter o estado do switch.' });
+    }
+});
+
+// Rota para atualizar o estado
+app.post('/api/atualizarEstadoSwitch', async (req, res) => {
+    try {
+        const novoEstado = req.body.estadoAtivo ? '1' : '0';
+        const switchState = await Switch.findOneAndUpdate({}, { estado: novoEstado }, { upsert: true, new: true });
+
+        res.json({ estadoAtivo: switchState.estado === '1' });
+    } catch (error) {
+        console.error('Erro ao atualizar o estado do switch:', error);
+        res.status(500).json({ error: 'Erro ao atualizar o estado do switch.' });
+    }
+});
+
+
+
+app.get('/admin/aprovar/vaga/:id', async (req, res) => {
+    
+    const vaga = await Vagas.findOne({ _id: req.params.id});
+
+    vaga.__v = 1;
+    await vaga.save();
+    
+    res.redirect('/filtro/vagas');
+})
+
+
 app.post('/cadastrar-vaga', (req, res)=>{
-    res.redirect('admin/login')
+    res.redirect('/admin/login')
 })
 
 app.get('/cadastrar-vaga', async (req, res) => {
@@ -137,6 +253,15 @@ app.get('/cadastrar-vaga', async (req, res) => {
 
             // Realize uma consulta ao banco de dados para obter o _id do usuário
             const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+            let autUsuario;
+            if(usuario.adm == "super"){
+                autUsuario = 3;
+            } else if(usuario.adm == "med"){
+                autUsuario = 2;
+            }else{
+                autUsuario = 1;
+            }
             
             if (!usuario) {
                 // Trate o caso em que o usuário não foi encontrado
@@ -150,7 +275,7 @@ app.get('/cadastrar-vaga', async (req, res) => {
                         cargo: val.cargo
                     }
                 })
-                res.render('cadastrar-vaga', {idUsuario: usuario._id, cargos: cargos, nomeUsuario: usuario.nome});
+                res.render('cadastrar-vaga', {idUsuario: usuario._id, cargos: cargos, nomeUsuario: usuario.nome, autUsuario});
             })
         }
     } catch (err) {
@@ -174,6 +299,20 @@ app.get('/usuarios', async (req,res)=>{
 
         // Realize uma consulta ao banco de dados para obter o _id do usuário
         const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
+
+        if (usuario.adm !== 'super' && usuario.adm !== 'med') {
+            res.send('Não permitido o acesso a essa página!');
+            return; // Adicione um return para garantir que não haja envio de múltiplas respostas
+        }
         
         if (!usuario) {
             // Trate o caso em que o usuário não foi encontrado
@@ -181,7 +320,7 @@ app.get('/usuarios', async (req,res)=>{
             return;
         }
 
-        Usuarios.find({}).sort({'_id': -1}).then(function(usuarios){
+        Usuarios.find({'adm': null}).sort({'_id': -1}).then(function(usuarios){
             usuarios = usuarios.map(function(val){
                 // let linkImage = (val.imagem).split("/");
                 // let formatLinkImage = linkImage[linkImage.length - 1];
@@ -191,7 +330,7 @@ app.get('/usuarios', async (req,res)=>{
                     email: val.email,
                 }
             })
-            res.render('usuarios', {usuarios: usuarios, nomeUsuario: usuario.nome});
+            res.render('usuarios', {usuarios: usuarios, nomeUsuario: usuario.nome, autUsuario});
         })
     }
 })
@@ -209,13 +348,26 @@ app.get('/apoiadores', async (req,res)=>{
 
         // Realize uma consulta ao banco de dados para obter o _id do usuário
         const usuario = await Usuarios.findOne({ email: emailUsuario });
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
+
+        if (usuario.adm !== 'super' && usuario.adm !== 'med') {
+            res.send('Não permitido o acesso a essa página!');
+            return; // Adicione um return para garantir que não haja envio de múltiplas respostas
+        }
         
         if (!usuario) {
             // Trate o caso em que o usuário não foi encontrado
             res.status(404).send('Usuário não encontrado');
             return;
         }
-        res.render('apoiadores', {nomeUsuario: usuario.nome});
+        res.render('apoiadores', {nomeUsuario: usuario.nome, autUsuario});
     }
 })
 
@@ -233,13 +385,22 @@ app.get('/dados-pessoais', async (req,res)=>{
 
         // Realize uma consulta ao banco de dados para obter o _id do usuário
         const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
         
         if (!usuario) {
             // Trate o caso em que o usuário não foi encontrado
             res.status(404).send('Usuário não encontrado');
             return;
         }
-        res.render('dados-pessoais', {nomeUsuario: usuario.nome, emailUsuario: usuario.email});
+        res.render('dados-pessoais', {nomeUsuario: usuario.nome, emailUsuario: usuario.email, autUsuario});
     }
 })
 
@@ -259,6 +420,20 @@ app.get('/cargos-vagas', async (req,res)=>{
         // Realize uma consulta ao banco de dados para obter o nome do usuário
         const usuario = await Usuarios.findOne({ email: emailUsuario });
 
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
+
+        if (usuario.adm !== 'super' && usuario.adm !== 'med') {
+            res.send('Não permitido o acesso a essa página!');
+            return; // Adicione um return para garantir que não haja envio de múltiplas respostas
+        }
+
         if (!usuario) {
             // Trate o caso em que o usuário não foi encontrado
             res.status(404).send('Usuário não encontrado');
@@ -272,7 +447,7 @@ app.get('/cargos-vagas', async (req,res)=>{
                     cargo: val.cargo
                 }
             })
-            res.render('cargos-vagas', {cargos: cargos, nomeUsuario: usuario.nome});
+            res.render('cargos-vagas', {cargos: cargos, nomeUsuario: usuario.nome, autUsuario});
         })
     }
 })
@@ -316,6 +491,12 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             slug: new Date().getTime(),
             idUsuario: req.body.id_usuario
         });
+        const switchState = await Switch.findOne();
+        if(switchState.estado === '0'){
+            vaga.__v = 1
+            // const vaga = await Vagas.findOne({ _id: req.params.id});
+            await vaga.save();
+        }
 
         // Imprime todos os atributos da vaga
         // console.log('Vaga cadastrada:', vaga);
@@ -383,27 +564,97 @@ app.get('/cadastrar/usuario/:id', (req, res)=>{
     res.render('cadastrar-usuario', {})
 })
 
+app.get('/deletar/usuario/:id', (req, res) => {
+    
+    Usuarios.deleteOne({ _id: req.params.id }).then(function () {
+        res.redirect('/usuarios');
+        // console.log('excluido com sucesso')
+    });
+})
+
 
 
 app.get('/deletar/vaga/:id/:imagem', (req, res) => {
     // console.log(req.params.imagem)
-    fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
-        if (err) {
-            console.error('Erro ao excluir o arquivo:', err);
-        }
-        Vagas.deleteOne({ _id: req.params.id }).then(function () {
-            res.redirect('/admin/login');
-            // console.log('excluido com sucesso')
+    if(req.session.email == null){
+        // console.log("Não logou")
+        res.render('admin-login')
+    }else{
+        fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
+            if (err) {
+                console.error('Erro ao excluir o arquivo:', err);
+            }
+            Vagas.deleteOne({ _id: req.params.id }).then(function () {
+                res.redirect('/admin/login');
+                // console.log('excluido com sucesso')
+            });
         });
-    });
+    }
 })
 
 app.get('/deletar/cargo/:id', (req, res) => {
     
-    Cargos.deleteOne({ _id: req.params.id }).then(function () {
-        res.redirect('/cargos-vagas');
-        // console.log('excluido com sucesso')
-    });
+    if(req.session.email == null){
+        // console.log("Não logou")
+        res.render('admin-login')
+    }else{
+        Cargos.deleteOne({ _id: req.params.id }).then(function () {
+            res.redirect('/cargos-vagas');
+            // console.log('excluido com sucesso')
+        });
+    }
+})
+
+app.get('/vaga/usuario/:id', async (req, res) => {
+    
+    if(req.session.email == null){
+        // console.log("Não logou")
+        res.render('admin-login')
+    }else{
+        // Recupere o ID do usuário da sessão
+        const emailUsuario = req.session.email;
+
+        // Realize uma consulta ao banco de dados para obter o nome do usuário
+        const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+        if (!usuario) {
+            // Trate o caso em que o usuário não foi encontrado
+            res.status(404).send('Usuário não encontrado');
+            return;
+        }
+
+        let autUsuario;
+        if(usuario.adm == "super"){
+            autUsuario = 3;
+        } else if(usuario.adm == "med"){
+            autUsuario = 2;
+        }else{
+            autUsuario = 1;
+        }
+
+        if (usuario.adm !== 'super' && usuario.adm !== 'med') {
+            res.send('Não permitido o acesso a essa página!');
+            return; // Adicione um return para garantir que não haja envio de múltiplas respostas
+        }
+
+        const idUsuario = req.params.id;
+
+        const usuarioVagas = await Usuarios.findOne({ _id: idUsuario });
+
+        Vagas.find({idUsuario}).sort({'_id': -1}).then(function(vagas){
+            vagas = vagas.map(function(val){
+                // let linkImage = (val.imagem).split("/");
+                // let formatLinkImage = linkImage[linkImage.length - 1];
+                return {
+                    id: val._id,
+                    titulo: val.titulo,
+                    imagem: val.imagem,
+                    dataCriada: val.dataCriada
+                }
+            })
+            res.render('vagas-cadastradas-usuario', {vagas: vagas, nomeUsuarioVagas: usuarioVagas.nome, nomeUsuario: usuario.nome, autUsuario});
+        })
+    }
 })
 
 
@@ -434,15 +685,15 @@ app.get('/:slug', async (req, res) => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'andre.negreiros@dcx.ufpb.br',
-        pass: 'aNDRENGR123'
+        user: 'empregospbweb@gmail.com',
+        pass: 'lsxh fswu pzjl jque'
     }
 });
 
 // Função para enviar o código por e-mail
 function enviarCodigoPorEmail(destinatario, codigo) {
     const mailOptions = {
-        from: 'andre.negreiros@dcx.ufpb.br',
+        from: 'empregospbweb@gmail.com',
         to: destinatario,
         subject: 'Código de Recuperação de Senha',
         text: `Seu código de recuperação é: ${codigo}`
@@ -452,7 +703,7 @@ function enviarCodigoPorEmail(destinatario, codigo) {
         if (error) {
             console.error('Erro ao enviar o e-mail:', error);
         } else {
-            console.log('E-mail enviado:', info.response);
+            console.log('E-mail enviado');
         }
     });
 }

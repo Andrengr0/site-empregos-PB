@@ -6,7 +6,8 @@ var usuarioSchema = new Schema({
     nome: String,
     email: String,
     senha: String,
-    codigoRecuperacao: String
+    codigoRecuperacao: String,
+    adm: String
 },{collection:'usuarios'})
 
 var Usuarios = mongoose.model("Usuarios",usuarioSchema);

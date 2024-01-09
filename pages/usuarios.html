@@ -42,11 +42,17 @@
         <h6 class="usuario-nome"><%=usuarios[i].nome%></h6>
         <h6 class="usuario-email"><%=usuarios[i].email%></h6>
         <div class="box-buttons-usuario">
-            <a href="#" class="btn-ver-vagas-usuario">Ver vagas</a>
-            <button class="btn-resetar-senha">Resetar senha</button>
-            <a href="#" class="btn-remover-usuario">Remover</a>
+            <a href="/vaga/usuario/<%=usuarios[i].id%>" class="btn-ver-vagas-usuario">Ver vagas</a>
+            <button class="btn-resetar-senha" id="<%=usuarios[i].id%>">Remover</button>
         </div><!-- box-buttons-usuarios -->
     </div><!-- usuario-body -->
+
+    <div class="janela-float <%=usuarios[i].id%>" style="display: none;">
+        <div class="float-box">
+            <h4>Deseja realmente excluir essa vaga?</h4>
+            <a href="/deletar/usuario/<%=usuarios[i].id%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
+        </div>
+    </div>
 <% } %>
 
 </div><!-- tabela-usuarios -->
