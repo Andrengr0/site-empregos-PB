@@ -359,21 +359,28 @@ a#btn-excluir{
 
 
 /* ############################################################# */
+.box-cadastrar-apoiador{
+    margin: 0 auto;
+}
 
+.box-cadastrar-apoiador,
 .box-cadastrar-vaga{
     padding: 0 3% 40px 3%;
 }
 
+.box-cadastrar-apoiador form label,
 .box-cadastrar-vaga form label{
     display: block;
     font-weight: 500;
 }
 
+.box-cadastrar-apoiador form label span,
 .box-cadastrar-vaga form label span{
     font-size: 14px;
     color: #7c7c7c;
 }
 
+.box-cadastrar-apoiador form input,
 .box-cadastrar-vaga form input{
     padding: 4px 8px;
     width: 100%;
@@ -502,7 +509,8 @@ transform: rotate(45deg);
     max-width: 400px;
 }
 
-#cadastrar_vaga{
+#cadastrar_vaga,
+#cadastrar_apoiador{
     margin-top: 30px;
     display: inline-block;
     padding: 5px 10px;
@@ -512,7 +520,6 @@ transform: rotate(45deg);
     border-radius: 8px;
     cursor: pointer;
 }
-
 
 
 
@@ -675,6 +682,52 @@ section.apoiadores .table-apoiadores{
     color: #0D1B2B;
     padding: 3px 6px;
     border-radius: 6px;
+}
+
+.planos{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.plano-single{
+    width: 25%;
+    border: 2px solid #1b395c;
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.plano-single input{
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+}
+
+.plano-single label{
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+#btn_pagamento{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 15px;
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #02c70c;
+    color: #ffffff;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+}
+
+.realize-pagamento{
+    display: block;
+    text-align: center;
+    margin-top: 15px;
 }
 
 

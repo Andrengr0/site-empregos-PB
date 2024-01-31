@@ -110,7 +110,7 @@ $('#cadastrar_vaga').click(function () {
                 data: $("#form-vaga").serialize(), // Serialize o formulário para enviar os dados corretamente
                 success: function (data) {
                     redimensionar.croppie('destroy');
-                    console.log("Sucesso ao cadastrar");
+                    // console.log("Sucesso ao cadastrar");
                     location.reload();
                 },
                 error: function (error) {

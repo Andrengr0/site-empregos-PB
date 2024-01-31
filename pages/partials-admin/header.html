@@ -11,6 +11,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
     </head>
 
     <body>
@@ -36,6 +37,7 @@
                         <li><a class="a1" href="/apoiadores"><span><i class="fa fa-handshake-o" aria-hidden="true"></i></span>Apoiadores</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/cargos-vagas"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Cargos de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <li><a class="a1" href="/adicionar/apoiador"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Mostre sua marca</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <% } else if(autUsuario == 2){%>
                             <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/filtro/vagas"><span><i class="fa fa-home" aria-hidden="true"></i></span>Filtro de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
@@ -43,10 +45,12 @@
                             <li><a class="a1" href="/usuarios"><span><i class="fa fa-user" aria-hidden="true"></i></span>Usuários</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/cargos-vagas"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Cargos de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/adicionar/apoiador"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Mostre sua marca</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <% } else { %>
                         <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/cadastrar-vaga"><span><i class="fa fa-plus" aria-hidden="true"></i></span>Cadastrar vaga</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                        <li><a class="a1" href="/adicionar/apoiador"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Mostre sua marca</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                         <% } %>
                     </ul>
                 </nav>

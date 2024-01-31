@@ -18,6 +18,8 @@
         .container{
             max-width: 500px;
             margin: 0 auto;
+            border-left: 1px solid #636363;
+            border-right: 1px solid #636363;
         }
 
         img{
@@ -64,8 +66,9 @@
         <h6>Empresa/estabelecimento:</h6>
         <p><%=vaga.empresa%></p>
 
-        <h6>Tipo de cargo: </h6>
-        <p><%=vaga.categoria%>, <%=vaga.quantidade%> vaga(s), <%=vaga.modelo%></p>
+        <h6>Cargo(s): </h6>
+        <p><%= vaga.categoria.join(', ') %></p>
+        <p><%=vaga.quantidade%> vaga(s), <%=vaga.modelo%></p>
 
         <h6><%=vaga.experiencia%></h6>
 

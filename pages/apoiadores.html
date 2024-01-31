@@ -3,7 +3,7 @@
 <section class="apoiadores">
 
     <h5 class="mt-3 text-center">Painel sobre Apoiadores:</h5>
-    <a href="#" class="adicionar-apoiador"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar apoiador</a>
+    <a href="/adicionar/apoiador" class="adicionar-apoiador"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar apoiador</a>
 
     <h6 class="mt-5 text-center">Lista de Apoiadores cadastrados:</h6>
     <div class="table-apoiadores">
@@ -12,20 +12,13 @@
             <a class="remover-apoiador" href="#">Remover Apoiador</a>
         </div><!-- apoiadores-head -->
 
+    <% for(let i=0; i<apoiadores.length; i++){%>
         <div class="apoiadores-body">
-            <h6 class="nome-apoiador">Empresa Lorem Ipsum</h6>
-            <a class="remover-apoiador" href="#">Remover Apoiador</a>
+            <h6 class="nome-apoiador"><%= apoiadores[i].nome%></h6>
+            <% let nameImage = apoiadores[i].imagem.split('/') %>
+            <a class="remover-apoiador" href="/admin/deletar/apoiador/<%=apoiadores[i].id+"/"+nameImage[5]%></a>">Remover Apoiador</a>
         </div><!-- apoiadores-body -->
-
-        <div class="apoiadores-body">
-            <h6 class="nome-apoiador">Empresa Lorem Ipsum</h6>
-            <a class="remover-apoiador" href="#">Remover Apoiador</a>
-        </div><!-- apoiadores-body -->
-
-        <div class="apoiadores-body">
-            <h6 class="nome-apoiador">Empresa Lorem Ipsum</h6>
-            <a class="remover-apoiador" href="#">Remover Apoiador</a>
-        </div><!-- apoiadores-body -->
+    <% } %>
         
     </div><!-- table-apoiadores -->
 

@@ -20,12 +20,6 @@ header{
     padding: 30px 0 10px 0;
 }
 
-header .logo img{
-    width: 70px;
-    height: 60px;
-    cursor: pointer;
-}
-
 header .logo p{
     font-size: 18px;
     font-weight: 800;
@@ -59,6 +53,7 @@ section.apresentacao {
 .apresentacao .container-site{
     padding: 0 2%;
     align-items: center;
+    position: relative;
 }
 
 .apresentacao .frase-apresentacao{
@@ -88,9 +83,24 @@ section.apresentacao {
     max-height: 100%;
 }
 
+.apresentacao .logo-site{
+    width: 130px;
+    height: 115px;
+    cursor: pointer;
+    position: absolute;
+    bottom: -80px;
+    left: 40px;
+    border-radius: 6px;
+    /* border: 1px dashed #000; */
+}
+
 
 /* ---------------------------------------------------- */
 
+
+section.vagas{
+    background-color:#e3ddff;
+}
 
 section.vagas .search-vaga .form-busca,
 .search-vaga p{
@@ -121,25 +131,6 @@ section.vagas .container-site{
     padding: 0 2%;
 }
 
-.vagas .container-site .num-pages{
-    text-align: center;
-    vertical-align: text-bottom;
-    height: 25px;
-}
-
-.num-pages a, .num-pages p{
-    display: inline-block;
-}
-
-.num-pages p{
-    color: #454545;
-    padding: 0 2%;
-}
-
-.num-pages a{
-    padding: 5px;
-}
-
 .vagas .box-vagas{
     display: flex;
     flex-wrap: wrap;
@@ -155,32 +146,38 @@ section.vagas .container-site{
     border-radius: 10px;
 }
 
-.vaga-single .img-vaga{
-    width: 100%;
-}
-
-.vaga-single .img-vaga img{
-    width: 100%;
-    height: 250px;
-}
-
 .vaga-single h6{
     font-size: 15px;
     color: #d4d4d4;
 }
 
 .vaga-single h5{
-    font-size: 16px;
+    font-size: 18px;
     margin-top: 8px;
 }
 
-.vaga-single a{
+.vaga-single .btn-detalhes{
+    display: inline-block;
+    margin-top: 6px;
     text-decoration: none;
     background-color: #CC6223;
     border-radius: 8px;
     padding: 5px 10px;
     color: #ffffff;
-    margin-top: 5px;
+}
+
+.vagas .btn-aplicar-filtro{
+    background-color: #2c0c52;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: 0;
+    cursor: pointer;
+}
+
+.vagas .btn-aplicar-filtro:hover{
+    background-color: #3a3a3a;
 }
 
 
@@ -202,6 +199,21 @@ section.vagas .container-site{
 
 .vagas .modal .modal-body p{
     margin-top: 30px;
+}
+
+.vagas .container-site{
+    text-align: center;
+}
+
+.vagas .container-site > #carregar-mais{
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 25px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    background-color: #2c0c52;
+    color: #ffffff;
+
 }
 
 

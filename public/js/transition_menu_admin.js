@@ -5,8 +5,6 @@ $(() => {
     // Obtém o caminho da URL atual
     const currentPath = window.location.pathname;
 
-    console.log("currentPath")
-
     // Itera sobre os itens do menu
     item_menu.each(function() {
         let href = $(this).find('a').attr('href');

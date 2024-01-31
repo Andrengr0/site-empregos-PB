@@ -24,8 +24,9 @@ app.use(session({
 
 const Vagas = require('./Vagas.js');
 const Usuarios = require('./Usuarios.js');
-const Cargos = require('./Cargos.js')
-const Switch = require('./Switch.js')
+const Cargos = require('./Cargos.js');
+const Switch = require('./Switch.js');
+const Apoiador = require('./Apoiador.js');
 
 mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
     console.log('Conectado com sucesso!');
@@ -44,28 +45,176 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, '/pages'));
 
 
+// // SDK Mercado Pago
+// const { MercadoPagoConfig, Preference } = require('mercadopago');
+// // Adicione as credenciais
+// const client = new MercadoPagoConfig({ accessToken: 'TEST-8659705157279314-090519-a653c82695a27409d59bc64c60462a03-393147628' });
+
+// const preference = new Preference(client);
+
+// preference.create({
+//   body: {
+//     items: [
+//     {
+//         id: 'item-ID-1234',
+//         title: 'Meu produto',
+//         currency_id: 'BRL',
+//         picture_url: 'https://www.mercadopago.com/org-img/MP3/home/logomp3.gif',
+//         description: 'Descrição do Item',
+//         category_id: 'art',
+//         quantity: 1,
+//         unit_price: 75.76
+//     }
+//     ],
+//     payer: {
+//     name: 'João',
+//     surname: 'Silva',
+//     email: 'user@email.com',
+//     phone: {
+//         area_code: '11',
+//         number: '4444-4444'
+//     },
+//     identification: {
+//         type: 'CPF',
+//         number: '19119119100'
+//     },
+//     address: {
+//         street_name: 'Street',
+//         street_number: 123,
+//         zip_code: '06233200'
+//     }
+//     },
+//     back_urls: {
+//     success: 'https://www.success.com',
+//     failure: 'http://www.failure.com',
+//     pending: 'http://www.pending.com'
+//     },
+//     auto_return: 'approved',
+//     payment_methods: {
+//     excluded_payment_methods: [
+//             {
+//                         id: "bolbradesco"
+//             },
+//             {
+//                         id: "pec"
+//             }
+//     ],
+//     excluded_payment_types: [
+//             {
+//                         id: "credit_card"
+//             },
+//             {
+//                         id: "debit_card"
+//             }
+//     ],
+//     installments: 1
+// },
+//     notification_url: 'https://www.your-site.com/ipn',
+//     statement_descriptor: 'MEUNEGOCIO',
+//     external_reference: 'Reference_1234',
+//     expires: true,
+//     expiration_date_from: '2016-02-01T12:00:00.000-04:00',
+//     expiration_date_to: '2016-02-28T12:00:00.000-04:00'
+// }
+// })
+// .then(function (response) {
+//     console.log(response);  // Adicione esta linha
+//     if (response && response.body) {
+//         global.id = response.body.id;
+//     } else {
+//         console.log('A resposta não tem corpo');
+//     }
+// })
+// .catch(function (error) {
+//     console.log('Ocorreu um erro ao criar a preferência:', error);
+// });
+
 
 app.get('/', async (req, res) => {
     try {
-      if (req.query.busca == null) {
-  
-        const vagas = await Vagas.find({}).sort({data: 1});
-            var vagasReturn= vagas.map(function(val){
-                return {
-                    titulo: val.titulo,
-                    cidade: val.cidade,
-                    imagem: val.imagem,
-                    slug: val.slug 
-                }
-            })
-            
-        res.render('home', {vagas: vagasReturn});  
-      } 
+        const { filtroCargo, filtroCidade, buscar, inicio, limite } = req.query;
+        const vagas = await obterVagasFiltradas(filtroCargo, filtroCidade, buscar, inicio, limite);
+        
+        Cargos.find({}).sort({ cargo: 1 }).then(function(cargos) {
+            cargos = cargos.map(function(val) {
+                return { cargo: val.cargo };
+            });
+
+            res.render('home', { vagas, cargos });
+        });
     } catch (err) {
         console.error("Ocorreu um erro:", err);
-        res.status(500).send("Erro ao buscar as palestras.");
+        res.status(500).send("Erro ao buscar as vagas.");
     }
-  });
+});
+
+app.get('/api/obterVagasFiltradas', async (req, res) => {
+    try {
+        const { filtroCargo, filtroCidade, buscar, inicio, limite } = req.query;
+        const vagas = await obterVagasFiltradas(filtroCargo, filtroCidade, buscar, inicio, limite);
+        res.json(vagas);
+    } catch (error) {
+        console.error('Erro ao obter vagas filtradas:', error);
+        res.status(500).json({ error: 'Erro ao obter vagas filtradas.' });
+    }
+});
+
+app.post('/api/atualizarEstadoFiltros', async (req, res) => {
+    try {
+        const { filtroCargo, filtroCidade, buscar, inicio, limite } = req.body;
+
+        const vagasFiltradas = await obterVagasFiltradas(filtroCargo, filtroCidade, buscar, inicio, limite);
+
+        res.json({ success: true, vagas: vagasFiltradas });
+    } catch (error) {
+        console.error('Erro ao atualizar o estado dos filtros:', error);
+        res.status(500).json({ error: 'Erro ao atualizar o estado dos filtros.' });
+    }
+});
+
+
+async function obterVagasFiltradas(filtroCargo, filtroCidade, buscar, inicio = 0, limite = 12) {
+    try {
+        let query = {};
+
+        // Filtro por título da vaga (ignorado se não especificado)
+        if (buscar && buscar.trim() !== "") {
+            query.titulo = { $regex: new RegExp(buscar, 'i') };
+        }
+
+        // Filtro por categoria (ignorado se for "Geral")
+        if (filtroCargo && filtroCargo !== "Geral") {
+            query.categoria = filtroCargo;
+        }
+
+        // Filtro por cidade (ignorado se for "Escolher...")
+        if (filtroCidade && filtroCidade !== "Escolher...") {
+            query.cidade = filtroCidade;
+        }
+
+        // Filtro por __v (ignorado se não especificado)
+        query.__v = 1;
+
+        // Obtenha as vagas correspondentes aos filtros
+        // Use o método 'skip' para pular as 'inicio' primeiras vagas
+        // Use o método 'limit' para limitar o resultado a 'limite' vagas
+        const vagas = await Vagas.find(query).sort({'_id': -1}).skip(inicio).limit(limite);
+
+        return vagas.map(val => ({
+            titulo: val.titulo,
+            categoria: val.categoria,
+            cidade: val.cidade,
+            imagem: val.imagem,
+            quantVagas: val.quantidade,
+            dataCriada: val.dataCriada,
+            slug: val.slug
+        }));
+    } catch (error) {
+        console.error('Erro ao obter vagas filtradas:', error);
+        throw new Error('Erro ao obter vagas filtradas: ' + error.message);
+    }
+}
+
 
 
 const bcrypt = require('bcrypt');
@@ -367,7 +516,280 @@ app.get('/apoiadores', async (req,res)=>{
             res.status(404).send('Usuário não encontrado');
             return;
         }
-        res.render('apoiadores', {nomeUsuario: usuario.nome, autUsuario});
+        
+        Apoiador.find({}).sort({'_id': -1}).then(function(apoiadores){
+            apoiadores = apoiadores.map(function(val){
+                // let linkImage = (val.imagem).split("/");
+                // let formatLinkImage = linkImage[linkImage.length - 1];
+                return {
+                    id: val._id,
+                    nome: val.nome,
+                    imagem: val.imagem
+                }
+            })
+            res.render('apoiadores', {apoiadores: apoiadores, nomeUsuario: usuario.nome, autUsuario});
+        })
+    }
+})
+
+app.post('/adicionar/apoiador', async (req,res)=>{
+    res.redirect('/admin/login')
+})
+
+app.get('/adicionar/apoiador', async (req,res)=>{
+    
+    try {
+        if (req.session.email == null) {
+            res.render('admin-login');
+        } else {
+            // Recupere o ID do usuário da sessão
+            const emailUsuario = req.session.email;
+
+            // Realize uma consulta ao banco de dados para obter o _id do usuário
+            const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+            let autUsuario;
+            if(usuario.adm == "super"){
+                autUsuario = 3;
+            } else if(usuario.adm == "med"){
+                autUsuario = 2;
+            }else{
+                autUsuario = 1;
+            }
+            
+            if (!usuario) {
+                // Trate o caso em que o usuário não foi encontrado
+                res.status(404).send('Usuário não encontrado');
+                return;
+            }
+  
+            res.render('cadastrar-apoiador', {idUsuario: usuario._id,nomeUsuario: usuario.nome, autUsuario});
+
+            
+            // res.render('cadastrar-apoiador', {idUsuario: usuario._id, nomeUsuario: usuario.nome, autUsuario});
+        }
+    } catch (err) {
+        console.error('Erro ao buscar o usuário:', err);
+        res.status(500).send('Erro ao buscar o usuário.');
+    }
+});
+
+
+app.post('/admin/cadastro/apoiador', async (req, res) => {
+    try {
+      const imagem = req.body.imagem_recortada;
+  
+      const apoiador = await Apoiador.create({
+        nome: req.body.nome_apoiador,
+        link: req.body.link,
+        imagem: imagem,
+        plano: req.body.plano,
+        statusPayment: 'pendente', // padrão
+        dataCriada: new Date(),
+        idUsuario: req.body.id_usuario,
+      });
+  
+      // Se for um plano pago, criar pagamento
+      if (req.body.plano !== 'gratuito') {
+        const valorPlano = calcularValorDoPlano(req.body.plano); // Implemente esta função
+        const pagamento = await criarPagamentoMercadoPago(req, apoiador, valorPlano);
+        apoiador.statusPayment = 'pendente'; // Status inicial é pendente
+  
+        // Adicionar o ID do pagamento ao apoiador (você pode salvar no banco se quiser)
+        apoiador.idPagamento = pagamento.id;
+        await apoiador.save();
+  
+        const link_pagamento = pagamento.point_of_interaction.transaction_data.ticket_url;
+        console.log(link_pagamento)
+        // Redirecionar para a página de pagamento
+        // res.redirect(response.init_point);
+        res.send({ link_pagamento });
+      } else {
+        // Se for gratuito, atualizar status para 'pago'
+        apoiador.statusPayment = 'pago';
+        await apoiador.save();
+        return res.redirect('/admin/login');
+      }
+    } catch (err) {
+      console.error('Erro ao cadastrar o apoiador:', err);
+      res.status(500).send('Erro ao cadastrar o apoiador.');
+    }
+  });
+
+  function calcularValorDoPlano(plano) {
+    // Lógica para determinar o valor do plano
+    // Substitua com sua própria lógica
+    return plano === 'premium' ? 49.99 : plano === 'moderado' ? 9.99 : 0;
+  }
+  
+// Passo 1: Importe as partes do módulo que você deseja usar
+const { MercadoPagoConfig, Payment} = require('mercadopago');
+
+async function criarPagamentoMercadoPago(req, apoiador, valor) {
+    const client = new MercadoPagoConfig({
+      accessToken: 'TEST-87769228305025-011020-0cee964ae859bff392e5924e20606050-393147628', // Substitua pelo seu token real do Mercado Pago
+      options: {
+        timeout: 5000,
+        idempotencyKey: 'abc',
+      },
+    });
+
+const payment = new Payment(client);
+
+const emailUsuario = req.session.email;
+// console.log(emailUsuario);
+
+const body = {
+    transaction_amount: valor, // Substitua pelo valor desejado
+    description: `Assinatura do Plano - ${apoiador.plano}`,
+    payment_method_id: 'pix', // Substitua pelo ID do método de pagamento desejado
+    payer: {
+      email: `${emailUsuario}`, // Substitua pelo email do pagador
+    },
+};
+
+try {
+    const pagamento = await payment.create({ body });
+
+    // console.log(pagamento)
+    return pagamento;
+} catch (error) {
+    console.error('Erro ao criar pagamento no Mercado Pago:', error);
+    throw error;
+}
+}
+
+
+
+
+app.post('/webhook-mercado-pago', async (req, res) => {
+    try {
+      const evento = req.body;
+  
+      // Verifique o tipo de evento
+      if (evento.type === 'payment') {
+        const pagamento = evento.data;
+  
+        // Verifique se o pagamento foi confirmado
+        if (pagamento.status === 'approved') {
+          // Atualize o status do apoiador para 'pago' no banco de dados
+          await atualizarStatusApoiador(pagamento.external_reference, 'pago');
+        }
+      }
+  
+      res.status(200).send('OK');
+    } catch (error) {
+      console.error('Erro no webhook do Mercado Pago:', error);
+      res.status(500).send('Erro no webhook do Mercado Pago.');
+    }
+  });
+  
+async function atualizarStatusApoiador(idPagamento, novoStatus) {
+    try {
+      // Consulte o apoiador com base no idPagamento
+      const apoiador = await Apoiador.findOne({ idPagamento });
+  
+      if (!apoiador) {
+        console.error('Apoiador não encontrado:', idPagamento);
+        return;
+      }
+  
+      // Atualize o statusPayment
+      apoiador.statusPayment = novoStatus;
+      await apoiador.save();
+      console.log(`Status do apoiador atualizado para ${novoStatus}:`, idPagamento);
+    } catch (error) {
+      console.error('Erro ao atualizar status do apoiador:', error);
+    }
+}
+
+// ///////////////////////////////////////////////////
+
+// Lógica de verificação periódica (pode ser um cron job ou outra estratégia)
+function verificarPagamentosPendentes() {
+    // Lógica para obter todos os pagamentos pendentes do seu sistema ou banco de dados
+    const pagamentosPendentes = obterPagamentosPendentes();
+
+    // Verificar cada pagamento
+    pagamentosPendentes.forEach(async (pagamento) => {
+        const tempoDecorrido = calcularTempoDecorrido(pagamento.dataCriacao);
+
+        // Se o pagamento está pendente por mais de 10 minutos, cancelar
+        if (tempoDecorrido > 10 * 60 * 1000) { // 10 minutos em milissegundos
+            try {
+                // Utilize a API do Mercado Pago para cancelar o pagamento
+                await cancelarPagamentoNoMercadoPago(pagamento.idPagamento);
+                // Atualize o status do pagamento no seu sistema como cancelado
+                marcarPagamentoComoCancelado(pagamento.id);
+            } catch (error) {
+                console.error('Erro ao cancelar pagamento:', error);
+            }
+        }
+    });
+}
+
+// Exemplo de como calcular o tempo decorrido desde a criação
+function calcularTempoDecorrido(dataCriacao) {
+    const agora = new Date();
+    const tempoDecorrido = agora - new Date(dataCriacao);
+    return tempoDecorrido;
+}
+
+// Exemplo de como obter pagamentos pendentes do seu sistema ou banco de dados
+function obterPagamentosPendentes() {
+    // Lógica para obter os pagamentos pendentes do seu sistema ou banco de dados
+    // Retorne uma lista de pagamentos pendentes
+    return listaDePagamentosPendentes;
+}
+
+// Exemplo de como cancelar um pagamento no Mercado Pago
+async function cancelarPagamentoNoMercadoPago(idPagamento) {
+    // Utilize a API do Mercado Pago para cancelar o pagamento
+    // Substitua 'API_DO_MERCADO_PAGO' pelo seu token de acesso real
+    const mercadoPagoClient = new MercadoPagoClient({ accessToken: 'API_DO_MERCADO_PAGO' });
+    const pagamentoAPI = new PagamentoAPI(mercadoPagoClient);
+
+    await pagamentoAPI.cancelarPagamento(idPagamento);
+}
+
+// Exemplo de como marcar um pagamento como cancelado no seu sistema ou banco de dados
+function marcarPagamentoComoCancelado(idPagamento) {
+    // Lógica para atualizar o status do pagamento no seu sistema como cancelado
+}
+
+// ////////////////////////////////
+  
+
+const cron = require('node-cron');
+
+// agendar tarefa para ser executada a cada hora
+cron.schedule('0 * * * *', async () => {
+    const agora = new Date();
+    const vinteQuatroHorasAtras = new Date(agora - 24 * 60 * 60 * 1000);
+
+    // encontrar e deletar todos os apoiadores com plano 'gratuito' criados há mais de 24 horas
+    await Apoiador.deleteMany({
+        plano: 'gratuito',
+        dataCriada: { $lt: vinteQuatroHorasAtras }
+    });
+});
+
+
+app.get('/admin/deletar/apoiador/:id/:imagem', (req, res) => {
+    // console.log(req.params.imagem)
+    if(req.session.email == null){
+        // console.log("Não logou")
+        res.render('admin-login')
+    }else{
+        fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
+            if (err) {
+                console.error('Erro ao excluir o arquivo:', err);
+            }
+            Apoiador.deleteOne({ _id: req.params.id }).then(function () {
+                res.redirect('/admin/login');
+                // console.log('excluido com sucesso')
+            });
+        });
     }
 })
 
