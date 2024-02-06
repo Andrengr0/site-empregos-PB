@@ -105,8 +105,8 @@
                             </div>
                             <div class="modal-body text-left">
                                 <img src="<%=vagas[i].imagem%>">
-                                <% const textoDecodificado = decodeURIComponent(vagas[i].descricao).replace(/\n/g, '<br>'); %>
-                                <p class="mt-4"><%- textoDecodificado %></p>
+  
+                                <p class="mt-4"><%- vagas[i].descricao %></p>
                             </div><!-- modal-body -->
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

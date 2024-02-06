@@ -6,52 +6,54 @@
                 <h4 class="text-center">Vagas cadatradas: <span style="font-size: 17px;"><%=vagas.length%></span></h4>
                 <div class="box-vagas">
 
-                <% if (vagas.length > 0) { %>
-                    <% for(let i=0; i < vagas.length; i++){ %>
-
-                    <div class="row vaga-single mt-1">
-                        <div class="col-sm-8 titulo-vaga"><h5><%= vagas[i].titulo%><span>- <%= vagas[i].dataCriada%></span></h5></div>
-                        <div class="col-sm-4">
-                            <button type="button" data-toggle="modal" data-target="#vaga_recepcionista<%=[i]%>">Ver imagem</button>
-                            <button class="deletar-vaga" id="<%=vagas[i].id%>"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </div> <!-- col-md-6 -->
-                    </div><!-- row -->
-
-                    <div class="janela-float <%=vagas[i].id%>" style="display: none;">
-                        <div class="float-box">
-                            <h4>Deseja realmente excluir essa vaga?</h4>
-                            <% let nameImage = vagas[i].imagem.split('/') %>
-                            <a href="/deletar/vaga/<%=vagas[i].id +"/"+nameImage[5]%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
-                        </div>
-                    </div>
-                    <% } %>
-                <% } else { %>
-                <p>Nenhuma vaga disponível.</p>
-                <% } %>
-
-
-                <% for(let i=0; i < vagas.length; i++){ %>
-                    <!-- Modal -->
-                    <div class="modal fade" id="vaga_recepcionista<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="vaga_recepcionista" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="TituloModalCentralizado"><%= vagas[i].titulo%></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                    <% if (vagas.length > 0) { %>
+                        <% for(let i=0; i < vagas.length; i++){ %>
+    
+                        <div class="row vaga-single mt-1">
+                            <div class="col-sm-8 titulo-vaga"><h5><%= vagas[i].titulo%><span>- <%= vagas[i].dataCriada%></span></h5></div>
+                            <div class="col-sm-4">
+                                <button type="button" data-toggle="modal" data-target="#vaga_recepcionista<%=[i]%>">Detalhes</button>
+                                <button class="deletar-vaga" id="<%=vagas[i].id%>"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </div> <!-- col-md-6 -->
+                        </div><!-- row -->
+    
+                        <div class="janela-float <%=vagas[i].id%>" style="display: none;">
+                            <div class="float-box">
+                                <h4>Deseja realmente excluir essa vaga?</h4>
+                                <% let nameImage = vagas[i].imagem.split('/') %>
+                                <a href="/deletar/vaga/<%=vagas[i].id +"/"+nameImage[5]%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
                             </div>
-                            <div class="modal-body text-left">
-                                <img src="<%=vagas[i].imagem%>">
-                            </div><!-- modal-body -->
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                            </div><!-- modal-footer -->
                         </div>
+                        <% } %>
+                    <% } else { %>
+                    <p>Nenhuma vaga disponível.</p>
+                    <% } %>
+    
+    
+                    <% for(let i=0; i < vagas.length; i++){ %>
+                        <!-- Modal -->
+                        <div class="modal fade" id="vaga_recepcionista<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="vaga_recepcionista" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="TituloModalCentralizado"><%= vagas[i].titulo%></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-left">
+                                    <img src="<%=vagas[i].imagem%>">
+                                    <% const textoDecodificado = decodeURIComponent(vagas[i].descricao).replace(/\n/g, '<br>'); %>
+                                    <p class="mt-4"><%- textoDecodificado %></p>
+                                </div><!-- modal-body -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                </div><!-- modal-footer -->
+                            </div>
+                            </div>
                         </div>
-                    </div>
-                <% } %>
-            </div><!-- container-site -->
+                    <% } %>
+                </div><!-- container-site -->
 
             </section><!-- vagas-cadastradas -->
 

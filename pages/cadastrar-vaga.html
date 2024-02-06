@@ -4,8 +4,8 @@
     <h5 class="mt-3 text-center">Cadastrar vaga:</h5>
     <div class="box-cadastrar-vaga mt-4">
         <form id="form-vaga" enctype="multipart/form-data" method="post">
-            <label for="titulo_vaga">Título para a oferta de vaga: <span>(obrigatório)</span></label>
-            <input type="text" name="titulo_vaga" placeholder="Ex.: Recepcionista de clínica etc..." maxlength="100">
+            <label for="titulo_vaga">Título para a oferta de vaga: <span>(obrigatório) (max. 60 caracteres)</span></label>
+            <input type="text" name="titulo_vaga" placeholder="Ex.: Recepcionista de clínica etc..." maxlength="60">
 
             <label for="empresa_vaga" class="mt-4">Empresa/estabelecimento empregador(a): <span>(obrigatório)</span></label>
             <input type="text" name="empresa_vaga" placeholder="Ex.: Supermercado varejista etc..." maxlength="100">
@@ -16,7 +16,7 @@
                   <label class="input-group-text" for="cidade_vaga">Cidade:</label>
                 </div>
                 <select class="custom-select" id="cidade_vaga" name="cidade_vaga" required>
-                    <option value="Escolher..." selected>Escolher...</option>
+                    <option value="escolher" selected>Escolher...</option>
                     <option value="Água Branca">Água Branca</option>
                     <option value="Aguiar">Aguiar</option>
                     <option value="Alagoa Grande">Alagoa Grande</option>
@@ -290,14 +290,14 @@
 
             <!-- <input type="text" name="categoria_vaga" id="categoria_vaga" value=""> -->
 
-            <label class="mt-5" for="select_experiencia">Experiência requerida: <span>(opcional)</span></label>
+            <label class="mt-5" for="select_experiencia">Experiência requerida:</label>
             <select class="custom-select" id="experiencia_vaga" name="experiencia_vaga">
                 <option selected value="Com experiencia">Com experiência</option>
                 <option value="Com ou sem experiencia">Com ou sem experiência</option>
                 <option value="Sem experiencia">Sem experiência</option>
             </select>
 
-            <label class="mt-5" for="modelo_vaga">Modelo de trabalho: <span>(opcional)</span></label>
+            <label class="mt-5" for="modelo_vaga">Modelo de trabalho:</label>
             <select class="custom-select" id="modelo_vaga" name="modelo_vaga">
                 <option selected value="Presencial">Presencial</option>
                 <option value="Remoto">Remoto</option>
@@ -313,9 +313,9 @@
             <label class="mt-5" for="salario_vaga">Salario: <span>(opcional)</span></label>
             <input type="text" id="salario_vaga" name="salario_vaga" value="R$" style="max-width: 150px;">
 
-            <label class="mt-5" for="arquivo_vaga">Imagem de divulgação: <span>(obrigatório)</span></label>
+            <label class="mt-5" for="arquivo_vaga">Imagem de divulgação: <span>(opcional)</span></label>
         
-            <input type="file" name="arquivo_vaga" id="arquivo_vaga" onchange="previewImage(this)" required style="display: block;">
+            <input type="file" name="arquivo_vaga" id="arquivo_vaga" onchange="previewImage(this)" style="display: block;">
 
             <input type="hidden" name="imagem_recortada" id="imagem_recortada" value="">
     

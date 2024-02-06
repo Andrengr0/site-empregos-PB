@@ -45,89 +45,6 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, '/pages'));
 
 
-// // SDK Mercado Pago
-// const { MercadoPagoConfig, Preference } = require('mercadopago');
-// // Adicione as credenciais
-// const client = new MercadoPagoConfig({ accessToken: 'TEST-8659705157279314-090519-a653c82695a27409d59bc64c60462a03-393147628' });
-
-// const preference = new Preference(client);
-
-// preference.create({
-//   body: {
-//     items: [
-//     {
-//         id: 'item-ID-1234',
-//         title: 'Meu produto',
-//         currency_id: 'BRL',
-//         picture_url: 'https://www.mercadopago.com/org-img/MP3/home/logomp3.gif',
-//         description: 'Descrição do Item',
-//         category_id: 'art',
-//         quantity: 1,
-//         unit_price: 75.76
-//     }
-//     ],
-//     payer: {
-//     name: 'João',
-//     surname: 'Silva',
-//     email: 'user@email.com',
-//     phone: {
-//         area_code: '11',
-//         number: '4444-4444'
-//     },
-//     identification: {
-//         type: 'CPF',
-//         number: '19119119100'
-//     },
-//     address: {
-//         street_name: 'Street',
-//         street_number: 123,
-//         zip_code: '06233200'
-//     }
-//     },
-//     back_urls: {
-//     success: 'https://www.success.com',
-//     failure: 'http://www.failure.com',
-//     pending: 'http://www.pending.com'
-//     },
-//     auto_return: 'approved',
-//     payment_methods: {
-//     excluded_payment_methods: [
-//             {
-//                         id: "bolbradesco"
-//             },
-//             {
-//                         id: "pec"
-//             }
-//     ],
-//     excluded_payment_types: [
-//             {
-//                         id: "credit_card"
-//             },
-//             {
-//                         id: "debit_card"
-//             }
-//     ],
-//     installments: 1
-// },
-//     notification_url: 'https://www.your-site.com/ipn',
-//     statement_descriptor: 'MEUNEGOCIO',
-//     external_reference: 'Reference_1234',
-//     expires: true,
-//     expiration_date_from: '2016-02-01T12:00:00.000-04:00',
-//     expiration_date_to: '2016-02-28T12:00:00.000-04:00'
-// }
-// })
-// .then(function (response) {
-//     console.log(response);  // Adicione esta linha
-//     if (response && response.body) {
-//         global.id = response.body.id;
-//     } else {
-//         console.log('A resposta não tem corpo');
-//     }
-// })
-// .catch(function (error) {
-//     console.log('Ocorreu um erro ao criar a preferência:', error);
-// });
 
 
 app.get('/', async (req, res) => {
@@ -274,6 +191,7 @@ app.get('/admin/login', async (req,res)=>{
                         id: val._id,
                         titulo: val.titulo,
                         imagem: val.imagem,
+                        descricao: val.descricao,
                         dataCriada: val.dataCriada
                     }
                 })
@@ -288,6 +206,7 @@ app.get('/admin/login', async (req,res)=>{
                         id: val._id,
                         titulo: val.titulo,
                         imagem: val.imagem,
+                        descricao: val.descricao,
                         dataCriada: val.dataCriada
                     }
                 })
@@ -575,204 +494,204 @@ app.get('/adicionar/apoiador', async (req,res)=>{
 });
 
 
-app.post('/admin/cadastro/apoiador', async (req, res) => {
-    try {
-      const imagem = req.body.imagem_recortada;
+// app.post('/admin/cadastro/apoiador', async (req, res) => {
+//     try {
+//       const imagem = req.body.imagem_recortada;
   
-      const apoiador = await Apoiador.create({
-        nome: req.body.nome_apoiador,
-        link: req.body.link,
-        imagem: imagem,
-        plano: req.body.plano,
-        statusPayment: 'pendente', // padrão
-        dataCriada: new Date(),
-        idUsuario: req.body.id_usuario,
-      });
+//       const apoiador = await Apoiador.create({
+//         nome: req.body.nome_apoiador,
+//         link: req.body.link,
+//         imagem: imagem,
+//         plano: req.body.plano,
+//         statusPayment: 'pendente', // padrão
+//         dataCriada: new Date(),
+//         idUsuario: req.body.id_usuario,
+//       });
   
-      // Se for um plano pago, criar pagamento
-      if (req.body.plano !== 'gratuito') {
-        const valorPlano = calcularValorDoPlano(req.body.plano); // Implemente esta função
-        const pagamento = await criarPagamentoMercadoPago(req, apoiador, valorPlano);
-        apoiador.statusPayment = 'pendente'; // Status inicial é pendente
+//       // Se for um plano pago, criar pagamento
+//       if (req.body.plano !== 'gratuito') {
+//         const valorPlano = calcularValorDoPlano(req.body.plano); // Implemente esta função
+//         const pagamento = await criarPagamentoMercadoPago(req, apoiador, valorPlano);
+//         apoiador.statusPayment = 'pendente'; // Status inicial é pendente
   
-        // Adicionar o ID do pagamento ao apoiador (você pode salvar no banco se quiser)
-        apoiador.idPagamento = pagamento.id;
-        await apoiador.save();
+//         // Adicionar o ID do pagamento ao apoiador (você pode salvar no banco se quiser)
+//         apoiador.idPagamento = pagamento.id;
+//         await apoiador.save();
   
-        const link_pagamento = pagamento.point_of_interaction.transaction_data.ticket_url;
-        console.log(link_pagamento)
-        // Redirecionar para a página de pagamento
-        // res.redirect(response.init_point);
-        res.send({ link_pagamento });
-      } else {
-        // Se for gratuito, atualizar status para 'pago'
-        apoiador.statusPayment = 'pago';
-        await apoiador.save();
-        return res.redirect('/admin/login');
-      }
-    } catch (err) {
-      console.error('Erro ao cadastrar o apoiador:', err);
-      res.status(500).send('Erro ao cadastrar o apoiador.');
-    }
-  });
+//         const link_pagamento = pagamento.point_of_interaction.transaction_data.ticket_url;
+//         console.log(link_pagamento)
+//         // Redirecionar para a página de pagamento
+//         // res.redirect(response.init_point);
+//         res.send({ link_pagamento });
+//       } else {
+//         // Se for gratuito, atualizar status para 'pago'
+//         apoiador.statusPayment = 'pago';
+//         await apoiador.save();
+//         return res.redirect('/admin/login');
+//       }
+//     } catch (err) {
+//       console.error('Erro ao cadastrar o apoiador:', err);
+//       res.status(500).send('Erro ao cadastrar o apoiador.');
+//     }
+//   });
 
-  function calcularValorDoPlano(plano) {
-    // Lógica para determinar o valor do plano
-    // Substitua com sua própria lógica
-    return plano === 'premium' ? 49.99 : plano === 'moderado' ? 9.99 : 0;
-  }
+//   function calcularValorDoPlano(plano) {
+//     // Lógica para determinar o valor do plano
+//     // Substitua com sua própria lógica
+//     return plano === 'premium' ? 49.99 : plano === 'moderado' ? 9.99 : 0;
+//   }
   
-// Passo 1: Importe as partes do módulo que você deseja usar
-const { MercadoPagoConfig, Payment} = require('mercadopago');
+// // Passo 1: Importe as partes do módulo que você deseja usar
+// const { MercadoPagoConfig, Payment} = require('mercadopago');
 
-async function criarPagamentoMercadoPago(req, apoiador, valor) {
-    const client = new MercadoPagoConfig({
-      accessToken: 'TEST-87769228305025-011020-0cee964ae859bff392e5924e20606050-393147628', // Substitua pelo seu token real do Mercado Pago
-      options: {
-        timeout: 5000,
-        idempotencyKey: 'abc',
-      },
-    });
+// async function criarPagamentoMercadoPago(req, apoiador, valor) {
+//     const client = new MercadoPagoConfig({
+//       accessToken: 'TEST-87769228305025-011020-0cee964ae859bff392e5924e20606050-393147628', // Substitua pelo seu token real do Mercado Pago
+//       options: {
+//         timeout: 5000,
+//         idempotencyKey: 'abc',
+//       },
+//     });
 
-const payment = new Payment(client);
+// const payment = new Payment(client);
 
-const emailUsuario = req.session.email;
-// console.log(emailUsuario);
+// const emailUsuario = req.session.email;
+// // console.log(emailUsuario);
 
-const body = {
-    transaction_amount: valor, // Substitua pelo valor desejado
-    description: `Assinatura do Plano - ${apoiador.plano}`,
-    payment_method_id: 'pix', // Substitua pelo ID do método de pagamento desejado
-    payer: {
-      email: `${emailUsuario}`, // Substitua pelo email do pagador
-    },
-};
+// const body = {
+//     transaction_amount: valor, // Substitua pelo valor desejado
+//     description: `Assinatura do Plano - ${apoiador.plano}`,
+//     payment_method_id: 'pix', // Substitua pelo ID do método de pagamento desejado
+//     payer: {
+//       email: `${emailUsuario}`, // Substitua pelo email do pagador
+//     },
+// };
 
-try {
-    const pagamento = await payment.create({ body });
+// try {
+//     const pagamento = await payment.create({ body });
 
-    // console.log(pagamento)
-    return pagamento;
-} catch (error) {
-    console.error('Erro ao criar pagamento no Mercado Pago:', error);
-    throw error;
-}
-}
-
-
+//     // console.log(pagamento)
+//     return pagamento;
+// } catch (error) {
+//     console.error('Erro ao criar pagamento no Mercado Pago:', error);
+//     throw error;
+// }
+// }
 
 
-app.post('/webhook-mercado-pago', async (req, res) => {
-    try {
-      const evento = req.body;
+
+
+// app.post('/webhook-mercado-pago', async (req, res) => {
+//     try {
+//       const evento = req.body;
   
-      // Verifique o tipo de evento
-      if (evento.type === 'payment') {
-        const pagamento = evento.data;
+//       // Verifique o tipo de evento
+//       if (evento.type === 'payment') {
+//         const pagamento = evento.data;
   
-        // Verifique se o pagamento foi confirmado
-        if (pagamento.status === 'approved') {
-          // Atualize o status do apoiador para 'pago' no banco de dados
-          await atualizarStatusApoiador(pagamento.external_reference, 'pago');
-        }
-      }
+//         // Verifique se o pagamento foi confirmado
+//         if (pagamento.status === 'approved') {
+//           // Atualize o status do apoiador para 'pago' no banco de dados
+//           await atualizarStatusApoiador(pagamento.external_reference, 'pago');
+//         }
+//       }
   
-      res.status(200).send('OK');
-    } catch (error) {
-      console.error('Erro no webhook do Mercado Pago:', error);
-      res.status(500).send('Erro no webhook do Mercado Pago.');
-    }
-  });
+//       res.status(200).send('OK');
+//     } catch (error) {
+//       console.error('Erro no webhook do Mercado Pago:', error);
+//       res.status(500).send('Erro no webhook do Mercado Pago.');
+//     }
+//   });
   
-async function atualizarStatusApoiador(idPagamento, novoStatus) {
-    try {
-      // Consulte o apoiador com base no idPagamento
-      const apoiador = await Apoiador.findOne({ idPagamento });
+// async function atualizarStatusApoiador(idPagamento, novoStatus) {
+//     try {
+//       // Consulte o apoiador com base no idPagamento
+//       const apoiador = await Apoiador.findOne({ idPagamento });
   
-      if (!apoiador) {
-        console.error('Apoiador não encontrado:', idPagamento);
-        return;
-      }
+//       if (!apoiador) {
+//         console.error('Apoiador não encontrado:', idPagamento);
+//         return;
+//       }
   
-      // Atualize o statusPayment
-      apoiador.statusPayment = novoStatus;
-      await apoiador.save();
-      console.log(`Status do apoiador atualizado para ${novoStatus}:`, idPagamento);
-    } catch (error) {
-      console.error('Erro ao atualizar status do apoiador:', error);
-    }
-}
+//       // Atualize o statusPayment
+//       apoiador.statusPayment = novoStatus;
+//       await apoiador.save();
+//       console.log(`Status do apoiador atualizado para ${novoStatus}:`, idPagamento);
+//     } catch (error) {
+//       console.error('Erro ao atualizar status do apoiador:', error);
+//     }
+// }
 
-// ///////////////////////////////////////////////////
+// // ///////////////////////////////////////////////////
 
-// Lógica de verificação periódica (pode ser um cron job ou outra estratégia)
-function verificarPagamentosPendentes() {
-    // Lógica para obter todos os pagamentos pendentes do seu sistema ou banco de dados
-    const pagamentosPendentes = obterPagamentosPendentes();
+// // Lógica de verificação periódica (pode ser um cron job ou outra estratégia)
+// function verificarPagamentosPendentes() {
+//     // Lógica para obter todos os pagamentos pendentes do seu sistema ou banco de dados
+//     const pagamentosPendentes = obterPagamentosPendentes();
 
-    // Verificar cada pagamento
-    pagamentosPendentes.forEach(async (pagamento) => {
-        const tempoDecorrido = calcularTempoDecorrido(pagamento.dataCriacao);
+//     // Verificar cada pagamento
+//     pagamentosPendentes.forEach(async (pagamento) => {
+//         const tempoDecorrido = calcularTempoDecorrido(pagamento.dataCriacao);
 
-        // Se o pagamento está pendente por mais de 10 minutos, cancelar
-        if (tempoDecorrido > 10 * 60 * 1000) { // 10 minutos em milissegundos
-            try {
-                // Utilize a API do Mercado Pago para cancelar o pagamento
-                await cancelarPagamentoNoMercadoPago(pagamento.idPagamento);
-                // Atualize o status do pagamento no seu sistema como cancelado
-                marcarPagamentoComoCancelado(pagamento.id);
-            } catch (error) {
-                console.error('Erro ao cancelar pagamento:', error);
-            }
-        }
-    });
-}
+//         // Se o pagamento está pendente por mais de 10 minutos, cancelar
+//         if (tempoDecorrido > 10 * 60 * 1000) { // 10 minutos em milissegundos
+//             try {
+//                 // Utilize a API do Mercado Pago para cancelar o pagamento
+//                 await cancelarPagamentoNoMercadoPago(pagamento.idPagamento);
+//                 // Atualize o status do pagamento no seu sistema como cancelado
+//                 marcarPagamentoComoCancelado(pagamento.id);
+//             } catch (error) {
+//                 console.error('Erro ao cancelar pagamento:', error);
+//             }
+//         }
+//     });
+// }
 
-// Exemplo de como calcular o tempo decorrido desde a criação
-function calcularTempoDecorrido(dataCriacao) {
-    const agora = new Date();
-    const tempoDecorrido = agora - new Date(dataCriacao);
-    return tempoDecorrido;
-}
+// // Exemplo de como calcular o tempo decorrido desde a criação
+// function calcularTempoDecorrido(dataCriacao) {
+//     const agora = new Date();
+//     const tempoDecorrido = agora - new Date(dataCriacao);
+//     return tempoDecorrido;
+// }
 
-// Exemplo de como obter pagamentos pendentes do seu sistema ou banco de dados
-function obterPagamentosPendentes() {
-    // Lógica para obter os pagamentos pendentes do seu sistema ou banco de dados
-    // Retorne uma lista de pagamentos pendentes
-    return listaDePagamentosPendentes;
-}
+// // Exemplo de como obter pagamentos pendentes do seu sistema ou banco de dados
+// function obterPagamentosPendentes() {
+//     // Lógica para obter os pagamentos pendentes do seu sistema ou banco de dados
+//     // Retorne uma lista de pagamentos pendentes
+//     return listaDePagamentosPendentes;
+// }
 
-// Exemplo de como cancelar um pagamento no Mercado Pago
-async function cancelarPagamentoNoMercadoPago(idPagamento) {
-    // Utilize a API do Mercado Pago para cancelar o pagamento
-    // Substitua 'API_DO_MERCADO_PAGO' pelo seu token de acesso real
-    const mercadoPagoClient = new MercadoPagoClient({ accessToken: 'API_DO_MERCADO_PAGO' });
-    const pagamentoAPI = new PagamentoAPI(mercadoPagoClient);
+// // Exemplo de como cancelar um pagamento no Mercado Pago
+// async function cancelarPagamentoNoMercadoPago(idPagamento) {
+//     // Utilize a API do Mercado Pago para cancelar o pagamento
+//     // Substitua 'API_DO_MERCADO_PAGO' pelo seu token de acesso real
+//     const mercadoPagoClient = new MercadoPagoClient({ accessToken: 'API_DO_MERCADO_PAGO' });
+//     const pagamentoAPI = new PagamentoAPI(mercadoPagoClient);
 
-    await pagamentoAPI.cancelarPagamento(idPagamento);
-}
+//     await pagamentoAPI.cancelarPagamento(idPagamento);
+// }
 
-// Exemplo de como marcar um pagamento como cancelado no seu sistema ou banco de dados
-function marcarPagamentoComoCancelado(idPagamento) {
-    // Lógica para atualizar o status do pagamento no seu sistema como cancelado
-}
+// // Exemplo de como marcar um pagamento como cancelado no seu sistema ou banco de dados
+// function marcarPagamentoComoCancelado(idPagamento) {
+//     // Lógica para atualizar o status do pagamento no seu sistema como cancelado
+// }
 
-// ////////////////////////////////
+// // ////////////////////////////////
   
 
-const cron = require('node-cron');
+// const cron = require('node-cron');
 
-// agendar tarefa para ser executada a cada hora
-cron.schedule('0 * * * *', async () => {
-    const agora = new Date();
-    const vinteQuatroHorasAtras = new Date(agora - 24 * 60 * 60 * 1000);
+// // agendar tarefa para ser executada a cada hora
+// cron.schedule('0 * * * *', async () => {
+//     const agora = new Date();
+//     const vinteQuatroHorasAtras = new Date(agora - 24 * 60 * 60 * 1000);
 
-    // encontrar e deletar todos os apoiadores com plano 'gratuito' criados há mais de 24 horas
-    await Apoiador.deleteMany({
-        plano: 'gratuito',
-        dataCriada: { $lt: vinteQuatroHorasAtras }
-    });
-});
+//     // encontrar e deletar todos os apoiadores com plano 'gratuito' criados há mais de 24 horas
+//     await Apoiador.deleteMany({
+//         plano: 'gratuito',
+//         dataCriada: { $lt: vinteQuatroHorasAtras }
+//     });
+// });
 
 
 app.get('/admin/deletar/apoiador/:id/:imagem', (req, res) => {

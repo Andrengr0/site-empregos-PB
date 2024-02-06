@@ -16,27 +16,49 @@
     <header>
         <div class="container-site row">
             <div class="logo col-md-3">
-                <p>Empregos CG</p>
-            </div>
+                <p>Empregos PB</p>
+            </div><!-- logo -->
     
-            <nav class="menu-desktop col-md-9 text-right">
+            <nav class="menu-desktop col-md-9 text-right" style="display: none;">
                 <ul>
-                    <li><a href="#">Início</a></li>
-                    <li><a href="#">Vagas</a></li>
-                    <li><a href="#">Contato</a></li>
-                    <li><a href="#">Quem Somos</a></li>
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#vagas">Vagas</a></li>
+                    <li><a href="/admin/login">Anunciar Vaga</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="#quem-somos">Quem Somos</a></li>
                 </ul>
             </nav><!-- menu-desktop -->
+
+            <label class="icon-menu-mobile" for="burger" style="display: none;">
+                <span>Menu</span>
+                <label class="buttons__burger ml-2" for="burger">
+                    <input type="checkbox" id="burger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>                
+            </label><!-- icon-menu-mobile -->
+
+            <nav class="menu-mobile">
+                <ul>
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#vagas">Vagas</a></li>
+                    <li><a href="/admin/login">Anunciar Vaga</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="#quem-somos">Quem Somos</a></li>
+                </ul>
+            </nav><!-- menu-mobile -->
+            <div style="clear: both;"></div>
         </div><!-- container-site -->
     </header>
 
-    <section class="apresentacao">
+    <section id="inicio" class="apresentacao">
         <div class="container-site d-md-flex">
             <div class="frase-apresentacao">
-                <h1>Conectando candidatos a emprego e empregadores em Campina Grande</h1>
-                <p>Empregos CG é uma plataforma de busca de emprego projetada para ajudá-lo a 
+                <h1>Conectando candidatos a emprego e empregadores na Paraíba</h1>
+                <p>Empregos PB é uma plataforma de busca de emprego projetada para ajudá-lo a 
                     encontrar a vaga que procura. Com nosso mecanismo que permite busca e visualização
-                    dessas vagas, conectamos quem procura emprego com os principais empregadores de Campina Grande.
+                    dessas vagas, conectamos quem procura emprego com os principais empregadores de toda Paraíba.
                 </p>
             </div><!-- frase-apresentacao -->
 
@@ -49,13 +71,13 @@
         
     </section><!-- apresentacao -->
 
-    <section class="vagas pt-5 pb-4">
+    <section id="vagas" class="vagas pt-5 pb-4">
         <div class="container">
             <h3 class="text-center pl-2 pr-2">Confira as vagas mais recentes disponíveis:</h3>
 
             <div class="row mt-5">
-                <div class="filtro-tipo-vaga col-md-3 text-left">
-                    <p class="d-md-inline-block">Filtrar por cargo:</p>
+                <div class="filtro-tipo-vaga col-lg-3 text-left">
+                    <p>Filtrar por cargo:</p>
                     <select id="filtro-cargo" name="filtroCargo">
                         <option>Geral</option>
                     <% for(let i=0; i < cargos.length; i++) {%>
@@ -64,8 +86,8 @@
                     </select>
                 </div><!-- filtro-tipo-vaga -->
 
-                <div class="filtro-tipo-vaga col-md-3 text-left">
-                    <p class="d-md-inline-block">Filtrar por cidade:</p>
+                <div class="filtro-tipo-vaga col-lg-3 text-left">
+                    <p>Filtrar por cidade:</p>
                     <select id="filtro-cidade" name="filtroCidade">
                         <option value="Escolher..." selected>Escolher...</option>
                         <option value="Água Branca">Água Branca</option>
@@ -294,8 +316,8 @@
                     </select>
                 </div><!-- filtro-tipo-vaga -->
     
-                <div class="search-vaga col-md-6 text-right pr-2">
-                    <p class="d-md-inline-block">Buscar uma vaga específica:</p>
+                <div class="search-vaga col-lg-6 text-right pr-2">
+                    <p>Buscar por título:</p>
                     <div class="form-busca">
                         <form action="/">
                             <i class="fa fa-search" aria-hidden="true"></i>
@@ -305,8 +327,18 @@
                 </div><!-- search-vaga -->
             </div><!-- row -->
 
-            <div class="text-center mt-4" style="display: block;">
-                <button type="submit" class="btn-aplicar-filtro">Aplicar filtro</button>
+            <div class="text-center mt-4" style="display: block; position: relative;">
+                <button type="submit" class="btn-aplicar-filtro">Aplicar filtro</button><span class="msg-atualizado">Vagas atualizadas!</span>
+                <div class="dot-spinner">
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                </div>
             </div>
         </div><!-- container -->
 
@@ -334,18 +366,106 @@
         
     </section><!-- vagas -->
 
+    <section class="apoiadores">
+        <div class="container">
+            <div class="text-apoiadores text-left mt-3">
+                <h3>Nossos apoiadores:</h3>
+                <a class="el-1 btn-ser-apoiador" href="#">Quero ser apoiador</a>
+            </div><!-- text-apoiadores -->
+
+            <div class="box-apoiadores">
+
+                <div class="apoiador-single">
+                    <a href="#"><img src="../public/images/img-curriculo.jpg"></a>
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single">
+                    <a href="#"><img src="../public/images/img-curriculo.jpg"></a>
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single">
+                    <a href="#"><img src="../public/images/img-curriculo.jpg"></a>
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single">
+                    <a href="#"><img src="../public/images/img-curriculo.jpg"></a>
+                </div><!-- apoiador-single -->
+
+                <div class="apoiador-single">
+                    <a href="#"><img src="../public/images/img-curriculo.jpg"></a>
+                </div><!-- apoiador-single -->
+
+            </div><!-- box-apoiadores -->
+            
+            <a class="el-2 btn-ser-apoiador" href="#">Quero ser apoiador</a>
+            
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+        </div><!-- container -->
+    </section><!-- apoiadores -->
+
+
+    <section id="anunciar-vaga" class="anunciar-vaga">
+        <div class="container">
+            <h5 class="text-center mt-3">Deseja anunciar vagas? Aproveite nossa plataforma!</h5>
+
+            <div class="d-md-flex box-content desktop">
+                <div class="img-megafone d-flex"><img src="../public/images/img-megafone.png"></div>
+                <div class="text">
+                    <p class="paragrafo-1 mt-5">No nosso site, você pode anunciar sua vaga de emprego de forma rápida, 
+                        fácil e segura. Realize apenas um cadastro caso não tenha, faça o login e terá
+                        acesso ao painel administrativo para cadastrar vagas.</p>
+                    <p class="mt-4 pb-3">Se você está procurando um novo talento para sua equipe, não perca tempo. 
+                        Anuncie sua vaga de emprego no nosso site e receba currículos de 
+                        candidatos interessados em poucas horas. Clique no botão abaixo!</p>
+
+                    <a class="btn-anunciar" href="#">Anuncie sua vaga!</a>
+                    <img src="../public/images/click.png">
+                </div><!-- text -->
+            </div><!-- box-content -->
+
+
+            <div class="d-md-flex box-content mobile" style="display: none;">
+                <div class="img-megafone d-flex"><img src="../public/images/img-megafone.png">
+                    No nosso site, você pode anunciar sua vaga de emprego de forma rápida, 
+                    fácil e segura. Realize apenas um cadastro caso não tenha, faça o login e terá
+                    acesso ao painel administrativo para cadastrar vagas.
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Se você está procurando um novo talento para sua equipe, não perca tempo. 
+                    Anuncie sua vaga de emprego no nosso site e receba currículos de 
+                    candidatos interessados em poucas horas. Clique no botão abaixo!
+                
+                </div><!-- img-megafone-->
+                <div style="clear: both;"></div>
+                <div class="text">
+                    <a class="btn-anunciar" href="/admin/login">Anuncie sua vaga!</a>
+                    <div class="box-img-click"><img src="../public/images/click.png"></div>
+                </div><!-- text -->
+            </div><!-- box-content -->
+        </div><!-- container -->
+
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </section><!-- anunciar-vaga -->
+
     <section class="dicas text-right mt-5">
         <div class="container d-md-flex">
-            <div class="img-curriculo">
+            <div class="img-curriculo desktop">
                 <img src="/public/images/img-curriculo.jpg">
             </div><!-- img-curriculo -->
-            <div class="box-dicas text-left">
+            <div class="box-dicas text-left desktop">
                 <h4 data-toggle="modal" data-target="#dicas_emprego">Dicas para conseguir seu emprego</h4>
-                <p data-toggle="modal" data-target="#dicas_emprego">Clique aqui e confira dicas valiosas para aumentar suas chances de conseguir um emprego desejado.
+                <p data-toggle="modal" data-target="#dicas_emprego"><span style="text-decoration: underline;">Clique aqui</span> e confira dicas valiosas para aumentar suas chances de conseguir um emprego desejado.
                     Aprenda a se destacar durante o processo seletivo e conquistar sua vaga.
                 </p>
             </div><!-- box-dicas -->
 
+            <div class="mobile" style="display: none;">
+                <h4 class="mt-3 text-left">Dicas para conseguir seu emprego...</h4>
+                <div class="content mt-4" data-toggle="modal" data-target="#dicas_emprego">
+                    <img src="/public/images/img-curriculo.jpg">
+                    <span style="text-decoration: underline;">Clique aqui</span> e confira dicas valiosas para aumentar suas chances de conseguir um emprego desejado.
+                    Aprenda a se destacar durante o processo seletivo e conquistar sua vaga.</div><!-- img-mobile -->
+            </div><!-- mobile -->
+            <div style="clear: both;"></div>
 
             
             <!-- Modal -->
@@ -353,48 +473,43 @@
                 <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="TituloModalCentralizado">Título do modal</h4>
+                        <h4 class="modal-title" id="TituloModalCentralizado">Dicas para conseguir seu emprego</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body text-left">
-                        <h5 class="mt-3">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
-                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
-                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
-                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
-                            pulvinar ac nulla.</p>
+                        <h5 class="mt-3">Conheça a si mesmo:</h5>
+                        <p>Antes de procurar um emprego, entenda suas habilidades, interesses e valores. Isso ajudará você a encontrar um emprego que seja um bom ajuste para você.</p>
 
 
-                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
-                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
-                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
-                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
-                            pulvinar ac nulla.</p>
+                        <h5 class="mt-5">Faça sua pesquisa:</h5>
+                        <p>Antes de se candidatar a um emprego, pesquise sobre a empresa. Isso mostrará ao empregador que você está realmente interessado na vaga.</p>
                         
-                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
-                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
-                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
-                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
-                            pulvinar ac nulla.</p>
+                        <h5 class="mt-5">Personalize seu currículo:</h5>
+                        <p>Adapte seu currículo para cada vaga para a qual você se candidata. Destaque as habilidades e experiências que são mais relevantes para o trabalho.</p>
 
 
-                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
-                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
-                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
-                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
-                            pulvinar ac nulla.</p>
+                        <h5 class="mt-5">Prepare-se para a entrevista:</h5>
+                        <p>Pratique suas respostas para perguntas comuns de entrevistas e pense em perguntas para fazer ao entrevistador.</p>
 
-                        <h5 class="mt-5">Titulo da dica tal tal tal Lorem Ipsum gametmf</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra interdum 
-                            sodales. Mauris porta volutpat placerat. Vivamus sit amet lacus urna. Vivamus 
-                            efficitur sed magna sed commodo. Vestibulum sollicitudin odio erat, vitae ultricies 
-                            enim ullamcorper pellentesque. Suspendisse felis diam, tincidunt nec scelerisque et, 
-                            pulvinar ac nulla.</p>
+                        <h5 class="mt-5">Vista-se para impressionar:</h5>
+                        <p>Mesmo que a empresa tenha um código de vestimenta casual, é importante se vestir de maneira profissional para a entrevista.</p>
+
+                        <h5 class="mt-5">Seja pontual:</h5>
+                        <p>Chegar atrasado a uma entrevista ou ao trabalho pode dar a impressão de que você não é confiável.</p>
+
+                        <h5 class="mt-5">Mantenha uma atitude positiva:</h5>
+                        <p>Mesmo que a busca de emprego seja estressante, tente manter uma atitude positiva. Isso pode ajudar a melhorar suas chances de conseguir um emprego.</p>
+
+                        <h5 class="mt-5">Continue aprendendo:</h5>
+                        <p>Aprender novas habilidades pode torná-lo mais atraente para os empregadores.</p>
+
+                        <h5 class="mt-5">Faça networking:</h5>
+                        <p>Conhecer pessoas em seu campo de interesse pode abrir portas para oportunidades de emprego.</p>
+
+                        <h5 class="mt-5">Não desista:</h5>
+                        <p>A busca de emprego pode levar tempo. Não desanime se você não conseguir um emprego imediatamente. Continue se candidatando e eventualmente você encontrará a oportunidade certa.</p>
 
                     </div><!-- modal-body -->
                     <div class="modal-footer">
@@ -406,43 +521,19 @@
         </div><!-- container -->
         
     </section><!-- dicas -->
+    
 
-
-    <section class="apoiadores mt-5">
+    <section id="contato" class="contato">
         <div class="container">
-            <div class="text-apoiadores text-center">
-                <h2>Nossos apoiadores:</h2>
-            </div><!-- text-apoiadores -->
-
-            <div class="box-apoiadores">
-
-                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
-                </div><!-- apoiador-single -->
-
-                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
-                </div><!-- apoiador-single -->
-
-                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
-                </div><!-- apoiador-single -->
-
-                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
-                </div><!-- apoiador-single -->
-
-                <div class="apoiador-single" style="background-image: url(../public/images/img-curriculo.jpg);">
-                </div><!-- apoiador-single -->
-
-            </div><!-- box-apoiadores -->
-            <i class="fa fa-caret-down" aria-hidden="true"></i>
-        </div><!-- container -->
-    </section><!-- apoiadores -->
-
-    <section class="contato">
-        <div class="container">
-            <h4 class="text-center mt-5">Deseja anunciar sua vaga ou ser nosso apoiador? Entre em contato agora mesmo!</h4>
+            <h4 class="text-center mt-5">Deseja ser nosso <span style="font-weight: bold;">apoiador</span>? Ou caso tenha alguma dúvida, entre em contato agora mesmo!</h4>
             <p class="mt-4"><i class="fa fa-whatsapp" aria-hidden="true"></i> Link Whatsapp: <a href="#">Clique aqui</a></p>
-            <p class="mt-4"><i class="fa fa-whatsapp" aria-hidden="true"></i> Numero: <span>(00) 00000-0000</span></p>
-            <p class="mt-4"><i class="fa fa-envelope" aria-hidden="true"></i> email: <span>emailemail@email.com</span></p>
-            <p class="mt-4">Para você que necessita anunciar sua vaga oferecemos 2 formas de serviço......</p>
+            <p class="mt-4"><i class="fa fa-whatsapp" aria-hidden="true"></i> Numero: <span>(83) 99199-8085</span></p>
+            <p class="mt-4"><i class="fa fa-envelope" aria-hidden="true"></i> email: <span style="font-weight: 500;">empregospbweb@gmail.com</span></p>
+            <div class="social-media">
+                <a href="#" class="text-instagram d-inline-block">Visite nosso instagram!</a>
+                <a href="#" class="d-inline-block"><img src="../public/images/instagram.png"></a>
+            </div><!-- social-media -->
+            <div style="clear: both;"></div>
         </div><!-- container -->
     </section><!-- contato -->
 
@@ -452,219 +543,85 @@
 
             <div class="comentario-single">
                 <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
-                <h6>Ana Julia</h6>
-                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+                <h6>Roberto</h6>
+                <p>Esse site é um diferencial para quem quer encontrar um emprego de qualidade. Tem vagas para todos os níveis, áreas e salários.</p>
             </div><!-- comentario-single -->
 
             <div class="comentario-single">
                 <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
                 <h6>Ana Julia</h6>
-                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+                <p>O site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
             </div><!-- comentario-single -->
 
             <div class="comentario-single">
                 <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
-                <h6>Ana Julia</h6>
-                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+                <h6>Bruna Gonçalves</h6>
+                <p>Eu recomendo esse site para quem está procurando emprego. É fácil de usar, tem muitas opções e o atendimento é ótimo.</p>
             </div><!-- comentario-single -->
 
             <div class="comentario-single">
                 <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
-                <h6>Ana Julia</h6>
-                <p>Esse site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+                <h6>Claudio Leal</h6>
+                <p>Esse site é o melhor que eu já usei para buscar emprego. Tem vagas atualizadas, filtros eficientes e dicas valiosas para se destacar no mercado.</p>
             </div><!-- comentario-single -->
 
         </div><!-- container -->
     </section><!-- comentarios -->
 
 
-    <section class="quem-somos mt-5">
+    <section id="quem-somos" class="quem-somos mt-5">
         <div class="container">
-            <h4 class="text-center">Conheça nosso trabalho...</h4>
-            <p class="text-left mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut iaculis lacus nec tincidunt 
-                commodo. Duis tincidunt cursus laoreet. Orci varius natoque penatibus et magnis dis 
-                parturient montes, nascetur ridiculus mus. Nam tempor purus nec mauris cursus, at 
-                tincidunt mauris fermentum. Quisque suscipit convallis diam. Nam et pellentesque odio. 
-                Proin vitae neque quis sapien ultrices viverra vitae non ligula. Integer a vestibulum 
-                sem. Aliquam venenatis ac lorem nec volutpat. Ut fringilla quis tellus et facilisis.
-                Orci varius natoque penatibus et magnis dis 
-                parturient montes, nascetur ridiculus mus. Nam tempor purus nec mauris cursus, at 
-                tincidunt mauris fermentum. Quisque suscipit convallis diam. Nam et pellentesque odio. 
-                Proin vitae neque quis sapien ultrices viverra vitae non ligula.
+            <h4 class="text-center">Quem somos...</h4>
+            <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bem-vindo ao Empregos PB, sua principal fonte de oportunidades de emprego no estado da Paraíba. 
+                Nós, da Empregos PB, estamos dedicados a fornecer a você as melhores e mais atualizadas vagas de 
+                emprego disponíveis em nossa região.
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nascemos da necessidade de um espaço dedicado exclusivamente à busca de empregos na Paraíba. 
+                Percebemos que as vagas de emprego para nosso estado estavam dispersas em vários sites que abrangem 
+                muitos estados. Isso tornava a busca por emprego local um processo demorado e complicado. Assim, 
+                decidimos criar o Empregos PB para facilitar essa busca e conectar candidatos a emprego e 
+                empregadores de maneira eficiente.
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nosso site aborda vagas de emprego de maneira geral, permitindo que empregadores de todos os 
+                setores divulguem suas próprias vagas. Isso significa que, seja qual for o tipo de trabalho que 
+                você esteja procurando, é provável que você o encontre aqui no Empregos PB.
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estamos constantemente trabalhando para melhorar e expandir nossos serviços. Nosso objetivo é 
+                tornar a busca de emprego o mais fácil e direta possível para nossos usuários. Agradecemos por 
+                escolher o Empregos PB como seu parceiro na busca por novas oportunidades de emprego.
             </p>
+            <p id="btn-voltar-ao-topo" class="btn-topo">Voltar ao topo</p>
         </div><!-- container -->
     </section><!-- quem-somos -->
 
 
     <footer>
-        <p>Todos os direitos reservados. @2023</p>
-        <a href="/admin/login">Area restrita</a>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 text-left btn-painel">
+                    <a href="/admin/login">Painel administrativo de vagas</a>
+                </div>
+                <div class="col-sm-4 mt-5">
+                    <p>Todos os direitos reservados. @2023</p>
+                </div>
+                <div class="col-sm-4">
+                    <a class="dev-empresa" href="#">Desenvolvido por <span>BR Software</span></a>
+                </div>
+            </div><!-- row -->
+        </div><!-- container -->
     </footer>
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="../public/slick/slick.min.js"></script>
     <script src="../public/js/sliders_apoiadores.js"></script>
-    <!-- <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
-    <script>
-
-        let totalCarregado = 0;
-        let limite = 12;
-
-        $('#carregar-mais').click( function(event) {
-            event.preventDefault();
-
-            let filtroCargo = document.getElementById('filtro-cargo').value;
-
-            // Atualize o total de vagas já carregadas
-            totalCarregado += limite;
-
-            // Obtenha os valores dos filtros
-            const filtroCidade = document.getElementById('filtro-cidade').value;
-            const buscar = document.getElementById('buscar-vaga').value;
-
-            // Faça uma solicitação GET para '/api/obterVagasFiltradas' com os parâmetros 'inicio', 'limite' e os filtros
-            fetch(`/api/obterVagasFiltradas?inicio=${totalCarregado}&limite=${limite}&filtroCargo=${filtroCargo}&filtroCidade=${filtroCidade}&buscar=${buscar}`)
-                .then(response => response.json())
-                .then(vagas => {
-                    // Adicione as novas vagas à página
-                    renderizarVagas(vagas);
-
-                    // Se o número de vagas retornadas é menor que o limite, desative o botão "Carregar mais..."
-                    if (vagas.length < limite) {
-                        document.getElementById('carregar-mais').disabled = true;
-                        $('#carregar-mais').css('background-color','#ccc')
-                    }
-                })
-                .catch(error => console.error('Erro ao carregar mais vagas:', error));
-        });
-    
-        function renderizarVagas(vagas) {
-            const boxVagas = document.querySelector('.box-vagas');
-
-            vagas.forEach(vaga => {
-                const vagaElement = document.createElement('div');
-                vagaElement.className = 'vaga-single mt-4';
-                vagaElement.innerHTML = `
-                    <h5>${vaga.titulo}</h5>
-                    <h6>Cidade: ${vaga.cidade}</h6>
-                    <h6>Nº de vagas: ${vaga.quantVagas}</h6>
-                    <h6>Publicada: ${vaga.dataCriada}</h6>
-                    <a class="btn-detalhes" href="/${vaga.slug}">Ver detalhes</a>
-                `;
-                boxVagas.appendChild(vagaElement);
-            });
-        }
-
-
-
-        
-        // Evento de clique no botão de aplicar filtro
-        $('.btn-aplicar-filtro').click( async (event) => {
-            event.preventDefault(); // Evite o comportamento padrão do formulário
-            // Obtenha os valores dos filtros
-            const filtroCargo = document.getElementById('filtro-cargo').value;
-            const filtroCidade = document.getElementById('filtro-cidade').value;
-            const buscar = document.getElementById('buscar-vaga').value;
-
-            // Armazene os valores dos filtros no localStorage
-            localStorage.setItem('filtroCargo', filtroCargo);
-            localStorage.setItem('filtroCidade', filtroCidade);
-            localStorage.setItem('buscar', buscar);
-
-            // Envie uma solicitação ao servidor para atualizar o estado dos filtros
-            const response = await fetch('/api/atualizarEstadoFiltros', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    filtroCargo,
-                    filtroCidade,
-                    buscar
-                })
-            });
-            // Verifique se a atualização foi bem-sucedida antes de recarregar a página
-            const data = await response.json();
-
-            if (data.success) {
-                // Chame a função para obter e exibir as vagas filtradas
-                await obterVagasFiltradasEExibir();
-            } else {
-                console.error('Erro ao atualizar os filtros:', data.error);
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Ao carregar a página, obtenha o estado atual do servidor
-            const filtroCargo = localStorage.getItem('filtroCargo');
-            const filtroCidade = localStorage.getItem('filtroCidade');
-            const buscar = localStorage.getItem('buscar');
-
-            // Atualize a interface do usuário com base no estado recebido
-            document.getElementById('filtro-cargo').value = filtroCargo ? filtroCargo : 'Geral';
-            document.getElementById('filtro-cidade').value = filtroCidade ? filtroCidade : 'Escolher...';
-            document.getElementById('buscar-vaga').value = buscar ? buscar : '';
-
-            // Chame a função para obter e exibir as vagas filtradas
-            await obterVagasFiltradasEExibir();
-        });
-
-
-        // Armazene os valores dos filtros no localStorage
-        localStorage.setItem('filtroCargo', filtroCargo);
-        localStorage.setItem('filtroCidade', filtroCidade);
-        localStorage.setItem('buscar', buscar);
-        localStorage.setItem('horaSalvar', new Date().getTime());
-
-        // Ao carregar a página, obtenha o estado atual do servidor
-        const filtroCargo = localStorage.getItem('filtroCargo');
-        const filtroCidade = localStorage.getItem('filtroCidade');
-        const buscar = localStorage.getItem('buscar');
-        const horaSalvar = localStorage.getItem('horaSalvar');
-
-        // Verifique se passou 1 hora
-        const umaHora = 60 * 60 * 1000; // 1 hora em milissegundos
-        if (new Date().getTime() - horaSalvar > umaHora) {
-            // Limpe os dados se passou 1 hora
-            localStorage.removeItem('filtroCargo');
-            localStorage.removeItem('filtroCidade');
-            localStorage.removeItem('buscar');
-            localStorage.removeItem('horaSalvar');
-        }
-    
-        // Função para obter e exibir as vagas filtradas
-        async function obterVagasFiltradasEExibir() {
-            // Obtenha os valores dos filtros
-            const filtroCargo = document.getElementById('filtro-cargo').value;
-            const filtroCidade = document.getElementById('filtro-cidade').value;
-            const buscar = document.getElementById('buscar-vaga').value;
-    
-            // Envie uma solicitação ao servidor para obter as vagas filtradas
-            const response = await fetch(`/api/obterVagasFiltradas?filtroCargo=${filtroCargo}&filtroCidade=${filtroCidade}&buscar=${buscar}`);
-            const vagas = await response.json();
-    
-            // Atualize a interface do usuário com as vagas obtidas
-            const boxVagas = document.querySelector('.box-vagas');
-            boxVagas.innerHTML = "";
-    
-            vagas.forEach(vaga => {
-                const vagaElement = document.createElement('div');
-                vagaElement.classList.add('vaga-single', 'mt-4');
-                vagaElement.innerHTML = `
-                    <h5>${vaga.titulo}</h5>
-                    <h6>Cidade: ${vaga.cidade}</h6>
-                    <h6>Nº de vagas: ${vaga.quantVagas}</h6>
-                    <h6>Publicada: ${vaga.dataCriada}</h6>
-                    <a class="btn-detalhes" href="/${vaga.slug}">Ver detalhes</a>
-                `;
-                boxVagas.appendChild(vagaElement);
-            });
-        }
-    </script>
-    
+    <script src="../public/js/filtro-vaga.js"></script>
+    <script src="../public/js/btn-voltar-ao-topo.js"></script>
+    <script src="../public/js/menu-mobile.js"></script>
+    <script src="../public/js/efeito-scroll.js"></script>
     
 </body>
 </html>

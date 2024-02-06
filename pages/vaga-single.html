@@ -56,7 +56,9 @@
             <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
         </div>
 
+        <% if(vaga.imagem) {%>
         <img src="<%=vaga.imagem%>" class="d-block">
+        <% } %>
 
         <h5><%=vaga.titulo%></h5>
 
@@ -72,16 +74,20 @@
 
         <h6><%=vaga.experiencia%></h6>
 
+        <% if(vaga.descricao) {%>
         <h6>Descrição da vaga:</h6>
         <% const textoDecodificado = decodeURIComponent(vaga.descricao).replace(/\n/g, '<br>'); %>
         <p><%- textoDecodificado %></p>
+        <% } %>
 
         <h6>Contato para envio de currículo:</h6>
         <p id="contato" style="display: inline-block;"><%=vaga.contato%></p>
         <button id="copiarContato" type="button" onclick="copiarContato()" data-container="body" data-toggle="popover" data-placement="top" data-content="Informação copiada.">Copiar</button>
 
+        <% if(vaga.salario) {%>
         <h6>Salário:</h6>
         <p><%=vaga.salario%></p>
+        <% } %>
 
         <h6>Data de postagem:</h6>
         <p><%=vaga.dataCriada%></p>

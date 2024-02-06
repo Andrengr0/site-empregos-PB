@@ -55,6 +55,7 @@ header .user span{
     width: 15%;
     margin-top: 80px;
     background-color: #24282D;
+    overflow-y: auto;
 }
 
 .content-painel aside nav{
