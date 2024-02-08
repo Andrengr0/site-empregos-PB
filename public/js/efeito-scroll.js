@@ -1,7 +1,6 @@
-$(document).ready(function(){
+$(()=>{
     // Adicione o evento de clique em todas as tags <a> que possuem o atributo href começando com #
     $('header a[href^="#"]').on('click', function(event) {
-
         // Prevenindo o comportamento padrão do clique
         event.preventDefault();
 
@@ -13,7 +12,6 @@ $(document).ready(function(){
             scrollTop: target.offset().top - 100
         }, 1000);
     });
-
 
     // Função para exibir ou ocultar menu secundário quando a página rola para baixo
     $(window).scroll(function(){

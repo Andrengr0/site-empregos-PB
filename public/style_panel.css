@@ -42,6 +42,32 @@ header .user span{
     padding: 0 8px;
 }
 
+@media screen and (max-width: 630px){
+    header .user{
+        float: none;
+        position: absolute;
+        top: 54px;
+        right: 10px;
+        margin-top: 10px;
+        padding-right: 0;
+    }
+}
+
+@media screen and (max-width: 390px){
+    header h3{
+        font-size: 20px;
+        line-height: 45px;
+    }
+
+    header img{
+        margin-right: 15px;
+        width: 40px;
+    }
+}
+
+
+/* ############################################ */
+
 
 .content-painel{
     display: flex;
@@ -55,17 +81,19 @@ header .user span{
     width: 15%;
     margin-top: 80px;
     background-color: #24282D;
+    transition: left 0.5s ease;
     overflow-y: auto;
 }
 
 .content-painel aside nav{
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .content-painel .box-content-painel{
     width: 85%;
     margin-left: 15%;
     margin-top: 110px;
+    padding-bottom: 30px;
 }
 
 .content-painel aside li{
@@ -96,8 +124,88 @@ header .user span{
     display: none;
 }
 
+.btn-menu-mobile{
+    position: fixed;
+    transition: 0.5s ease;
+    padding: 2px 3px 0 0;
+    background-color: #05012c;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    top: 102px;
+    display: inline-block;
+    z-index: 3;
+    height: 47px;
+}
+
+.hamburger {
+    cursor: pointer;
+  }
+  
+  .hamburger input {
+    display: none;
+  }
+  
+  .hamburger svg {
+    /* The size of the SVG defines the overall size */
+    height: 3em;
+    /* Define the transition for transforming the SVG */
+    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .line {
+    fill: none;
+    stroke: white;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3;
+    /* Define the transition for transforming the Stroke */
+    transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .line-top-bottom {
+    stroke-dasharray: 12 63;
+  }
+  
+  .hamburger input:checked + svg {
+    transform: rotate(-45deg);
+  }
+  
+  .hamburger input:checked + svg .line-top-bottom {
+    stroke-dasharray: 20 300;
+    stroke-dashoffset: -32.42;
+  }
+  
+
+@media screen and (min-width: 1106px){
+    .btn-menu-mobile{
+        display: none;
+}
+}
+
+@media screen and (max-width: 1105px){
+
+    .content-painel aside{
+        top: 22px;
+        width: 220px;
+        z-index: 2;
+        height: auto;
+        padding-bottom: 10px;
+        left: -220px;
+    }
+
+    .content-painel .box-content-painel{
+        display: block !important;
+        margin-top: 140px !important;
+        width:100%;
+        margin: 110px 2% 0 2%;
+    }
+    
+}
 
 
+
+/* ####################################################33 */
 
 
 
@@ -140,6 +248,15 @@ section.vagas-cadastradas .container-site{
     padding: 4px 8px;
     color: #ffffff;
     cursor: pointer;
+}
+
+.vaga-single a{
+    text-decoration: none;
+    background-color: #CC6223;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    padding: 5px 8px;
+    color: #ffffff;
 }
 
 .vaga-single .deletar-vaga{
@@ -199,27 +316,6 @@ a#btn-excluir{
     background-color: #f9ea60;
 }
 
-
-
-.vagas-cadastradas .modal .modal-header{
-    background-color: #0D1B2B;
-    color: #ffffff;
-}
-
-.vagas-cadastradas .modal .modal-header button{
-    background-color: #ffffff;
-    padding: 8px 12px !important;
-}
-
-.vagas-cadastradas .modal .modal-body img{
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-}
-
-.vagas-cadastradas .modal .modal-body p{
-    margin-top: 30px;
-}
 
 .vagas-cadastradas .btn-aprovar{
     text-decoration: none;
@@ -523,11 +619,12 @@ transform: rotate(45deg);
 }
 
 
-
+/* ############################################# */
 
 section.usuarios{
     width: 100%;
     max-width: 1280px;
+    padding: 0 2%;
 }
 
 
@@ -544,8 +641,10 @@ section.usuarios{
 .usuarios .tabela-usuarios{
     margin: 0 auto;
     width: 97%;
+    min-width: 600px;
     max-width: 1100px;
     border: 2px solid #000;
+    overflow-x: scroll !important;
 }
 
 .usuario-head{
@@ -592,6 +691,18 @@ section.usuarios{
 
 .box-buttons-usuario{
     width: 40%;
+}
+
+@media screen and (max-width: 830px){
+
+    .usuario-head .usuario-email,
+.usuario-body .usuario-email{
+    width: 44%;
+}
+
+    .box-buttons-usuario{
+        width: 30%;
+    }
 }
 
 .box-buttons-usuario a{

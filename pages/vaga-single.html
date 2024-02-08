@@ -53,7 +53,13 @@
     <div class="container mt-3">
         
         <div class="d-block text-right" style="width: 100%;">
-            <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
+            <% if(user == "usuarioLog"){%>
+                <a href="/admin/login" class="voltar btn btn-dark"><< Voltar à página principal</a>
+            <%} else if(user == "usuarioLogPageUser"){%>
+                <a style="display: none;"></a>
+            <% } else {%>
+                <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
+            <% } %>
         </div>
 
         <% if(vaga.imagem) {%>
@@ -93,7 +99,13 @@
         <p><%=vaga.dataCriada%></p>
 
         <div class="d-block text-right mt-4 mb-4" style="width: 100%;">
-            <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
+            <% if(user == "usuarioLog"){%>
+                <a href="/admin/login" class="voltar btn btn-dark"><< Voltar à página principal</a>
+            <%} else if(user == "usuarioLogPageUser"){%>
+                <a style="display: none;"></a>
+            <% } else {%>
+                <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
+            <% } %>
         </div>
     </div><!-- container -->
 

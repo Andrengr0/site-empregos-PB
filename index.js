@@ -191,7 +191,7 @@ app.get('/admin/login', async (req,res)=>{
                         id: val._id,
                         titulo: val.titulo,
                         imagem: val.imagem,
-                        descricao: val.descricao,
+                        slug: val.slug,
                         dataCriada: val.dataCriada
                     }
                 })
@@ -990,6 +990,7 @@ app.get('/vaga/usuario/:id', async (req, res) => {
                     id: val._id,
                     titulo: val.titulo,
                     imagem: val.imagem,
+                    slug: val.slug,
                     dataCriada: val.dataCriada
                 }
             })
@@ -1000,8 +1001,9 @@ app.get('/vaga/usuario/:id', async (req, res) => {
 
 
 
-app.get('/:slug', async (req, res) => {
+app.get('/:slug/:user', async (req, res) => {
     const requestVagaSlug = req.params.slug;
+    const user = req.params.user;
 
     try {
         // Consulta a vaga com base no slug
@@ -1014,7 +1016,7 @@ app.get('/:slug', async (req, res) => {
         }
 
         // Renderiza a página 'vaga-single' com os detalhes da vaga
-        res.render('vaga-single', { vaga });
+        res.render('vaga-single', {vaga, user});
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar a vaga.");
