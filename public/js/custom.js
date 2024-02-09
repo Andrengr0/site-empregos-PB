@@ -1,35 +1,35 @@
-$(()=>{
+// $(()=>{
 
-    $('.vaga-single .deletar-vaga').click(function(){
-        let idVaga = $(this).attr('id');
-        $('.'+idVaga).css('display','block');
+//     $('.vaga-single .deletar-vaga').click(function(){
+//         let idVaga = $(this).attr('id');
+//         $('.'+idVaga).css('display','block');
 
-        $('.btn-cancelar').click(function(){
-            $('.'+idVaga).css('display','none');
-        })
-        return false;
-    })
+//         $('.btn-cancelar').click(function(){
+//             $('.'+idVaga).css('display','none');
+//         })
+//         return false;
+//     })
 
-    $('.lista-cargos .deletar-cargo').click(function(){
-        let idCargo = $(this).attr('id');
-        $('.'+idCargo).css('display','block');
+//     $('.lista-cargos .deletar-cargo').click(function(){
+//         let idCargo = $(this).attr('id');
+//         $('.'+idCargo).css('display','block');
 
-        $('.btn-cancelar').click(function(){
-            $('.'+idCargo).css('display','none');
-        })
-        return false;
-    })
+//         $('.btn-cancelar').click(function(){
+//             $('.'+idCargo).css('display','none');
+//         })
+//         return false;
+//     })
 
-    $('.tabela-usuarios .btn-resetar-senha').click(function(){
-        let idUsuario = $(this).attr('id');
-        $('.'+idUsuario).css('display','block');
+//     $('.tabela-usuarios .btn-resetar-senha').click(function(){
+//         let idUsuario = $(this).attr('id');
+//         $('.'+idUsuario).css('display','block');
 
-        $('.btn-cancelar').click(function(){
-            $('.'+idUsuario).css('display','none');
-        })
-        return false;
-    })
-})
+//         $('.btn-cancelar').click(function(){
+//             $('.'+idUsuario).css('display','none');
+//         })
+//         return false;
+//     })
+// })
 
 // alert("Funcionou o custom.js")
 var redimensionar = $('#preview').croppie({
@@ -108,8 +108,10 @@ $('#cadastrar_vaga').click(function () {
         return; // Pare a execução da função aqui
     }
 
+    $('.load').css('display','inline-block');
+
     // Verifique se uma imagem foi selecionada
-    if ($('#imagem_recortada').val() != "") {
+    if ($('#arquivo_vaga').val() != "") {
         // Obtenha a imagem cortada do Croppie
         redimensionar.croppie('result', {
             type: 'base64',
@@ -151,6 +153,7 @@ function enviarFormulario() {
             if (redimensionar) {
                 redimensionar.croppie('destroy');
             }
+            alert("Vaga cadastrada com sucesso!");
             location.reload();
         },
         error: function (error) {

@@ -50,17 +50,8 @@
     </style>
 </head>
 <body>
-    <div class="container mt-3">
-        
-        <div class="d-block text-right" style="width: 100%;">
-            <% if(user == "usuarioLog"){%>
-                <a href="/admin/login" class="voltar btn btn-dark"><< Voltar à página principal</a>
-            <%} else if(user == "usuarioLogPageUser"){%>
-                <a style="display: none;"></a>
-            <% } else {%>
-                <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
-            <% } %>
-        </div>
+    <div class="container mt-3 pt-3">
+
 
         <% if(vaga.imagem) {%>
         <img src="<%=vaga.imagem%>" class="d-block">
@@ -100,11 +91,11 @@
 
         <div class="d-block text-right mt-4 mb-4" style="width: 100%;">
             <% if(user == "usuarioLog"){%>
-                <a href="/admin/login" class="voltar btn btn-dark"><< Voltar à página principal</a>
+                <a href="/admin/login" class="voltar btn btn-dark"><-- Voltar</a>
             <%} else if(user == "usuarioLogPageUser"){%>
                 <a style="display: none;"></a>
             <% } else {%>
-                <a href="/" class="voltar btn btn-dark"><< Voltar à página principal</a>
+                <a href="/#vagas" class="voltar btn btn-dark"><-- Voltar</a>
             <% } %>
         </div>
     </div><!-- container -->
@@ -112,41 +103,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script>
-        $(function () {
-            $('#copiarContato').popover({
-                container: 'body'
-            })
-        })
-        function copiarContato() {
-        // Seleciona o elemento de texto
-        var contatoElemento = document.getElementById('contato');
-
-        // Cria um campo de texto temporário
-        var campoTemporario = document.createElement('textarea');
-
-        // Define o valor do campo de texto para o conteúdo do elemento
-        campoTemporario.value = contatoElemento.textContent;
-
-        // Adiciona o campo de texto temporário ao documento
-        document.body.appendChild(campoTemporario);
-
-        // Seleciona o conteúdo do campo de texto
-        campoTemporario.select();
-        campoTemporario.setSelectionRange(0, 99999); /* Para dispositivos móveis */
-
-        // Copia o texto para a área de transferência
-        document.execCommand('copy');
-
-        // Remove o campo de texto temporário do documento
-        document.body.removeChild(campoTemporario);
-
-         // Esconde o pop-up após 2 segundos (2000 milissegundos)
-        setTimeout(function () {
-        $('#copiarContato').popover('hide');
-        }, 2500);
-        }
-      </script>
+    <script src="../public/js/copiar-contato.js"></script>
     
 </body>
 </html>

@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({ limit: '200mb', extended: true })); // Aumente e
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use('/public', express.static(path.join(__dirname, 'public')));
-// app.use('/js', express.static(path.join(__dirname, 'js'))); não usado
+// app.use('/public/js', express.static(path.join(__dirname, 'js'))); //não usado
 app.set('views', path.join(__dirname, '/pages'));
 
 
@@ -147,7 +147,7 @@ app.post("/admin/login", async (req, res) => {
             res.redirect('/admin/login');
         } else {
             // Credenciais inválidas
-            res.status(401).send("Credenciais inválidas.");
+            return res.render('admin-login', { error: 'Credenciais inválidas.' });
         }
     } catch (err) {
         console.error("Ocorreu um erro:", err);
@@ -158,8 +158,7 @@ app.post("/admin/login", async (req, res) => {
 
 app.get('/admin/login', async (req,res)=>{
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('admin-login', { error: null })
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -217,14 +216,9 @@ app.get('/admin/login', async (req,res)=>{
 })
 
 
-app.post('/filtro/vagas', (req, res)=>{
-    res.redirect('/admin/login')
-})
-
 app.get('/filtro/vagas', async (req,res)=>{
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -297,7 +291,6 @@ app.post('/api/atualizarEstadoSwitch', async (req, res) => {
 
 
 app.get('/admin/aprovar/vaga/:id', async (req, res) => {
-    
     const vaga = await Vagas.findOne({ _id: req.params.id});
 
     vaga.__v = 1;
@@ -307,14 +300,10 @@ app.get('/admin/aprovar/vaga/:id', async (req, res) => {
 })
 
 
-app.post('/cadastrar-vaga', (req, res)=>{
-    res.redirect('/admin/login')
-})
-
 app.get('/cadastrar-vaga', async (req, res) => {
     try {
         if (req.session.email == null) {
-            res.render('admin-login');
+            res.render('sessao-expirou');
         } else {
             // Recupere o ID do usuário da sessão
             const emailUsuario = req.session.email;
@@ -353,14 +342,9 @@ app.get('/cadastrar-vaga', async (req, res) => {
 });
 
 
-
-app.post('/usuarios', (req, res)=>{
-    res.redirect('admin/login')
-})
-
 app.get('/usuarios', async (req,res)=>{
     if(req.session.email == null){
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -403,13 +387,10 @@ app.get('/usuarios', async (req,res)=>{
     }
 })
 
-app.post('/apoiadores', (req, res)=>{
-    res.redirect('admin/login')
-})
 
 app.get('/apoiadores', async (req,res)=>{
     if(req.session.email == null){
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -451,15 +432,11 @@ app.get('/apoiadores', async (req,res)=>{
     }
 })
 
-app.post('/adicionar/apoiador', async (req,res)=>{
-    res.redirect('/admin/login')
-})
 
 app.get('/adicionar/apoiador', async (req,res)=>{
-    
     try {
         if (req.session.email == null) {
-            res.render('admin-login');
+            res.render('sessao-expirou');
         } else {
             // Recupere o ID do usuário da sessão
             const emailUsuario = req.session.email;
@@ -484,8 +461,6 @@ app.get('/adicionar/apoiador', async (req,res)=>{
   
             res.render('cadastrar-apoiador', {idUsuario: usuario._id,nomeUsuario: usuario.nome, autUsuario});
 
-            
-            // res.render('cadastrar-apoiador', {idUsuario: usuario._id, nomeUsuario: usuario.nome, autUsuario});
         }
     } catch (err) {
         console.error('Erro ao buscar o usuário:', err);
@@ -695,10 +670,8 @@ app.get('/adicionar/apoiador', async (req,res)=>{
 
 
 app.get('/admin/deletar/apoiador/:id/:imagem', (req, res) => {
-    // console.log(req.params.imagem)
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
             if (err) {
@@ -713,13 +686,9 @@ app.get('/admin/deletar/apoiador/:id/:imagem', (req, res) => {
 })
 
 
-app.post('/dados-pessoais', (req, res)=>{
-    res.redirect('admin/login')
-})
-
 app.get('/dados-pessoais', async (req,res)=>{
     if(req.session.email == null){
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -746,14 +715,9 @@ app.get('/dados-pessoais', async (req,res)=>{
 })
 
 
-app.post('/cargos-vagas', (req, res)=>{
-    res.redirect('admin/login')
-})
-
 app.get('/cargos-vagas', async (req,res)=>{
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -863,7 +827,7 @@ app.post('/admin/cadastro/imagem', (req, res) => {
     const imageExtension = matches[1];
     const fileName = new Date().getTime() + '.' + imageExtension; // Use a extensão da imagem
     const imagePath = path.join(__dirname, 'public', 'images_vagas', fileName);
-    const imagePathMod = 'http://localhost:3000/public/images_vagas/'+ fileName;
+    const imagePathMod = '/public/images_vagas/'+ fileName;
 
     // Decodifique e salve a imagem
     fs.writeFile(imagePath, matches[2], 'base64', (err) => {
@@ -914,12 +878,10 @@ app.get('/deletar/usuario/:id', (req, res) => {
 })
 
 
-
 app.get('/deletar/vaga/:id/:imagem', (req, res) => {
     // console.log(req.params.imagem)
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
             if (err) {
@@ -933,11 +895,22 @@ app.get('/deletar/vaga/:id/:imagem', (req, res) => {
     }
 })
 
+
+app.get('/deletar/vaga/:id', (req, res) => {
+    if(req.session.email == null){
+        res.render('sessao-expirou');
+    }else{
+        Vagas.deleteOne({ _id: req.params.id }).then(function () {
+            res.redirect('/admin/login');
+            // console.log('excluido com sucesso')
+        });
+    }
+})
+
 app.get('/deletar/cargo/:id', (req, res) => {
     
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         Cargos.deleteOne({ _id: req.params.id }).then(function () {
             res.redirect('/cargos-vagas');
@@ -946,11 +919,11 @@ app.get('/deletar/cargo/:id', (req, res) => {
     }
 })
 
+
 app.get('/vaga/usuario/:id', async (req, res) => {
     
     if(req.session.email == null){
-        // console.log("Não logou")
-        res.render('admin-login')
+        res.render('sessao-expirou');
     }else{
         // Recupere o ID do usuário da sessão
         const emailUsuario = req.session.email;
@@ -1000,6 +973,27 @@ app.get('/vaga/usuario/:id', async (req, res) => {
 })
 
 
+app.get('/:slug', async (req, res) => {
+    const requestVagaSlug = req.params.slug;
+    let user = null;
+
+    try {
+        // Consulta a vaga com base no slug
+        const vaga = await Vagas.findOne({ slug: requestVagaSlug });
+
+        if (!vaga) {
+            // Se a vaga não for encontrada, pode renderizar uma página de erro ou redirecionar, conforme necessário
+            res.send('Página não existente!'); // Página de erro 404, ajuste conforme necessário
+            return;
+        }
+
+        // Renderiza a página 'vaga-single' com os detalhes da vaga
+        res.render('vaga-single', {vaga, user});
+    } catch (err) {
+        console.error("Ocorreu um erro:", err);
+        res.status(500).send("Erro ao buscar a vaga.");
+    }
+});
 
 app.get('/:slug/:user', async (req, res) => {
     const requestVagaSlug = req.params.slug;
@@ -1151,7 +1145,7 @@ app.post('/admin/cadastrar/nova/senha', async (req, res) => {
 });
 
 
-app.get('/admin/logout', (req, res) => {
+app.get('/sair/painel/usuario', (req, res) => {
     req.session.destroy(err => {
       if (err) {
         console.error('Erro ao encerrar a sessão:', err);

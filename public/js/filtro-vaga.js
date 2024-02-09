@@ -25,7 +25,8 @@ $(()=>{
                 renderizarVagas(vagas);
 
                 // Se o número de vagas retornadas é menor que o limite, desative o botão "Carregar mais..."
-                if (vagas.length <= limite) {
+                if (vagas.length < limite) {
+                    $('.msg-sem-vagas').fadeIn();
                     document.getElementById('carregar-mais').disabled = true;
                     $('#carregar-mais').css('background-color','#ccc')
                 }
@@ -66,6 +67,7 @@ $('.btn-aplicar-filtro').click( async (event) => {
 
     // Obtenha os valores dos filtros
     $('.box-vagas').fadeOut();
+    $('.msg-sem-vagas').fadeOut(0);
     $('.dot-spinner').fadeIn();
     const filtroCargo = document.getElementById('filtro-cargo').value;
     const filtroCidade = document.getElementById('filtro-cidade').value;
@@ -155,6 +157,10 @@ async function obterVagasFiltradasEExibir() {
     // Envie uma solicitação ao servidor para obter as vagas filtradas
     const response = await fetch(`/api/obterVagasFiltradas?filtroCargo=${filtroCargo}&filtroCidade=${filtroCidade}&buscar=${buscar}`);
     const vagas = await response.json();
+
+    if(vagas.length == 0){
+        $('.msg-sem-vagas').fadeIn();
+    }
 
     // Atualize a interface do usuário com as vagas obtidas
     const boxVagas = document.querySelector('.box-vagas');

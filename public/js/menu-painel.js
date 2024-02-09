@@ -12,6 +12,17 @@ $(document).ready(function(){
         }
     });
 
+    $(window).on('resize', function() {
+        if ($(window).width() <= 1105) {
+           // Esconda o menu
+           $('.content-painel aside').css('left', '-300px');
+           $('#hamburger').prop('checked', false);
+           $('.btn-menu-mobile').css('left', '0px');
+        } else {
+            $('.content-painel aside').css('left', '0px');
+        }
+    });
+
     $('.content-painel aside a').click(function(){
         if($(window).width() <= 1105){
             // Esconda o menu

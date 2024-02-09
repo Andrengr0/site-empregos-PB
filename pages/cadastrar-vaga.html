@@ -307,11 +307,11 @@
             <label class="mt-5" for="descricao_vaga">Descrição da vaga: <span>(opcional)</span></label>
             <textarea id="descricao_vaga" name="descricao_vaga" placeholder="Atrubuições, requisitos, benefícios, etc..." maxlength="800"></textarea>
 
-            <label for="contato_vaga" class="mt-4">Onde o candidato envia currículo: <span>(obrigatório)</span></label>
+            <label for="contato_vaga" class="mt-4">Contato para envio de currículo: <span>(obrigatório)</span></label>
             <input type="text" name="contato_vaga" placeholder="Número ou link de whatsapp, email, etc..." maxlength="100">
 
             <label class="mt-5" for="salario_vaga">Salario: <span>(opcional)</span></label>
-            <input type="text" id="salario_vaga" name="salario_vaga" value="R$" style="max-width: 150px;">
+            <input type="text" id="salario_vaga" name="salario_vaga" value="R$" style="max-width: 150px;" autocomplete="false">
 
             <label class="mt-5" for="arquivo_vaga">Imagem de divulgação: <span>(opcional)</span></label>
         
@@ -324,8 +324,34 @@
             <div id="preview" style="display: none;"></div>
 
             <div id="cadastrar_vaga">Cadastrar Vaga</div>
+
+            <div class="dot-spinner load">
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+                <div class="dot-spinner__dot"></div>
+            </div>
         </form>
     </div><!-- box-cadastrar-vaga -->
 </div><!-- container-site -->
 
-<%- include('partials-admin/footer.html') %>
+</div><!-- box-content-painel -->
+</div><!-- content-painel -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script src="../public/js/transition_menu_admin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.8.1/autoNumeric.min.js"></script>
+<script src="../public/js/custom.js"></script>
+<script src="../public/js/btn-adicionar-categoria.js"></script>
+<script src="../public/js/formatar_real.js"></script>
+<script src="../public/js/menu-painel.js"></script>
+</body>
+</html>

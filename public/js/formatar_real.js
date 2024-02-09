@@ -1,8 +1,8 @@
 
-    document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function(){
 
         // Selecione o elemento de input por ID
-        var valorVagaInput = document.getElementById('salario_vaga');
+        var valorVagaInput = $('#salario_vaga');
 
         // Inicialize o autoNumeric no elemento de input
         var autoNumericInstance = new AutoNumeric(valorVagaInput, {

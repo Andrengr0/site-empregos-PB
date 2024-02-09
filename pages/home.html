@@ -346,7 +346,6 @@
 
             <div class="box-vagas">
                 <% for(let i=0; i < vagas.length; i++) {%>
-
                 <div class="vaga-single mt-4">
                     <h5><%=vagas[i].titulo%></h5>
                     <h6>Cidade: <%=vagas[i].cidade%></h6>
@@ -354,9 +353,10 @@
                     <h6>Publicada: <%= vagas[i].dataCriada %></h6>
                     <a class="btn-detalhes" href="/<%=vagas[i].slug%>">Ver detalhes</a>
                 </div><!-- vaga-single -->
-            <% } %>
+                <% } %>
                 
             </div><!-- box-vagas -->
+            <p class="msg-sem-vagas mt-3" style="color: #000; display: none;">Para esse filtro não há mais vagas disponíveis por enquanto...</p>
 
             <div style="display: block; width: 100%; height: 1px;"></div>
 
@@ -549,8 +549,8 @@
 
             <div class="comentario-single">
                 <div class="estrelas"><i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i></div><!-- estrelas -->
-                <h6>Ana Julia</h6>
-                <p>O site é maravilho, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
+                <h6>Tainã Moreira</h6>
+                <p>O site é maravilhoso, me ajudou a encontrar uma vaga em pouquíssimo tempo.</p>
             </div><!-- comentario-single -->
 
             <div class="comentario-single">
