@@ -1039,20 +1039,18 @@ function enviarCodigoPorEmail(destinatario, codigo) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('Erro ao enviar o e-mail:', error);
-        } else {
-            console.log('E-mail enviado');
         }
     });
 }
 
 
-app.get('/resetar/senha', async (req, res) => {
+app.get('/resetar/senha/usuario', async (req, res) => {
     // Renderiza a página para o usuário inserir o e-mail
     res.render('resetar-senha', { error: null });
 });
 
 // Adicione esta rota para processar o e-mail inserido e enviar o código
-app.post('/resetar/senha', async (req, res) => {
+app.post('/resetar/senha/usuario', async (req, res) => {
     try {
         const { email } = req.body;
         const usuario = await Usuarios.findOne({ email });
@@ -1081,7 +1079,7 @@ app.post('/resetar/senha', async (req, res) => {
 });
 
 
-app.post('/verificar/codigo', async (req, res) => {
+app.post('/verificar/codigo/usuario', async (req, res) => {
     try {
         const email = req.body.email_usuario;
         const usuario = await Usuarios.findOne({ email });
