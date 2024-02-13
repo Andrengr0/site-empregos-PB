@@ -835,7 +835,7 @@ app.post('/admin/cadastro/imagem', (req, res) => {
     const imageExtension = matches[1];
     const fileName = new Date().getTime() + '.' + imageExtension; // Use a extensão da imagem
     const imagePath = path.join(__dirname, 'public', 'images_vagas', fileName);
-    const imagePathMod = 'http://localhost:3000/public/images_vagas/'+ fileName;
+    const imagePathMod = 'https://empregospb.com/public/images_vagas/'+ fileName;
 
     // Decodifique e salve a imagem
     fs.writeFile(imagePath, matches[2], 'base64', (err) => {
@@ -875,7 +875,7 @@ app.post('/admin/cadastrar/usuario/form', async (req, res) => {
 
 app.post('/admin/adicionar/usuario', (req, res)=>{
     const idUsuario = new Date().getTime();
-    let link = 'http://localhost:3000/cadastrar/usuario/'+idUsuario;
+    let link = 'https://empregospb.com/cadastrar/usuario/'+idUsuario;
     res.json({ success: true, link });
 })
 
