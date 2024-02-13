@@ -999,3 +999,11 @@ section.dados-pessoais{
     background-color: #0D1B2B;
     color: #e5e5e5;
 }
+
+/* ############################## */
+
+@media screen and (max-width: 591px){
+    .btn_cadastrar_cargo{
+        margin-top: 15px;
+    }
+}
