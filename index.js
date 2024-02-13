@@ -28,6 +28,14 @@ const Cargos = require('./Cargos.js');
 const Switch = require('./Switch.js');
 const Apoiador = require('./Apoiador.js');
 
+// ############## Conexão para as coleções de testes ################
+// mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
+//     console.log('Conectado com sucesso!');
+// }).catch(function(err){
+//     console.log(err.message);
+// })
+
+// ############## Conexão para as coleções de produção ################
 mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/EmpregosPB?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
     console.log('Conectado com sucesso!');
 }).catch(function(err){
