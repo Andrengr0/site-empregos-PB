@@ -104,7 +104,6 @@ if(validNome && validEmail && validSenha && validConfirmSenha){
         senha: senha.value
     };
 
-    // Use o método $.ajax para enviar os dados para o servidor
     $.ajax({
         url: '/admin/cadastrar/usuario/form',
         method: 'POST',
@@ -112,7 +111,7 @@ if(validNome && validEmail && validSenha && validConfirmSenha){
         success: function (response) {
             // Aqui você pode manipular a resposta do servidor, se necessário
             btnCadastrar.style.display = 'none';
-
+    
             // Exibe o botão de redirecionamento
             btnRedirectLogin.style.display = 'block';
             msgSuccess.setAttribute('style', 'display: block');
@@ -123,11 +122,17 @@ if(validNome && validEmail && validSenha && validConfirmSenha){
         error: function (err) {
             console.error('Erro ao cadastrar usuário:', err);
             msgError.setAttribute('style', 'display: block');
-            msgError.innerHTML = '<strong>Erro ao cadastrar usuário. Tente novamente.</strong>';
+            if (err.responseJSON && err.responseJSON.message) {
+                // Use a mensagem de erro do servidor
+                msgError.innerHTML = '<strong>' + err.responseJSON.message + '</strong>';
+            } else {
+                // Use uma mensagem de erro genérica
+                msgError.innerHTML = '<strong>Erro ao cadastrar usuário. Tente novamente.</strong>';
+            }
             msgSuccess.innerHTML = '';
             msgSuccess.setAttribute('style', 'display: none');
         }
-    });
+    });    
 } else {
     msgError.setAttribute('style', 'display: block');
     msgError.innerHTML = '<strong>Preencha todos os campos corretamente antes de cadastrar</strong>';

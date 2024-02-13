@@ -1,35 +1,3 @@
-// $(()=>{
-
-//     $('.vaga-single .deletar-vaga').click(function(){
-//         let idVaga = $(this).attr('id');
-//         $('.'+idVaga).css('display','block');
-
-//         $('.btn-cancelar').click(function(){
-//             $('.'+idVaga).css('display','none');
-//         })
-//         return false;
-//     })
-
-//     $('.lista-cargos .deletar-cargo').click(function(){
-//         let idCargo = $(this).attr('id');
-//         $('.'+idCargo).css('display','block');
-
-//         $('.btn-cancelar').click(function(){
-//             $('.'+idCargo).css('display','none');
-//         })
-//         return false;
-//     })
-
-//     $('.tabela-usuarios .btn-resetar-senha').click(function(){
-//         let idUsuario = $(this).attr('id');
-//         $('.'+idUsuario).css('display','block');
-
-//         $('.btn-cancelar').click(function(){
-//             $('.'+idUsuario).css('display','none');
-//         })
-//         return false;
-//     })
-// })
 
 // alert("Funcionou o custom.js")
 var redimensionar = $('#preview').croppie({

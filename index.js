@@ -28,7 +28,7 @@ const Cargos = require('./Cargos.js');
 const Switch = require('./Switch.js');
 const Apoiador = require('./Apoiador.js');
 
-mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
+mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/EmpregosPB?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true}).then(function(){
     console.log('Conectado com sucesso!');
 }).catch(function(err){
     console.log(err.message);
@@ -827,7 +827,7 @@ app.post('/admin/cadastro/imagem', (req, res) => {
     const imageExtension = matches[1];
     const fileName = new Date().getTime() + '.' + imageExtension; // Use a extensão da imagem
     const imagePath = path.join(__dirname, 'public', 'images_vagas', fileName);
-    const imagePathMod = '/public/images_vagas/'+ fileName;
+    const imagePathMod = 'http://localhost:3000/public/images_vagas/'+ fileName;
 
     // Decodifique e salve a imagem
     fs.writeFile(imagePath, matches[2], 'base64', (err) => {
@@ -843,7 +843,13 @@ app.post('/admin/cadastro/imagem', (req, res) => {
 
 app.post('/admin/cadastrar/usuario/form', async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.senha, 10); // corrigido para req.body.senha
+        // Verifique se o email já existe
+        const usuarioExistente = await Usuarios.findOne({ email: req.body.email });
+        if (usuarioExistente) {
+            return res.status(400).send({ success: false, message: 'Email já está em uso.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(req.body.senha, 10);
         const usuario = await Usuarios.create({
             nome: req.body.nome,
             email: req.body.email,
@@ -856,6 +862,7 @@ app.post('/admin/cadastrar/usuario/form', async (req, res) => {
         res.status(500).send('Erro ao cadastrar o usuário.');
     }
 });
+
 
 
 app.post('/admin/adicionar/usuario', (req, res)=>{
@@ -879,33 +886,28 @@ app.get('/deletar/usuario/:id', (req, res) => {
 
 
 app.get('/deletar/vaga/:id/:imagem', (req, res) => {
-    // console.log(req.params.imagem)
     if(req.session.email == null){
         res.render('sessao-expirou');
     }else{
-        fs.unlink(__dirname+'/public/images_vagas/'+req.params.imagem, (err) => {
-            if (err) {
-                console.error('Erro ao excluir o arquivo:', err);
-            }
+        const imagePath = __dirname+'/public/images_vagas/'+req.params.imagem;
+        if (fs.existsSync(imagePath)) {
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.error('Erro ao excluir o arquivo:', err);
+                }
+                Vagas.deleteOne({ _id: req.params.id }).then(function () {
+                    res.redirect('/admin/login');
+                });
+            });
+        } else {
             Vagas.deleteOne({ _id: req.params.id }).then(function () {
                 res.redirect('/admin/login');
                 // console.log('excluido com sucesso')
             });
-        });
+        }
     }
-})
+});
 
-
-app.get('/deletar/vaga/:id', (req, res) => {
-    if(req.session.email == null){
-        res.render('sessao-expirou');
-    }else{
-        Vagas.deleteOne({ _id: req.params.id }).then(function () {
-            res.redirect('/admin/login');
-            // console.log('excluido com sucesso')
-        });
-    }
-})
 
 app.get('/deletar/cargo/:id', (req, res) => {
     
