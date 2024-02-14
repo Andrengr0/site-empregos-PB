@@ -47,6 +47,16 @@
             font-weight: 500;
         }
 
+        #copiarLink{
+            display: inline-block;
+            position: relative;
+            right: 0;
+            background-color: #590c9c;
+            color: #ffffff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+        }
+
     </style>
 </head>
 <body>
@@ -79,7 +89,7 @@
 
         <h6>Contato para envio de currículo:</h6>
         <p id="contato" style="display: inline-block;"><%=vaga.contato%></p>
-        <button id="copiarContato" type="button" onclick="copiarContato()" data-container="body" data-toggle="popover" data-placement="top" data-content="Informação copiada.">Copiar</button>
+        <button id="copiarContato" type="button" onclick="copiarContato()" data-container="body" data-toggle="popover" data-placement="top" data-content="Contato copiado.">Copiar</button>
 
         <% if(vaga.salario) {%>
         <h6>Salário:</h6>
@@ -89,7 +99,9 @@
         <h6>Data de postagem:</h6>
         <p><%=vaga.dataCriada%></p>
 
-        <div class="d-block text-right mt-4 mb-4" style="width: 100%;">
+        <div class="d-block text-right mt-3 mb-4" style="width: 100%;">
+            <button id="copiarLink" type="button" onclick="copiarLink()" data-container="body" data-toggle="popover" data-placement="top" data-content="Link copiado!">Compartilhar link</button>
+            <br>
             <% if(user == "usuarioLog"){%>
                 <a href="/admin/login" class="voltar btn btn-dark"><-- Voltar</a>
             <%} else if(user == "usuarioLogPageUser"){%>

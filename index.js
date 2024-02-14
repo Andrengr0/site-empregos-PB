@@ -199,7 +199,8 @@ app.get('/admin/login', async (req,res)=>{
                         titulo: val.titulo,
                         imagem: val.imagem,
                         slug: val.slug,
-                        dataCriada: val.dataCriada
+                        dataCriada: val.dataCriada,
+                        status: val.__v
                     }
                 })
                 res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
@@ -214,7 +215,9 @@ app.get('/admin/login', async (req,res)=>{
                         titulo: val.titulo,
                         imagem: val.imagem,
                         descricao: val.descricao,
-                        dataCriada: val.dataCriada
+                        dataCriada: val.dataCriada,
+                        slug: val.slug,
+                        status: val.__v
                     }
                 })
                 res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});

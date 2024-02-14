@@ -10,7 +10,11 @@
                         <% for(let i=0; i < vagas.length; i++){ %>
     
                         <div class="row vaga-single mt-1">
-                            <div class="col-sm-8 titulo-vaga"><h5><%= vagas[i].titulo%><span>- <%= vagas[i].dataCriada%></span></h5></div>
+                            <div class="col-sm-8 titulo-vaga"><h5><%= vagas[i].titulo%><span>- <%= vagas[i].dataCriada%> </span>
+                            <% if(vagas[i].status == 0) {%>
+                                <span>-  Em análise, aguarde um pouco...</span>
+                            <% } %>
+                            </h5></div>
                             <div class="col-sm-4">
                                 <a href="/<%=vagas[i].slug+"/usuarioLog"%>">Detalhes</a>
                                 <button class="deletar-vaga" id="<%=vagas[i].id%>"><i class="fa fa-trash" aria-hidden="true"></i></button>
