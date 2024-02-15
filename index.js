@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
-const schedule = require('node-schedule');
+// const schedule = require('node-schedule');
 const nodemailer = require('nodemailer');
 var mongoose = require("mongoose");
 
@@ -876,28 +876,28 @@ app.post('/admin/cadastrar/usuario/form', async (req, res) => {
 });
 
 
-// Agenda a tarefa para ser executada uma vez por dia
-let j = schedule.scheduleJob('0 0 * * *', async function(){
-    // Obtém a data 35 dias atrás
-    let dataLimite = new Date();
-    dataLimite.setDate(dataLimite.getDate() - 35);
+// // Agenda a tarefa para ser executada uma vez por dia
+// let j = schedule.scheduleJob('0 0 * * *', async function(){
+//     // Obtém a data 35 dias atrás
+//     let dataLimite = new Date();
+//     dataLimite.setDate(dataLimite.getDate() - 35);
 
-    // Encontra todas as vagas que foram criadas há mais de 35 dias
-    let vagasAntigas = await Vagas.find({ dataCriada: { $lt: dataLimite } });
+//     // Encontra todas as vagas que foram criadas há mais de 35 dias
+//     let vagasAntigas = await Vagas.find({ dataCriada: { $lt: dataLimite } });
 
-    for (let vaga of vagasAntigas) {
-        // Exclui a imagem do sistema de arquivos, se houver
-        if (vaga.imagem) {
-            let nameImage = vaga.imagem.split('/');
-            let imagePath = path.join(__dirname, 'public', 'images_vagas', nameImage[5]);
-            fs.unlink(imagePath, (err) => {
-                if (err) console.error('Erro ao excluir a imagem:', err);
-            });
-        }
-        // Exclui a vaga do banco de dados
-        await Vagas.deleteOne({ _id: vaga._id });
-    }
-});
+//     for (let vaga of vagasAntigas) {
+//         // Exclui a imagem do sistema de arquivos, se houver
+//         if (vaga.imagem) {
+//             let nameImage = vaga.imagem.split('/');
+//             let imagePath = path.join(__dirname, 'public', 'images_vagas', nameImage[5]);
+//             fs.unlink(imagePath, (err) => {
+//                 if (err) console.error('Erro ao excluir a imagem:', err);
+//             });
+//         }
+//         // Exclui a vaga do banco de dados
+//         await Vagas.deleteOne({ _id: vaga._id });
+//     }
+// });
 
 
 
