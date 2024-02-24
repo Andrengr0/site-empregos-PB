@@ -102,12 +102,12 @@
         <div class="d-block text-right mt-3 mb-4" style="width: 100%;">
             <button id="copiarLink" type="button" onclick="copiarLink()" data-container="body" data-toggle="popover" data-placement="top" data-content="Link copiado!">Compartilhar link</button>
             <br>
-            <% if(user == "usuarioLog"){%>
+            <% if(user != null){%>
                 <a href="/admin/login" class="voltar btn btn-dark"><-- Voltar</a>
             <%} else if(user == "usuarioLogPageUser"){%>
                 <a style="display: none;"></a>
             <% } else {%>
-                <a href="/#vagas" class="voltar btn btn-dark"><-- Voltar</a>
+                <a href="https://empregospb.com/#vagas" class="voltar btn btn-dark"><-- Voltar</a>
             <% } %>
         </div>
     </div><!-- container -->
