@@ -49,10 +49,7 @@ function copiarLink() {
 
     // Verifica se a URL tem um parâmetro extra e o remove
     var partesUrl = urlAtual.split('/');
-    if (partesUrl.length > 4) {
-        partesUrl.pop();
-        urlAtual = partesUrl.join('/');
-    }
+    urlAtual = partesUrl.slice(0, 4).join('/');
 
     campoTemporario.value = urlAtual;
 
@@ -74,3 +71,4 @@ function copiarLink() {
         $('#copiarLink').popover('hide');
     }, 2500);
 }
+
