@@ -45,7 +45,16 @@ function copiarLink() {
     var campoTemporario = document.createElement('textarea');
 
     // Define o valor do campo de texto para o URL da página atual
-    campoTemporario.value = window.location.href;
+    var urlAtual = window.location.href;
+
+    // Verifica se a URL tem um parâmetro extra e o remove
+    var partesUrl = urlAtual.split('/');
+    if (partesUrl.length > 4) {
+        partesUrl.pop();
+        urlAtual = partesUrl.join('/');
+    }
+
+    campoTemporario.value = urlAtual;
 
     // Adiciona o campo de texto temporário ao documento
     document.body.appendChild(campoTemporario);
