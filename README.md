@@ -40,6 +40,7 @@ npm install
 npm start
 ```
 ou, caso tenha o nodemon instalado:
+```
 nodemon index.js
 ```
 
