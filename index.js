@@ -6,6 +6,7 @@ const path = require('path'); // Utilitário para trabalhar com caminhos de arqu
 const fs = require('fs'); // Módulo para manipulação de arquivos no sistema de arquivos
 const multer = require('multer'); // Middleware para lidar com upload de arquivos
 const nodemailer = require('nodemailer'); // Módulo para envio de emails
+const bcrypt = require('bcrypt'); // Módulo para criptografar senhas
 var mongoose = require("mongoose"); // ODM (Object Data Modeling) para MongoDB
 
 const app = express(); // Inicializa a aplicação Express
