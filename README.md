@@ -6,6 +6,18 @@ O projeto EmpregosPB é uma aplicação web voltada para gerenciamento de vagas 
 ![alt text](image_site_EmpregosPB.jpg)
 
 
+## Estrutura do projeto:
+
+1. Arquivo principal para rodar servidor: index.js  -> contém e gerencia e responde todas as rotas requisitadas.
+2. /pages -> Envolve todas as páginas do site
+3. /public -> Envolve arquivos de estilização, bibliotecas de animação, todos os scripts utilizados, imagens de design do site e imagens das vagas.
+4. Classes para criação de modelos para o BD:
+    ./Vagas.js
+    ./Usuarios.js
+    ./Cargos.js
+    ./Switch.js
+    ./Apoiador.js
+
 ## Ferramentas Necessárias
 Para executar o projeto EmpregosPB em sua máquina, você precisará das seguintes ferramentas:
 
