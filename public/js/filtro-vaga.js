@@ -17,6 +17,27 @@ $(()=>{
         const filtroCidade = document.getElementById('filtro-cidade').value;
         const buscar = document.getElementById('buscar-vaga').value;
 
+        $(document).on('keypress', function(e) {
+            if (e.which == 13) { // 13 é o código da tecla Enter
+                e.preventDefault(); // Evite o comportamento padrão do formulário
+                $('.btn-aplicar-filtro').click(); // Acione o clique do botão
+                return false;
+            }
+        });
+
+        $('input').on('keypress', function(e) {
+            if (e.which == 13) { // 13 é o código da tecla Enter
+                e.preventDefault(); // Evite o comportamento padrão do formulário
+                $('.btn-aplicar-filtro').click(); // Acione o clique do botão
+            }
+        });
+
+        $('form').on('submit', function(e) {
+            e.preventDefault(); // Evite o comportamento padrão do formulário
+            $('.btn-aplicar-filtro').click(); // Acione o clique do botão
+        });
+        
+
         // Faça uma solicitação GET para '/api/obterVagasFiltradas' com os parâmetros 'inicio', 'limite' e os filtros
         fetch(`/api/obterVagasFiltradas?inicio=${totalCarregado}&limite=${limite}&filtroCargo=${filtroCargo}&filtroCidade=${filtroCidade}&buscar=${buscar}`)
             .then(response => response.json())
@@ -34,6 +55,13 @@ $(()=>{
             .catch(error => console.error('Erro ao carregar mais vagas:', error));
     });
 })
+
+
+$('form').on('submit', function(e) {
+    e.preventDefault(); // Evite o comportamento padrão do formulário
+    $('.btn-aplicar-filtro').click(); // Acione o clique do botão
+    return false;
+});
 
 
 
@@ -77,6 +105,7 @@ $('.btn-aplicar-filtro').click( async (event) => {
     localStorage.setItem('filtroCargo', filtroCargo);
     localStorage.setItem('filtroCidade', filtroCidade);
     localStorage.setItem('buscar', buscar);
+    localStorage.setItem('horaSalvar', Date.now());
 
     // Envie uma solicitação ao servidor para atualizar o estado dos filtros
     const response = await fetch('/api/atualizarEstadoFiltros', {
@@ -111,9 +140,28 @@ $('.btn-aplicar-filtro').click( async (event) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Ao carregar a página, obtenha o estado atual do servidor
-    const filtroCargo = localStorage.getItem('filtroCargo');
-    const filtroCidade = localStorage.getItem('filtroCidade');
-    const buscar = localStorage.getItem('buscar');
+    const filtroCargo = localStorage.getItem('filtroCargo') || 'Geral';
+    const filtroCidade = localStorage.getItem('filtroCidade') || 'Escolher...';
+    const buscar = localStorage.getItem('buscar') || '';
+    const horaSalvar = localStorage.getItem('horaSalvar');
+
+    // Verifique se passou 1 hora
+    const umaHora = 60 * 60 * 1000; // 1 hora em milissegundos
+    if (horaSalvar && Date.now() - horaSalvar > umaHora) {
+        // Limpe os dados se passou 1 hora
+        localStorage.removeItem('filtroCargo');
+        localStorage.removeItem('filtroCidade');
+        localStorage.removeItem('buscar');
+        localStorage.removeItem('horaSalvar');
+
+        // Resetar os filtros
+        document.getElementById('filtro-cargo').value = 'Geral';
+        document.getElementById('filtro-cidade').value = 'Escolher...';
+        document.getElementById('buscar-vaga').value = '';
+
+        // Atualizar a página
+        location.reload();
+    }
 
     // Atualize a interface do usuário com base no estado recebido
     document.getElementById('filtro-cargo').value = filtroCargo ? filtroCargo : 'Geral';
@@ -124,28 +172,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await obterVagasFiltradasEExibir();
 });
 
-
-// Armazene os valores dos filtros no localStorage
-localStorage.setItem('filtroCargo', filtroCargo);
-localStorage.setItem('filtroCidade', filtroCidade);
-localStorage.setItem('buscar', buscar);
-localStorage.setItem('horaSalvar', new Date().getTime());
-
-// Ao carregar a página, obtenha o estado atual do servidor
-const filtroCargo = localStorage.getItem('filtroCargo');
-const filtroCidade = localStorage.getItem('filtroCidade');
-const buscar = localStorage.getItem('buscar');
-const horaSalvar = localStorage.getItem('horaSalvar');
-
-// Verifique se passou 1 hora
-const umaHora = 60 * 60 * 1000; // 1 hora em milissegundos
-if (new Date().getTime() - horaSalvar > umaHora) {
-    // Limpe os dados se passou 1 hora
-    localStorage.removeItem('filtroCargo');
-    localStorage.removeItem('filtroCidade');
-    localStorage.removeItem('buscar');
-    localStorage.removeItem('horaSalvar');
-}
 
 // Função para obter e exibir as vagas filtradas
 async function obterVagasFiltradasEExibir() {
