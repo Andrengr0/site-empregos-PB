@@ -113,7 +113,7 @@ header .menu-mobile ul li a{
     font-size: 19px;
     font-weight: 500;
     display: block;
-    border: 1px solid #ffffff;
+    border: 1px solid #e2e2e2;
     background-color: #331f4d;
     width: 100%;
     padding: 14px 14px;
@@ -295,12 +295,13 @@ section.vagas{
     width: 100%;
 }
 
-section.vagas .search-vaga .form-busca,
-.search-vaga p{
-    display: inline-block;
-}
+/* section.vagas .search-vaga .form-busca, */
+/* .search-vaga p{
+    text-align: left;
+}  */
 
 .vagas .search-vaga .form-busca form{
+    width: 100%;
     display: inline-block;
     position: relative;
 }
@@ -314,6 +315,7 @@ section.vagas .search-vaga .form-busca,
 }
 
 .form-busca form input{
+    width: 100%;
     font-size: 15px;
     border-radius: 8px;
     padding: 3px 6px 3px 27px;
@@ -414,6 +416,7 @@ section.vagas .container-site{
     color: #20a126;
     font-weight: 600;
 }
+
 
 @media screen and (max-width: 1050px){
     .vagas .box-vagas .vaga-single{

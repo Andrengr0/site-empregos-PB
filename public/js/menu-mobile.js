@@ -1,7 +1,7 @@
 $(document).ready(function(){
     let el = $('.menu-mobile, .icon-menu-mobile');
 
-    if ($(window).width() <= 830) {
+    if ($(window).width() <= 910) {
         $('.menu-desktop').fadeOut(0);
         $(el).fadeIn(0);
     } else {
@@ -10,7 +10,7 @@ $(document).ready(function(){
     }
 
     $(window).on('resize', function() {
-        if ($(window).width() <= 830) {
+        if ($(window).width() <= 910) {
             $('.menu-desktop').fadeOut(0);
             $(el).fadeIn(0);
         } else {
