@@ -135,7 +135,15 @@
 
         <% if(vaga.descricao) {%>
         <h6>Descrição da vaga:</h6>
-        <% const textoDecodificado = decodeURIComponent(vaga.descricao).replace(/\n/g, '<br>'); %>
+        <% let textoDecodificado;
+        try {
+            const descricaoTemp = vaga.descricao.replace(/\n/g, 'QUEBRADELINHA');
+            const descricaoDecodificada = unescape(descricaoTemp);
+            textoDecodificado = descricaoDecodificada.replace(/QUEBRADELINHA/g, '<br>').replace(/-\s/g, '• ');
+        } catch (e) {
+            console.error(e);  // Log the error
+            textoDecodificado = vaga.descricao;  // Use the original string as a fallback
+        } %>
         <p><%- textoDecodificado %></p>
         <% } %>
 
