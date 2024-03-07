@@ -843,7 +843,7 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             modelo: req.body.modelo_vaga,
             descricao: req.body.descricao_vaga,
             salario: req.body.salario_vaga,
-            contato: req.body.contato_vaga,
+            contato: req.body.contato_vaga.toLowerCase(),
             imagem: imagem,
             dataCriada: new Date().toLocaleString('pt-br').substr(0, 10),
             slug: new Date().getTime(),
