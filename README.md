@@ -7,6 +7,9 @@ O projeto EmpregosPB é uma aplicação web voltada para gerenciamento de vagas 
 
 ![alt text](image_site_EmpregosPB.jpg)
 
+#### Página de Administração com nível de permissão mais alto:
+![alt text](image_adm_EmpregosPB.png)
+
 
 ## Estrutura do projeto:
 
