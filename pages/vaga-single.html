@@ -231,7 +231,15 @@
             <button class="mb-2" id="copiarLink" type="button" onclick="copiarLink()" data-container="body" data-toggle="popover" data-placement="top" data-content="Link copiado!">Compartilhar link</button>
             <br>
             <button id="baixarImagem" type="button" class="btn btn-primary mb-2">Baixar imagem p/compartilhar</button>
-            
+            <br>
+            <% if(user != null){%>
+                <a href="/admin/login" class="voltar btn btn-dark"><-- Voltar ao início</a>
+            <%} else if(user == "usuarioLogPageUser"){%>
+                <a style="display: none;"></a>
+            <% } else {%>
+                <a href="/#vagas" class="voltar btn btn-dark"><-- Voltar ao início</a>
+            <% } %>
+
             <div class="container-img">
                 <div class="box-imagem text-center">
                     <h1 id="titulo"><%=vaga.titulo%></h1>
@@ -265,14 +273,6 @@
                     <p id="mais-detalhes">Para contato ou mais detalhes, veja no site!</p>
                 </div>
             </div>
-            <br>
-            <% if(user != null){%>
-                <a href="/admin/login" class="voltar btn btn-dark"><-- Voltar ao início</a>
-            <%} else if(user == "usuarioLogPageUser"){%>
-                <a style="display: none;"></a>
-            <% } else {%>
-                <a href="/#vagas" class="voltar btn btn-dark"><-- Voltar ao início</a>
-            <% } %>
         </div>
     </div><!-- container -->
 
