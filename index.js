@@ -30,6 +30,7 @@ const Usuarios = require('./Usuarios.js');
 const Cargos = require('./Cargos.js');
 const Switch = require('./Switch.js');
 const Apoiador = require('./Apoiador.js');
+const Views = require('./Views.js');
 
 // Conexão com o banco de dados MongoDB (produção)
 mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/EmpregosPB?retryWrites=true&w=majority",
@@ -54,7 +55,6 @@ app.set('views', path.join(__dirname, '/pages'));
 
 
 
-
 // Rota principal para exibir as vagas de emprego filtradas
 app.get('/', async (req, res) => {
     try {
@@ -71,6 +71,13 @@ app.get('/', async (req, res) => {
             // Renderiza a página inicial com as vagas e cargos filtrados
             res.render('home', { vagas, cargos });
         });
+
+        try {
+            // Incrementa a contagem de visualizações
+            const result = await Views.findOneAndUpdate({}, { $inc: { quantidade: 1 } }, { new: true, upsert: true });
+        } catch (err) {
+            console.error("Erro ao atualizar a contagem de visualizações:", err);
+        };
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar as vagas.");
@@ -185,6 +192,11 @@ app.get('/admin/login', async (req,res)=>{
         }else{
             autUsuario = 1;
         }
+
+        // Busca a contagem de visualizações
+        const views = await Views.findOne({});
+        const quantidadeViews = views ? views.quantidade : 0;
+
         // Renderiza a página de vagas cadastradas ou aprovadas, dependendo do nível de autorização
         if(usuario.adm == 'super' || usuario.adm == 'med'){
             Vagas.find({'__v': 1}).sort({'_id': -1}).then(function(vagas){
@@ -199,7 +211,7 @@ app.get('/admin/login', async (req,res)=>{
                         status: val.__v
                     }
                 })
-                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
+                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario, quantidadeViews});
             })
         }else{
             // Se o usuário não é super ou médio, ele só pode ver as vagas que cadastrou
@@ -1080,6 +1092,13 @@ app.get('/:slug', async (req, res) => {
 
         // Renderiza a página 'vaga-single' com os detalhes da vaga
         res.render('vaga-single', {vaga, user});
+
+        try {
+            // Incrementa a contagem de visualizações
+            const result = await Views.findOneAndUpdate({}, { $inc: { quantidade: 1 } }, { new: true, upsert: true });
+        } catch (err) {
+            console.error("Erro ao atualizar a contagem de visualizações:", err);
+        };
     } catch (err) {
         // Em caso de erro, exibe uma mensagem de erro e status 500
         console.error("Ocorreu um erro:", err);

@@ -17,6 +17,7 @@
         }
 
         .container{
+            z-index: 3;
             max-width: 500px;
             margin: 0 auto;
             border-left: 1px solid #636363;
@@ -102,6 +103,73 @@
             }
         }
 
+        .container-img {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-height: 300px;
+            overflow: auto;
+            text-align: center;
+        }
+
+        .box-imagem {
+            background-image: url(/public/images/Imagem_Padrao.jpg);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: relative;
+            z-index: -1;
+            width: 1080px;
+            height: 1080px;
+            text-align: center;
+        }
+
+        #titulo{
+            position: absolute;
+            width: 1080px;
+            top: 85px;
+            transform: translateY(-50%);
+            font-size: 48px;
+            text-align: center;
+            z-index: 3;
+        }
+
+        #cidade{
+            position: absolute;
+            width: 600px;
+            top: 213px;
+            right: 13px;
+            font-size: 34px;
+            text-align: center;
+            z-index: 3;
+        }
+
+        #descricao {
+            position: absolute;
+            width: 1000px;
+            top: 300px;
+            left: 40px;
+            font-size: 40px;
+            line-height: 72px;
+            text-align: center;
+            z-index: 3;
+            max-height: calc(72px * 7); /* Define a altura máxima em pixels (34px é a altura de uma linha) */
+            overflow: hidden; /* Oculta o texto que estiver além da altura máxima */
+        }
+
+        #mais-detalhes{
+            position: absolute;
+            width: 830px;
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            font-weight: 500;
+            text-align: center;
+            z-index: 3;
+        }
+
+
     </style>
 </head>
 <body>
@@ -135,7 +203,7 @@
 
         <% if(vaga.descricao) {%>
         <h6>Descrição da vaga:</h6>
-        <% let textoDecodificado;
+        <% var textoDecodificado;
         try {
             const descricaoTemp = vaga.descricao.replace(/\n/g, 'QUEBRADELINHA');
             const descricaoDecodificada = unescape(descricaoTemp);
@@ -160,7 +228,43 @@
         <p><%=vaga.dataCriada%></p>
 
         <div class="d-block text-right mt-3 mb-4" style="width: 100%;">
-            <button id="copiarLink" type="button" onclick="copiarLink()" data-container="body" data-toggle="popover" data-placement="top" data-content="Link copiado!">Compartilhar link</button>
+            <button class="mb-2" id="copiarLink" type="button" onclick="copiarLink()" data-container="body" data-toggle="popover" data-placement="top" data-content="Link copiado!">Compartilhar link</button>
+            <br>
+            <button id="baixarImagem" type="button" class="btn btn-primary mb-2">Baixar imagem p/compartilhar</button>
+            
+            <div class="container-img">
+                <div class="box-imagem text-center">
+                    <h1 id="titulo"><%=vaga.titulo%></h1>
+                    <p id="cidade"><%=vaga.cidade%> - PB</p>
+                    <%
+                    // Remover palavras do início do texto
+                    function removerPalavrasIniciais(textoDecodificado) {
+                        // Verificar se o texto começa com a tag <br>
+                        var tagRemovida = false;
+                        if (textoDecodificado.startsWith('<br>') || textoDecodificado.startsWith('<br />')) {
+                            // Remover a tag <br> no início do texto e marcar como removida
+                            textoDecodificado = textoDecodificado.substring(textoDecodificado.indexOf('>') + 1);
+                            tagRemovida = true;
+                        }
+
+                        // Array com as palavras a serem removidas
+                        var palavrasIniciais = ['Requisitos', 'Descrição', 'Atribuições'];
+
+                        // Expressão regular para encontrar as palavras no início do texto
+                        var regex = new RegExp('^(' + palavrasIniciais.join('|') + '):?\\s*(\\n+)?', 'im');
+
+                        // Substituir as palavras iniciais e a quebra de linha por uma string vazia
+                        textoDecodificado = textoDecodificado.replace(regex, '').trim();
+
+                        // Remover quebra de linha no início do texto após a remoção das palavras iniciais
+                        textoDecodificado = textoDecodificado.replace(/^\n+/, '');
+                        return textoDecodificado;
+                    }
+                    %>
+                    <p class="text-left" id="descricao"><%- removerPalavrasIniciais(textoDecodificado) %></p>
+                    <p id="mais-detalhes">Para contato ou mais detalhes, veja no site!</p>
+                </div>
+            </div>
             <br>
             <% if(user != null){%>
                 <a href="/admin/login" class="voltar btn btn-dark"><-- Voltar ao início</a>
@@ -175,7 +279,44 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
     <script src="/public/js/copiar-contato.js"></script>
+
+    <script>
+        // Função para baixar a imagem de compartilhamento
+        document.getElementById('baixarImagem').addEventListener('click', function() {
+            $('.container-img').css('display','block');
+            // Seleciona o elemento container-img
+            var container = document.querySelector('.box-imagem');
+
+            // Cria um canvas com as dimensões do container-img
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+
+            // Cria um novo elemento de imagem
+            var img = new Image();
+
+            // Converte o conteúdo do container para uma imagem
+            html2canvas(container).then(canvas => {
+                // Define a imagem gerada a partir do conteúdo do container
+                img.src = canvas.toDataURL();
+
+                // Obtém o ID da página atual a partir da URL
+                var url = window.location.href;
+                var urlParts = url.split('/');
+                var id = urlParts[3];
+
+                // Cria um link para baixar a imagem
+                var link = document.createElement('a');
+                link.href = img.src;
+                link.download = `vaga_${id}.jpg`; // Define o nome do arquivo com o ID da página
+                link.click();
+                $('.container-img').css('display','none');
+            });
+        });
+    </script>
     
 </body>
 </html>
