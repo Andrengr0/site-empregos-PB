@@ -12,6 +12,7 @@ var vagaSchema = new Schema({
     modelo: String,
     descricao: String,
     salario: String,
+    link: String,
     contato: String,
     imagem: String,
     dataCriada: String,

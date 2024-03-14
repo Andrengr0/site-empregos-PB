@@ -307,21 +307,18 @@
             <label class="mt-5" for="descricao_vaga">Descrição da vaga: <span>(opcional)</span></label>
             <textarea id="descricao_vaga" name="descricao_vaga" placeholder="Atrubuições, requisitos, benefícios, etc..." maxlength="1200"></textarea>
 
-            <label for="contato_vaga" class="mt-4">Contato para envio de currículo: <span>(obrigatório)</span></label>
-            <input type="text" name="contato_vaga" placeholder="Número ou link de whatsapp, email, etc..." maxlength="100">
+            <label for="link_vaga" class="mt-4">Link da vaga (caso tenha):</label>
+            <input type="text" name="link_vaga" placeholder="exemplo: https//empregospb.com" maxlength="1000">
 
-            <label class="mt-5" for="salario_vaga">Salario: <span>(opcional)</span></label>
+            <label for="contato_vaga" class="mt-4">Contato para envio de currículo: <span>(opcional)</span></label>
+            <input type="text" name="contato_vaga" placeholder="Número de whatsapp, email, etc..." maxlength="100">
+
+            <label class="mt-4" for="salario_vaga">Salario: <span>(opcional)</span></label>
             <input type="text" id="salario_vaga" name="salario_vaga" value="R$" style="max-width: 150px;" autocomplete="false">
 
-            <label class="mt-5" for="arquivo_vaga">Imagem de divulgação: <span>(opcional)</span></label>
-        
-            <input type="file" name="arquivo_vaga" id="arquivo_vaga" onchange="previewImage(this)" style="display: block;">
-
-            <input type="hidden" name="imagem_recortada" id="imagem_recortada" value="">
-    
             <input type="hidden" name="id_usuario" id="id_usuario" value="<%=idUsuario%>">
-
-            <div id="preview" style="display: none;"></div>
+            
+            <div></div>
 
             <div id="cadastrar_vaga">Cadastrar Vaga</div>
 

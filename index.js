@@ -135,7 +135,7 @@ async function obterVagasFiltradas(filtroCargo, filtroCidade, buscar, inicio = 0
             titulo: val.titulo,
             categoria: val.categoria,
             cidade: val.cidade,
-            imagem: val.imagem,
+            // imagem: val.imagem,
             quantVagas: val.quantidade,
             dataCriada: val.dataCriada,
             slug: val.slug
@@ -205,7 +205,7 @@ app.get('/admin/login', async (req,res)=>{
                     return {
                         id: val._id,
                         titulo: val.titulo,
-                        imagem: val.imagem,
+                        // imagem: val.imagem,
                         slug: val.slug,
                         dataCriada: val.dataCriada,
                         status: val.__v
@@ -220,7 +220,7 @@ app.get('/admin/login', async (req,res)=>{
                     return {
                         id: val._id,
                         titulo: val.titulo,
-                        imagem: val.imagem,
+                        // imagem: val.imagem,
                         descricao: val.descricao,
                         dataCriada: val.dataCriada,
                         slug: val.slug,
@@ -276,7 +276,7 @@ app.get('/filtro/vagas', async (req, res) => {
                 return {
                     id: val._id,
                     titulo: val.titulo,
-                    imagem: val.imagem,
+                    // imagem: val.imagem,
                     descricao: val.descricao,
                     dataCriada: val.dataCriada
                 }
@@ -841,8 +841,8 @@ app.post('/admin/cadastro/cargo', upload.single('form_cargo'), async (req, res) 
 // Rota para cadastrar uma nova vaga
 app.post('/admin/cadastro/vaga', async (req, res) => {
     try {
-        // Extrai os dados do corpo da requisição
-        const imagem = req.body.imagem_recortada;
+        // // Extrai os dados do corpo da requisição
+        // const imagem = req.body.imagem_recortada;
 
         // Cria uma nova vaga no banco de dados com base nos dados recebidos do formulário
         const vaga = await Vagas.create({
@@ -855,8 +855,9 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             modelo: req.body.modelo_vaga,
             descricao: req.body.descricao_vaga,
             salario: req.body.salario_vaga,
+            link: req.body.link_vaga,
             contato: req.body.contato_vaga.toLowerCase(),
-            imagem: imagem,
+            // imagem: imagem,
             dataCriada: new Date().toLocaleString('pt-br').substr(0, 10),
             slug: new Date().getTime(),
             idUsuario: req.body.id_usuario
@@ -969,33 +970,17 @@ app.get('/deletar/usuario/:id', (req, res) => {
 });
 
 // Rota para deletar uma vaga específica com base no ID e na imagem fornecidos
-app.get('/deletar/vaga/:id/:imagem', (req, res) => {
+app.get('/deletar/vaga/:id', (req, res) => {
     if(req.session.email == null){
         // Se a sessão do usuário expirou, renderiza a página 'sessao-expirou'
         res.render('sessao-expirou');
     }else{
-        // Constrói o caminho completo da imagem a ser deletada
-        const imagePath = __dirname+'/public/images_vagas/'+req.params.imagem;
-        if (fs.existsSync(imagePath)) {
-            // Se a imagem existe, exclui-a
-            fs.unlink(imagePath, (err) => {
-                if (err) {
-                    console.error('Erro ao excluir o arquivo:', err);
-                }
-                // Após excluir a imagem, deleta a vaga do banco de dados com base no ID fornecido
-                Vagas.deleteOne({ _id: req.params.id }).then(function () {
-                    // Redireciona para a página de login do administrador após a exclusão
-                    res.redirect('/admin/login');
-                });
-            });
-        } else {
-            // Se a imagem não existe, apenas deleta a vaga do banco de dados com base no ID fornecido
-            Vagas.deleteOne({ _id: req.params.id }).then(function () {
-                // Redireciona para a página de login do administrador após a exclusão
-                res.redirect('/admin/login');
-                // console.log('excluido com sucesso')
-            });
-        }
+        // Deleta a vaga do banco de dados com base no ID fornecido
+        Vagas.deleteOne({ _id: req.params.id }).then(function () {
+            // Redireciona para a página de login do administrador após a exclusão
+            res.redirect('/admin/login');
+            // console.log('excluido com sucesso')
+        });
     }
 });
 
@@ -1064,7 +1049,7 @@ app.get('/vaga/usuario/:id', async (req, res) => {
                 return {
                     id: val._id,
                     titulo: val.titulo,
-                    imagem: val.imagem,
+                    // imagem: val.imagem,
                     slug: val.slug,
                     dataCriada: val.dataCriada
                 }

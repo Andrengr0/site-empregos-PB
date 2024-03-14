@@ -20,12 +20,7 @@
         <div class="janela-float <%=vagas[i].id%>" style="display: none;">
             <div class="float-box">
                 <h4>Deseja realmente excluir essa vaga?</h4>
-                <% if(vagas[i].imagem){%>
-                    <% let nameImage = vagas[i].imagem.split('/') %>
-                    <a href="/deletar/vaga/<%=vagas[i].id +"/"+nameImage[5]%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
-                <% } else {%>
                     <a href="/deletar/vaga/<%=vagas[i].id%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
-                <% } %>
             </div>
         </div>
         <% } %>

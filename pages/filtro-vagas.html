@@ -92,8 +92,7 @@
                     <div class="janela-float <%=vagas[i].id%>" style="display: none;">
                         <div class="float-box">
                             <h4>Deseja realmente excluir essa vaga?</h4>
-                            <% let nameImage = vagas[i].imagem.split('/') %>
-                            <a href="/deletar/vaga/<%=vagas[i].id +"/"+nameImage[5]%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
+                            <a href="/deletar/vaga/<%=vagas[i].id%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
                         </div>
                     </div>
                     <% } %>
@@ -114,8 +113,6 @@
                                 </button>
                             </div>
                             <div class="modal-body text-left">
-                                <img src="<%=vagas[i].imagem%>">
-
                                 <% if(vagas[i].descricao) {%>
                                     <% const textoDecodificado = decodeURIComponent(vagas[i].descricao).replace(/\n/g, '<br>'); %>
                                     <p class="mt-4"><%- textoDecodificado %></p>

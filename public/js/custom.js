@@ -52,64 +52,38 @@ function previewImage(input) {
 
 // Adicione um evento de clique ao botão de confirmação
 $('#cadastrar_vaga').click(function () {
+    $('.load').css('display','inline-block');
     // Verificações dos inputs obrigatórios
     var tituloVaga = $('input[name="titulo_vaga"]').val();
     var empresaVaga = $('input[name="empresa_vaga"]').val();
     var cidadeVaga = $('#cidade_vaga').val();
     var cargosSelecionados = $('input[name="checks"]:checked');
     var contatoVaga = $('input[name="contato_vaga"]').val();
+    var linkVaga = $('input[name="link_vaga"]').val();
 
     if (tituloVaga == "") {
+        $('.load').css('display','none');
         alert("Por favor, preencha o título da vaga.");
         return; // Pare a execução da função aqui
     }else if (empresaVaga == "") {
+        $('.load').css('display','none');
         alert("Por favor, preencha o nome da empresa/estabelecimento.");
         return; // Pare a execução da função aqui
     }else if (cidadeVaga == "escolher") {
+        $('.load').css('display','none');
         alert("Por favor, escolha uma cidade.");
         return; // Pare a execução da função aqui
     }else if (cargosSelecionados.length == 0) {
+        $('.load').css('display','none');
         alert("Por favor, selecione pelo menos um cargo.");
         return; // Pare a execução da função aqui
-    }else if (contatoVaga == "") {
-        alert("Por favor, preencha o campo para contato.");
+    }else if (contatoVaga == "" && linkVaga == "") {
+        $('.load').css('display','none');
+        alert("Por favor, coloque alguma informação no link da vaga ou no contato, para envio de currículo.");
         return; // Pare a execução da função aqui
-    }
+    }  
 
-    $('.load').css('display','inline-block');
-
-    // Verifique se uma imagem foi selecionada
-    if ($('#arquivo_vaga').val() != "") {
-        // Obtenha a imagem cortada do Croppie
-        redimensionar.croppie('result', {
-            type: 'base64',
-            format: 'png', // Ajuste para o formato desejado (png, jpeg, etc.)
-            size: 'viewport'
-        }).then(function (imagemBase64) {
-            $.ajax({
-                url: '/admin/cadastro/imagem',
-                method: 'POST',
-                data: { imagemBase64 },
-                success: function (response) {
-                    // A resposta do servidor conterá o caminho da imagem
-                    const imagePath = response.imagePathMod;
-        
-                    // Você pode usar imagePath como o caminho da imagem no formulário
-                    // e enviá-lo junto com outros dados do formulário
-                    $('#imagem_recortada').val(imagePath);
-        
-                    // Agora, envie o formulário completo para o endpoint de cadastro de vaga
-                    enviarFormulario();
-                },
-                error: function (err) {
-                    console.error('Erro ao enviar a imagem:', err);
-                }
-            });
-        });
-    } else {
-        // Nenhuma imagem foi selecionada, envie o formulário diretamente
-        enviarFormulario();
-    }
+    enviarFormulario();
 });
 
 function enviarFormulario() {
@@ -118,9 +92,6 @@ function enviarFormulario() {
         url: "/admin/cadastro/vaga",
         data: $("#form-vaga").serialize(), // Serialize o formulário para enviar os dados corretamente
         success: function (data) {
-            if (redimensionar) {
-                redimensionar.croppie('destroy');
-            }
             alert("Vaga cadastrada com sucesso!");
             location.reload();
         },
