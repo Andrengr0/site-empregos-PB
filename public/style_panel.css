@@ -1015,6 +1015,15 @@ section.dados-pessoais{
     color: #e5e5e5;
 }
 
+.box-grafico{
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    max-height: 600px;
+    margin: 40px auto;
+}
+
 /* ############################## */
 
 @media screen and (max-width: 591px){

@@ -72,17 +72,30 @@ app.get('/', async (req, res) => {
             res.render('home', { vagas, cargos });
         });
 
-        try {
-            // Incrementa a contagem de visualizações
-            const result = await Views.findOneAndUpdate({}, { $inc: { quantidade: 1 } }, { new: true, upsert: true });
-        } catch (err) {
-            console.error("Erro ao atualizar a contagem de visualizações:", err);
-        };
+        // Obtenha a data atual
+        let today = new Date();
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+
+        // Tente encontrar um documento de visualizações para a data atual
+        let views = await Views.findOne({ date: today });
+
+        if (views) {
+            // Se um documento existir, incremente a quantidade
+            views.quantidade++;
+            await views.save();
+        } else {
+            // Se nenhum documento existir, crie um novo
+            views = new Views({ date: today, quantidade: 1 });
+            await views.save();
+        }
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar as vagas.");
     }
 });
+
 
 // Rota para obter as vagas filtradas em formato JSON
 app.get('/api/obterVagasFiltradas', async (req, res) => {
@@ -193,9 +206,17 @@ app.get('/admin/login', async (req,res)=>{
             autUsuario = 1;
         }
 
-        // Busca a contagem de visualizações
-        const views = await Views.findOne({});
-        const quantidadeViews = views ? views.quantidade : 0;
+        // Busca a contagem total de visualizações
+        const totalViews = await Views.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    total: {
+                        $sum: "$quantidade"
+                    }
+                }
+            }
+        ]);
 
         // Renderiza a página de vagas cadastradas ou aprovadas, dependendo do nível de autorização
         if(usuario.adm == 'super' || usuario.adm == 'med'){
@@ -211,7 +232,7 @@ app.get('/admin/login', async (req,res)=>{
                         status: val.__v
                     }
                 })
-                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario, quantidadeViews});
+                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario, totalViews: totalViews[0].total});
             })
         }else{
             // Se o usuário não é super ou médio, ele só pode ver as vagas que cadastrou
@@ -1078,12 +1099,24 @@ app.get('/:slug', async (req, res) => {
         // Renderiza a página 'vaga-single' com os detalhes da vaga
         res.render('vaga-single', {vaga, user});
 
-        try {
-            // Incrementa a contagem de visualizações
-            const result = await Views.findOneAndUpdate({}, { $inc: { quantidade: 1 } }, { new: true, upsert: true });
-        } catch (err) {
-            console.error("Erro ao atualizar a contagem de visualizações:", err);
-        };
+        // Obtenha a data atual
+        let today = new Date();
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+
+        // Tente encontrar um documento de visualizações para a data atual
+        let views = await Views.findOne({ date: today });
+
+        if (views) {
+            // Se um documento existir, incremente a quantidade
+            views.quantidade++;
+            await views.save();
+        } else {
+            // Se nenhum documento existir, crie um novo
+            views = new Views({ date: today, quantidade: 1 });
+            await views.save();
+        }
     } catch (err) {
         // Em caso de erro, exibe uma mensagem de erro e status 500
         console.error("Ocorreu um erro:", err);
@@ -1241,6 +1274,105 @@ app.post('/admin/cadastrar/nova/senha', async (req, res) => {
         res.status(500).send('Erro ao resetar a senha.');
     }
 });
+
+
+// Rota para renderizar a tela de métricas
+app.get('/admin/painel/metricas', async (req, res) => {
+    try {
+        if (req.session.email == null) {
+            res.render('sessao-expirou');
+        } else {
+            // Recupera o email do usuário da sessão
+            const emailUsuario = req.session.email;
+
+            // Consulta o banco de dados para obter o usuário pelo email
+            const usuario = await Usuarios.findOne({ email: emailUsuario });
+
+            // Determina o nível de autorização do usuário
+            let autUsuario;
+            if (usuario.adm == "super") {
+                autUsuario = 3;
+            } else if (usuario.adm == "med") {
+                autUsuario = 2;
+            } else {
+                autUsuario = 1;
+            }
+
+            // Verifica se o usuário foi encontrado
+            if (!usuario) {
+                // Trata o caso em que o usuário não foi encontrado
+                res.status(404).send('Usuário não encontrado');
+                return;
+            }
+
+            // Busca a contagem total de visualizações
+            const totalViews = await Views.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        total: {
+                            $sum: "$quantidade"
+                        }
+                    }
+                }
+            ]);
+
+            // Renderiza o formulário de cadastro de apoiador
+            res.render('metricas', { idUsuario: usuario._id, nomeUsuario: usuario.nome, autUsuario, totalViews: totalViews[0].total });
+
+        }
+    } catch (err) {
+        console.error('Erro ao buscar o usuário:', err);
+        res.status(500).send('Erro ao buscar o usuário.');
+    }
+});
+
+
+// Rota para os últimos 30 dias
+app.get('/admin/api/views/last30days', async (req, res) => {
+    try {
+        // Crie um array de dias decrescentes
+        let days = Array.from({length: 30}, (_, i) => 30 - i);
+
+        // Busque todos os documentos de visualizações para cada dia
+        let views = await Promise.all(days.map(async day => {
+            let date = new Date();
+            date.setDate(date.getDate() - day);
+            date.setHours(0, 0, 0, 0);
+            let view = await Views.findOne({ date: date });
+            return view ? view.quantidade : 0;
+        }));
+
+        // Retorne os arrays de dias e visualizações
+        res.json({ days, views });
+    } catch (err) {
+        console.error("Ocorreu um erro:", err);
+        res.status(500).send("Erro ao buscar as visualizações.");
+    }
+});
+
+// Rota para as últimas 24 horas
+app.get('/admin/api/views/last24hours', async (req, res) => {
+    try {
+        // Crie um array de horas decrescentes
+        let hours = Array.from({length: 24}, (_, i) => 24 - i);
+
+        // Busque todos os documentos de visualizações para cada hora
+        let views = await Promise.all(hours.map(async hour => {
+            let date = new Date();
+            date.setHours(date.getHours() - hour, 0, 0, 0);
+            let view = await Views.findOne({ date: date });
+            return view ? view.quantidade : 0;
+        }));
+
+        // Retorne os arrays de horas e visualizações
+        res.json({ hours, views });
+    } catch (err) {
+        console.error("Ocorreu um erro:", err);
+        res.status(500).send("Erro ao buscar as visualizações.");
+    }
+});
+
 
 
 
