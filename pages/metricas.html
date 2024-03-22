@@ -1,7 +1,9 @@
 <%- include('partials-admin/header.html')%>
     <h3 class="text-center mt-3">Métricas do site EmpregosPB</h3>
     <h6 class="text-center mt-3">Visualizações totais: <span style="font-size: 16px;"><%=totalViews%></span></h6>
-    <div class="box-grafico">
+
+
+    <div class="box-grafico mt-5">
         <canvas id="myChart30Days"></canvas>
     </div>
 
@@ -66,7 +68,7 @@ fetch('/admin/api/views/last24hours')
                 labels: data.hours, // as horas retornadas pelo servidor
                 datasets: [{
                     label: 'Últimas 24h de acessos',
-                    borderColor: 'rgb(34,56,251)',
+                    borderColor: 'rgb(81,97,242)',
                     data: data.views, // as visualizações retornadas pelo servidor
                 }]
             },
