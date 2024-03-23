@@ -85,11 +85,14 @@
         fetch('/admin/api/views/last24hours')
             .then(response => response.json())
             .then(data => {
+                // Ajusta as horas para a sua região
+                let adjustedHours = data.hours.map(hour => ((hour - 3 + 24) % 24).toString().padStart(2, '0'));
+
                 let ctx = document.getElementById('myChart24Hours');
                 let chart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: data.hours, // as horas retornadas pelo servidor
+                        labels: adjustedHours, // as horas ajustadas para a sua região
                         datasets: [{
                             label: 'Acessos',
                             borderColor: 'rgb(54,162,235)',
@@ -139,6 +142,7 @@
                 });
             })
             .catch(error => console.error('Erro:', error));
+
 
 
 
