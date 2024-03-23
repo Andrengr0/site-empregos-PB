@@ -7,7 +7,8 @@ const fs = require('fs'); // Módulo para manipulação de arquivos no sistema d
 const multer = require('multer'); // Middleware para lidar com upload de arquivos
 const nodemailer = require('nodemailer'); // Módulo para envio de emails
 const bcrypt = require('bcrypt'); // Módulo para criptografar senhas
-var mongoose = require("mongoose"); // ODM (Object Data Modeling) para MongoDB
+const mongoose = require("mongoose"); // ODM (Object Data Modeling) para MongoDB
+const moment = require('moment-timezone');
 
 const app = express(); // Inicializa a aplicação Express
 
@@ -72,8 +73,8 @@ app.get('/', async (req, res) => {
             res.render('home', { vagas, cargos });
         });
 
-        // Obtenha a data atual
-        let today = new Date();
+        // Obtenha a data atual no fuso horário do Brasil
+        let today = moment().tz("America/Fortaleza").toDate();
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
@@ -90,6 +91,7 @@ app.get('/', async (req, res) => {
             views = new Views({ date: today, quantidade: 1 });
             await views.save();
         }
+
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar as vagas.");
@@ -1099,8 +1101,8 @@ app.get('/:slug', async (req, res) => {
         // Renderiza a página 'vaga-single' com os detalhes da vaga
         res.render('vaga-single', {vaga, user});
 
-        // Obtenha a data atual
-        let today = new Date();
+        // Obtenha a data atual no fuso horário do Brasil
+        let today = moment().tz("America/Fortaleza").toDate();
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
@@ -1328,22 +1330,24 @@ app.get('/admin/painel/metricas', async (req, res) => {
 });
 
 
-// Rota para os últimos 30 dias
 app.get('/admin/api/views/last30days', async (req, res) => {
     try {
-        // Crie um array de dias decrescentes
         let days = Array.from({length: 30}, (_, i) => 30 - i);
 
-        // Busque todos os documentos de visualizações para cada dia
         let views = await Promise.all(days.map(async day => {
-            let date = new Date();
-            date.setDate(date.getDate() - day);
-            date.setHours(0, 0, 0, 0);
-            let view = await Views.findOne({ date: date });
-            return view ? view.quantidade : 0;
+            let start = new Date();
+            start.setDate(start.getDate() - day);
+            start.setHours(0, 0, 0, 0);
+
+            let end = new Date(start);
+            end.setHours(23, 59, 59, 999);
+
+            let dayViews = await Views.find({ date: { $gte: start, $lt: end } });
+            let totalViews = dayViews.reduce((sum, view) => sum + view.quantidade, 0);
+
+            return totalViews;
         }));
 
-        // Retorne os arrays de dias e visualizações
         res.json({ days, views });
     } catch (err) {
         console.error("Ocorreu um erro:", err);
@@ -1351,28 +1355,27 @@ app.get('/admin/api/views/last30days', async (req, res) => {
     }
 });
 
+
 // Rota para as últimas 24 horas
 app.get('/admin/api/views/last24hours', async (req, res) => {
     try {
-        // Crie um array de horas decrescentes
-        let hours = Array.from({length: 24}, (_, i) => 24 - i);
-
-        // Busque todos os documentos de visualizações para cada hora
-        let views = await Promise.all(hours.map(async hour => {
+        let views = await Promise.all(Array.from({length: 24}, async (_, i) => {
             let date = new Date();
-            date.setHours(date.getHours() - hour, 0, 0, 0);
+            date.setHours(date.getHours() - i - 1, 0, 0, 0); // Subtrai uma hora
             let view = await Views.findOne({ date: date });
             return view ? view.quantidade : 0;
         }));
 
-        // Retorne os arrays de horas e visualizações
+        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i + 23) % 24).toString().padStart(2, '0')).reverse();
+
+        views.reverse();
+
         res.json({ hours, views });
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar as visualizações.");
     }
 });
-
 
 
 

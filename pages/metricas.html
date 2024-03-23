@@ -18,81 +18,127 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="/public/js/menu-painel.js"></script>
+    <script src="/public/js/transition_menu_admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Gráfico para os últimos 30 dias
-fetch('/admin/api/views/last30days')
-    .then(response => response.json())
-    .then(data => {
-        let ctx = document.getElementById('myChart30Days');
-        let chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.days, // os dias retornados pelo servidor
-                datasets: [{
-                    label: 'Últimos 30 dias de acesso',
-                    borderColor: 'rgb(34,56,251)',
-                    data: data.views, // as visualizações retornadas pelo servidor
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1,
-                            autoSkip: true,
-                            maxTicksLimit: 5,
-                            suggestedMin: 0
+        fetch('/admin/api/views/last30days')
+            .then(response => response.json())
+            .then(data => {
+                let ctx = document.getElementById('myChart30Days');
+                let chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.days, // os dias retornados pelo servidor
+                        datasets: [{
+                            label: 'Acessos',
+                            borderColor: 'rgb(34,56,251)',
+                            data: data.views, // as visualizações retornadas pelo servidor
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Ultimos 30 dias de acesso'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Acessos'
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1,
+                                    autoSkip: true,
+                                    maxTicksLimit: 5,
+                                    suggestedMin: 0
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Dias atrás'
+                                }
+                            }
+                        },
+                        elements: {
+                            line: {
+                                tension: 0, // torna a linha reta
+                            },
+                            point: {
+                                pointStyle: 'circle',
+                                radius: 3,
+                                hitRadius: 2,
+                                borderWidth: 3
+                            }
                         }
-                    }]
-                },
-                elements: {
-                    line: {
-                        tension: 0 // torna a linha reta
                     }
-                }
-            }
-        });
-    })
-    .catch(error => console.error('Erro:', error));
+                });
+            })
+            .catch(error => console.error('Erro:', error));
 
-// Gráfico para as últimas 24 horas
-fetch('/admin/api/views/last24hours')
-    .then(response => response.json())
-    .then(data => {
-        let ctx = document.getElementById('myChart24Hours');
-        let chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.hours, // as horas retornadas pelo servidor
-                datasets: [{
-                    label: 'Últimas 24h de acessos',
-                    borderColor: 'rgb(81,97,242)',
-                    data: data.views, // as visualizações retornadas pelo servidor
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1,
-                            autoSkip: true,
-                            maxTicksLimit: 5,
-                            suggestedMin: 0
+        // Gráfico para as últimas 24 horas
+        fetch('/admin/api/views/last24hours')
+            .then(response => response.json())
+            .then(data => {
+                let ctx = document.getElementById('myChart24Hours');
+                let chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.hours, // as horas retornadas pelo servidor
+                        datasets: [{
+                            label: 'Acessos',
+                            borderColor: 'rgb(54,162,235)',
+                            data: data.views, // as visualizações retornadas pelo servidor
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Ultimas 24h de acesso'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Acessos'
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1,
+                                    autoSkip: true,
+                                    maxTicksLimit: 5,
+                                    suggestedMin: 0
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Horas'
+                                }
+                            }
+                        },
+                        elements: {
+                            line: {
+                                tension: 0, // torna a linha reta
+                            },
+                            point: {
+                                pointStyle: 'circle',
+                                radius: 3,
+                                hitRadius: 2,
+                                borderWidth: 3
+                            }
                         }
-                    }]
-                },
-                elements: {
-                    line: {
-                        tension: 0 // torna a linha reta
                     }
-                }
-            }
-        });
-    })
-    .catch(error => console.error('Erro:', error));
+                });
+            })
+            .catch(error => console.error('Erro:', error));
 
 
 
