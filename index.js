@@ -79,6 +79,9 @@ app.get('/', async (req, res) => {
         today.setSeconds(0);
         today.setMilliseconds(0);
 
+        // Ajusta a data para a sua região
+        today.setHours(today.getHours() - 3);
+
         // Tente encontrar um documento de visualizações para a data atual
         let views = await Views.findOne({ date: today });
 
@@ -91,7 +94,6 @@ app.get('/', async (req, res) => {
             views = new Views({ date: today, quantidade: 1 });
             await views.save();
         }
-
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar as vagas.");
@@ -1107,6 +1109,9 @@ app.get('/:slug', async (req, res) => {
         today.setSeconds(0);
         today.setMilliseconds(0);
 
+        // Ajusta a data para a sua região
+        today.setHours(today.getHours() - 3);
+
         // Tente encontrar um documento de visualizações para a data atual
         let views = await Views.findOne({ date: today });
 
@@ -1361,12 +1366,12 @@ app.get('/admin/api/views/last24hours', async (req, res) => {
     try {
         let views = await Promise.all(Array.from({length: 24}, async (_, i) => {
             let date = new Date();
-            date.setHours(date.getHours() - i - 1, 0, 0, 0); // Subtrai uma hora
+            date.setHours(date.getHours() - i - 4, 0, 0, 0); // Subtrai uma hora e mais 3 para corrigir timezone
             let view = await Views.findOne({ date: date });
             return view ? view.quantidade : 0;
         }));
 
-        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i + 23) % 24).toString().padStart(2, '0')).reverse();
+        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i - 4 + 24) % 24).toString().padStart(2, '0')).reverse();
 
         views.reverse();
 
