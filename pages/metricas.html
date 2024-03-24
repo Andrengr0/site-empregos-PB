@@ -11,6 +11,14 @@
         <canvas id="myChart24Hours"></canvas>
     </div>
 
+    <div class="box-grafico">
+        <canvas id="myChart48Hours"></canvas>
+    </div>
+
+    <!-- <div class="box-grafico">
+        <canvas id="myChartAllTime"></canvas>
+    </div> -->
+
     </div><!-- box-content-painel -->
     </div><!-- content-painel -->
 
@@ -30,7 +38,7 @@
                 let chart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: data.days, // os dias retornados pelo servidor
+                        labels: data.dates, // os dias retornados pelo servidor
                         datasets: [{
                             label: 'Acessos',
                             borderColor: 'rgb(34,56,251)',
@@ -54,14 +62,14 @@
                                     beginAtZero: true,
                                     stepSize: 1,
                                     autoSkip: true,
-                                    maxTicksLimit: 5,
+                                    maxTicksLimit: 8,
                                     suggestedMin: 0
                                 }
                             },
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Dias atrás'
+                                    text: 'Dias mais recentes'
                                 }
                             }
                         },
@@ -72,7 +80,7 @@
                             point: {
                                 pointStyle: 'circle',
                                 radius: 3,
-                                hitRadius: 2,
+                                hitRadius: 3,
                                 borderWidth: 3
                             }
                         }
@@ -113,7 +121,7 @@
                                     beginAtZero: true,
                                     stepSize: 1,
                                     autoSkip: true,
-                                    maxTicksLimit: 5,
+                                    maxTicksLimit: 8,
                                     suggestedMin: 0
                                 }
                             },
@@ -131,7 +139,7 @@
                             point: {
                                 pointStyle: 'circle',
                                 radius: 3,
-                                hitRadius: 2,
+                                hitRadius: 3,
                                 borderWidth: 3
                             }
                         }
@@ -139,6 +147,132 @@
                 });
             })
             .catch(error => console.error('Erro:', error));
+
+        // Gráfico para as últimas 24 horas
+        fetch('/admin/api/views/last48hours')
+            .then(response => response.json())
+            .then(data => {
+                let ctx = document.getElementById('myChart48Hours');
+                let chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.hours, // as horas retornadas pelo servidor
+                        datasets: [{
+                            label: 'Acessos',
+                            borderColor: 'rgb(54,162,235)',
+                            data: data.views, // as visualizações retornadas pelo servidor
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Ultimas 48h de acesso'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Acessos'
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1,
+                                    autoSkip: true,
+                                    maxTicksLimit: 8,
+                                    suggestedMin: 0
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Horas'
+                                },
+                                ticks: {
+                                    autoSkip: true,
+                                    maxTicksLimit: 24
+                                }
+                            }
+                        },
+                        elements: {
+                            line: {
+                                tension: 0, // torna a linha reta
+                            },
+                            point: {
+                                pointStyle: 'circle',
+                                radius: 3,
+                                hitRadius: 3,
+                                borderWidth: 3
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Erro:', error));
+
+            // // Gráfico para todo o período
+            // fetch('/admin/api/views/alltime')
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         let ctx = document.getElementById('myChartAllTime');
+            //         let chart = new Chart(ctx, {
+            //             type: 'line',
+            //             data: {
+            //                 labels: data.dates, // os dias retornados pelo servidor
+            //                 datasets: [{
+            //                     label: 'Acessos',
+            //                     borderColor: 'rgb(34,56,251)',
+            //                     data: data.views, // as visualizações retornadas pelo servidor
+            //                 }]
+            //             },
+            //             options: {
+            //                 plugins: {
+            //                     title: {
+            //                         display: true,
+            //                         text: 'Acessos de todos os tempos'
+            //                     }
+            //                 },
+            //                 scales: {
+            //                     y: {
+            //                         title: {
+            //                             display: true,
+            //                             text: 'Acessos'
+            //                         },
+            //                         ticks: {
+            //                             beginAtZero: true,
+            //                             stepSize: 1,
+            //                             autoSkip: true,
+            //                             maxTicksLimit: 8,
+            //                             suggestedMin: 0
+            //                         }
+            //                     },
+            //                     x: {
+            //                         title: {
+            //                             display: true,
+            //                             text: 'Dias do mês'
+            //                         },
+            //                         ticks: {
+            //                         autoSkip: true,
+            //                         maxTicksLimit: 30
+            //                     }
+            //                     }
+            //                 },
+            //                 elements: {
+            //                     line: {
+            //                         tension: 0, // torna a linha reta
+            //                     },
+            //                     point: {
+            //                         pointStyle: 'circle',
+            //                         radius: 3,
+            //                         hitRadius: 3,
+            //                         borderWidth: 3
+            //                     }
+            //                 }
+            //             }
+            //         });
+            //     })
+            //     .catch(error => console.error('Erro:', error));
 
     </script>
 </body>

@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var { utcToZonedTime, format } = require('date-fns-tz');
 
 var viewsSchema = new Schema({
     date: { 
@@ -10,12 +9,11 @@ var viewsSchema = new Schema({
             date.setMinutes(0);
             date.setSeconds(0);
             date.setMilliseconds(0);
-            var zonedDate = utcToZonedTime(date, 'America/Fortaleza');
-            return format(zonedDate, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: 'America/Fortaleza' });
+            return date.toISOString();
         }
     },
     quantidade: Number,
-},{collection:'views2'})
+},{collection:'views'})
 
 var Views = mongoose.model("Views",viewsSchema);
 

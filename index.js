@@ -8,7 +8,6 @@ const multer = require('multer'); // Middleware para lidar com upload de arquivo
 const nodemailer = require('nodemailer'); // Módulo para envio de emails
 const bcrypt = require('bcrypt'); // Módulo para criptografar senhas
 const mongoose = require("mongoose"); // ODM (Object Data Modeling) para MongoDB
-const moment = require('moment-timezone');
 
 const app = express(); // Inicializa a aplicação Express
 
@@ -73,8 +72,8 @@ app.get('/', async (req, res) => {
             res.render('home', { vagas, cargos });
         });
 
-        // Obtenha a data atual no fuso horário do Brasil
-        let today = moment().tz("America/Fortaleza").toDate();
+        // Obtenha a data atual
+        let today = new Date();
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
@@ -82,8 +81,11 @@ app.get('/', async (req, res) => {
         // Ajusta a data para a sua região
         today.setHours(today.getHours() - 3);
 
+        // Converte a data para uma string no formato ISO 8601
+        let isoToday = today.toISOString();
+
         // Tente encontrar um documento de visualizações para a data atual
-        let views = await Views.findOne({ date: today });
+        let views = await Views.findOne({ date: isoToday });
 
         if (views) {
             // Se um documento existir, incremente a quantidade
@@ -91,7 +93,7 @@ app.get('/', async (req, res) => {
             await views.save();
         } else {
             // Se nenhum documento existir, crie um novo
-            views = new Views({ date: today, quantidade: 1 });
+            views = new Views({ date: isoToday, quantidade: 1 });
             await views.save();
         }
     } catch (err) {
@@ -1103,8 +1105,8 @@ app.get('/:slug', async (req, res) => {
         // Renderiza a página 'vaga-single' com os detalhes da vaga
         res.render('vaga-single', {vaga, user});
 
-        // Obtenha a data atual no fuso horário do Brasil
-        let today = moment().tz("America/Fortaleza").toDate();
+        // Obtenha a data atual
+        let today = new Date();
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
@@ -1112,8 +1114,11 @@ app.get('/:slug', async (req, res) => {
         // Ajusta a data para a sua região
         today.setHours(today.getHours() - 3);
 
+        // Converte a data para uma string no formato ISO 8601
+        let isoToday = today.toISOString();
+
         // Tente encontrar um documento de visualizações para a data atual
-        let views = await Views.findOne({ date: today });
+        let views = await Views.findOne({ date: isoToday });
 
         if (views) {
             // Se um documento existir, incremente a quantidade
@@ -1121,7 +1126,7 @@ app.get('/:slug', async (req, res) => {
             await views.save();
         } else {
             // Se nenhum documento existir, crie um novo
-            views = new Views({ date: today, quantidade: 1 });
+            views = new Views({ date: isoToday, quantidade: 1 });
             await views.save();
         }
     } catch (err) {
@@ -1335,25 +1340,36 @@ app.get('/admin/painel/metricas', async (req, res) => {
 });
 
 
+
 app.get('/admin/api/views/last30days', async (req, res) => {
     try {
         let days = Array.from({length: 30}, (_, i) => 30 - i);
 
         let views = await Promise.all(days.map(async day => {
             let start = new Date();
+            start.setHours(start.getHours() - 4, 0, 0, 0); // Subtrai 3 horas aqui
             start.setDate(start.getDate() - day);
-            start.setHours(0, 0, 0, 0);
+            let isoStart = start.toISOString();
 
             let end = new Date(start);
-            end.setHours(23, 59, 59, 999);
+            end.setHours(end.getHours() + 23, 59, 59, 999); // Adiciona 23 horas aqui para manter o mesmo intervalo de 24 horas
+            let isoEnd = end.toISOString();
 
-            let dayViews = await Views.find({ date: { $gte: start, $lt: end } });
+            let dayViews = await Views.find({ date: { $gte: isoStart, $lt: isoEnd } });
             let totalViews = dayViews.reduce((sum, view) => sum + view.quantidade, 0);
 
             return totalViews;
         }));
 
-        res.json({ days, views });
+        // Converte as datas de início para strings representando apenas o dia do mês
+        let dates = days.map(day => {
+            let date = new Date();
+            date.setHours(date.getHours() - 3, 0, 0, 0);
+            date.setDate(date.getDate() - day);
+            return date.getDate().toString().padStart(2, '0'); // Retorna apenas o dia do mês
+        });
+
+        res.json({ dates, views });
     } catch (err) {
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar as visualizações.");
@@ -1361,17 +1377,21 @@ app.get('/admin/api/views/last30days', async (req, res) => {
 });
 
 
+
+
 // Rota para as últimas 24 horas
 app.get('/admin/api/views/last24hours', async (req, res) => {
     try {
         let views = await Promise.all(Array.from({length: 24}, async (_, i) => {
             let date = new Date();
-            date.setHours(date.getHours() - i - 4, 0, 0, 0); // Subtrai uma hora e mais 3 para corrigir timezone
-            let view = await Views.findOne({ date: date });
+            date.setHours(date.getHours() - i - 4, 0, 0, 0); // Subtrai uma hora e mais 3 para corrigir timezone  #linha para server
+            let isoDate = date.toISOString();
+
+            let view = await Views.findOne({ date: isoDate });
             return view ? view.quantidade : 0;
         }));
 
-        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i - 4 + 24) % 24).toString().padStart(2, '0')).reverse();
+        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i - 4 + 24) % 24).toString().padStart(2, '0')).reverse();  // Linha para server
 
         views.reverse();
 
@@ -1381,6 +1401,36 @@ app.get('/admin/api/views/last24hours', async (req, res) => {
         res.status(500).send("Erro ao buscar as visualizações.");
     }
 });
+
+
+// Rota para as últimas 48 horas
+app.get('/admin/api/views/last48hours', async (req, res) => {
+    try {
+        let views = await Promise.all(Array.from({length: 48}, async (_, i) => {
+            let start = new Date();
+            start.setHours(start.getHours() - i - 4, 0, 0, 0); // Subtrai uma hora e mais 3 para corrigir timezone
+            let end = new Date(start);
+            end.setMinutes(59, 59, 999); // Define o final do intervalo para o final da hora
+            let isoStart = start.toISOString();
+            let isoEnd = end.toISOString();
+
+            let view = await Views.findOne({ date: { $gte: isoStart, $lt: isoEnd } });
+            return view ? view.quantidade : 0;
+        }));
+
+        // let hours = Array.from({length: 48}, (_, i) => ((new Date().getUTCHours() - i - 4 + 24) % 24).toString().padStart(2, '0')).reverse();
+        // let hours = Array.from({length: 48}, (_, i) => ((new Date().getUTCHours() - i - 4 + 48) % 24).toString().padStart(2, '0')).reverse();
+        let hours = Array.from({length: 48}, (_, i) => ((new Date().getUTCHours() - i - 4 + 72) % 24).toString().padStart(2, '0')).reverse();
+
+        views.reverse();
+
+        res.json({ hours, views });
+    } catch (err) {
+        console.error("Ocorreu um erro:", err);
+        res.status(500).send("Erro ao buscar as visualizações.");
+    }
+});
+
 
 
 
