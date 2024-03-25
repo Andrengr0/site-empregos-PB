@@ -540,207 +540,6 @@ app.get('/adicionar/apoiador', async (req, res) => {
 });
 
 
-
-// app.post('/admin/cadastro/apoiador', async (req, res) => {
-//     try {
-//       const imagem = req.body.imagem_recortada;
-  
-//       const apoiador = await Apoiador.create({
-//         nome: req.body.nome_apoiador,
-//         link: req.body.link,
-//         imagem: imagem,
-//         plano: req.body.plano,
-//         statusPayment: 'pendente', // padrão
-//         dataCriada: new Date(),
-//         idUsuario: req.body.id_usuario,
-//       });
-  
-//       // Se for um plano pago, criar pagamento
-//       if (req.body.plano !== 'gratuito') {
-//         const valorPlano = calcularValorDoPlano(req.body.plano); // Implemente esta função
-//         const pagamento = await criarPagamentoMercadoPago(req, apoiador, valorPlano);
-//         apoiador.statusPayment = 'pendente'; // Status inicial é pendente
-  
-//         // Adicionar o ID do pagamento ao apoiador (você pode salvar no banco se quiser)
-//         apoiador.idPagamento = pagamento.id;
-//         await apoiador.save();
-  
-//         const link_pagamento = pagamento.point_of_interaction.transaction_data.ticket_url;
-//         console.log(link_pagamento)
-//         // Redirecionar para a página de pagamento
-//         // res.redirect(response.init_point);
-//         res.send({ link_pagamento });
-//       } else {
-//         // Se for gratuito, atualizar status para 'pago'
-//         apoiador.statusPayment = 'pago';
-//         await apoiador.save();
-//         return res.redirect('/admin/login');
-//       }
-//     } catch (err) {
-//       console.error('Erro ao cadastrar o apoiador:', err);
-//       res.status(500).send('Erro ao cadastrar o apoiador.');
-//     }
-//   });
-
-//   function calcularValorDoPlano(plano) {
-//     // Lógica para determinar o valor do plano
-//     // Substitua com sua própria lógica
-//     return plano === 'premium' ? 49.99 : plano === 'moderado' ? 9.99 : 0;
-//   }
-  
-// // Passo 1: Importe as partes do módulo que você deseja usar
-// const { MercadoPagoConfig, Payment} = require('mercadopago');
-
-// async function criarPagamentoMercadoPago(req, apoiador, valor) {
-//     const client = new MercadoPagoConfig({
-//       accessToken: 'TEST-87769228305025-011020-0cee964ae859bff392e5924e20606050-393147628', // Substitua pelo seu token real do Mercado Pago
-//       options: {
-//         timeout: 5000,
-//         idempotencyKey: 'abc',
-//       },
-//     });
-
-// const payment = new Payment(client);
-
-// const emailUsuario = req.session.email;
-// // console.log(emailUsuario);
-
-// const body = {
-//     transaction_amount: valor, // Substitua pelo valor desejado
-//     description: `Assinatura do Plano - ${apoiador.plano}`,
-//     payment_method_id: 'pix', // Substitua pelo ID do método de pagamento desejado
-//     payer: {
-//       email: `${emailUsuario}`, // Substitua pelo email do pagador
-//     },
-// };
-
-// try {
-//     const pagamento = await payment.create({ body });
-
-//     // console.log(pagamento)
-//     return pagamento;
-// } catch (error) {
-//     console.error('Erro ao criar pagamento no Mercado Pago:', error);
-//     throw error;
-// }
-// }
-
-
-
-
-// app.post('/webhook-mercado-pago', async (req, res) => {
-//     try {
-//       const evento = req.body;
-  
-//       // Verifique o tipo de evento
-//       if (evento.type === 'payment') {
-//         const pagamento = evento.data;
-  
-//         // Verifique se o pagamento foi confirmado
-//         if (pagamento.status === 'approved') {
-//           // Atualize o status do apoiador para 'pago' no banco de dados
-//           await atualizarStatusApoiador(pagamento.external_reference, 'pago');
-//         }
-//       }
-  
-//       res.status(200).send('OK');
-//     } catch (error) {
-//       console.error('Erro no webhook do Mercado Pago:', error);
-//       res.status(500).send('Erro no webhook do Mercado Pago.');
-//     }
-//   });
-  
-// async function atualizarStatusApoiador(idPagamento, novoStatus) {
-//     try {
-//       // Consulte o apoiador com base no idPagamento
-//       const apoiador = await Apoiador.findOne({ idPagamento });
-  
-//       if (!apoiador) {
-//         console.error('Apoiador não encontrado:', idPagamento);
-//         return;
-//       }
-  
-//       // Atualize o statusPayment
-//       apoiador.statusPayment = novoStatus;
-//       await apoiador.save();
-//       console.log(`Status do apoiador atualizado para ${novoStatus}:`, idPagamento);
-//     } catch (error) {
-//       console.error('Erro ao atualizar status do apoiador:', error);
-//     }
-// }
-
-// // ///////////////////////////////////////////////////
-
-// // Lógica de verificação periódica (pode ser um cron job ou outra estratégia)
-// function verificarPagamentosPendentes() {
-//     // Lógica para obter todos os pagamentos pendentes do seu sistema ou banco de dados
-//     const pagamentosPendentes = obterPagamentosPendentes();
-
-//     // Verificar cada pagamento
-//     pagamentosPendentes.forEach(async (pagamento) => {
-//         const tempoDecorrido = calcularTempoDecorrido(pagamento.dataCriacao);
-
-//         // Se o pagamento está pendente por mais de 10 minutos, cancelar
-//         if (tempoDecorrido > 10 * 60 * 1000) { // 10 minutos em milissegundos
-//             try {
-//                 // Utilize a API do Mercado Pago para cancelar o pagamento
-//                 await cancelarPagamentoNoMercadoPago(pagamento.idPagamento);
-//                 // Atualize o status do pagamento no seu sistema como cancelado
-//                 marcarPagamentoComoCancelado(pagamento.id);
-//             } catch (error) {
-//                 console.error('Erro ao cancelar pagamento:', error);
-//             }
-//         }
-//     });
-// }
-
-// // Exemplo de como calcular o tempo decorrido desde a criação
-// function calcularTempoDecorrido(dataCriacao) {
-//     const agora = new Date();
-//     const tempoDecorrido = agora - new Date(dataCriacao);
-//     return tempoDecorrido;
-// }
-
-// // Exemplo de como obter pagamentos pendentes do seu sistema ou banco de dados
-// function obterPagamentosPendentes() {
-//     // Lógica para obter os pagamentos pendentes do seu sistema ou banco de dados
-//     // Retorne uma lista de pagamentos pendentes
-//     return listaDePagamentosPendentes;
-// }
-
-// // Exemplo de como cancelar um pagamento no Mercado Pago
-// async function cancelarPagamentoNoMercadoPago(idPagamento) {
-//     // Utilize a API do Mercado Pago para cancelar o pagamento
-//     // Substitua 'API_DO_MERCADO_PAGO' pelo seu token de acesso real
-//     const mercadoPagoClient = new MercadoPagoClient({ accessToken: 'API_DO_MERCADO_PAGO' });
-//     const pagamentoAPI = new PagamentoAPI(mercadoPagoClient);
-
-//     await pagamentoAPI.cancelarPagamento(idPagamento);
-// }
-
-// // Exemplo de como marcar um pagamento como cancelado no seu sistema ou banco de dados
-// function marcarPagamentoComoCancelado(idPagamento) {
-//     // Lógica para atualizar o status do pagamento no seu sistema como cancelado
-// }
-
-// // ////////////////////////////////
-  
-
-// const cron = require('node-cron');
-
-// // agendar tarefa para ser executada a cada hora
-// cron.schedule('0 * * * *', async () => {
-//     const agora = new Date();
-//     const vinteQuatroHorasAtras = new Date(agora - 24 * 60 * 60 * 1000);
-
-//     // encontrar e deletar todos os apoiadores com plano 'gratuito' criados há mais de 24 horas
-//     await Apoiador.deleteMany({
-//         plano: 'gratuito',
-//         dataCriada: { $lt: vinteQuatroHorasAtras }
-//     });
-// });
-
-
 // Rota para deletar um apoiador específico
 app.get('/admin/deletar/apoiador/:id/:imagem', (req, res) => {
     // Verifica se há uma sessão ativa
@@ -870,6 +669,8 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
     try {
         // // Extrai os dados do corpo da requisição
         // const imagem = req.body.imagem_recortada;
+        let date = new Date();
+        date.setHours(date.getHours() - 3);
 
         // Cria uma nova vaga no banco de dados com base nos dados recebidos do formulário
         const vaga = await Vagas.create({
@@ -885,7 +686,7 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             link: req.body.link_vaga,
             contato: req.body.contato_vaga.toLowerCase(),
             // imagem: imagem,
-            dataCriada: new Date().toLocaleString('pt-br').substr(0, 10),
+            dataCriada: date.toLocaleString('pt-br').substr(0, 10),
             slug: new Date().getTime(),
             idUsuario: req.body.id_usuario
         });
@@ -907,6 +708,7 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
         res.status(500).send('Erro ao cadastrar a vaga.');
     }
 });
+
 
 // Rota para cadastrar uma nova imagem
 app.post('/admin/cadastro/imagem', (req, res) => {
@@ -1340,15 +1142,15 @@ app.get('/admin/painel/metricas', async (req, res) => {
 });
 
 
-
 app.get('/admin/api/views/last30days', async (req, res) => {
     try {
         let days = Array.from({length: 30}, (_, i) => 30 - i);
 
         let views = await Promise.all(days.map(async day => {
             let start = new Date();
-            start.setHours(start.getHours() - 4, 0, 0, 0); // Subtrai 3 horas aqui
             start.setDate(start.getDate() - day);
+            start.setHours(0, 0, 0, 0); // Define a hora como 0
+            // start.setHours(start.getHours() - 3, 0, 0, 0); // Subtrai 3 horas 
             let isoStart = start.toISOString();
 
             let end = new Date(start);
@@ -1377,8 +1179,6 @@ app.get('/admin/api/views/last30days', async (req, res) => {
 });
 
 
-
-
 // Rota para as últimas 24 horas
 app.get('/admin/api/views/last24hours', async (req, res) => {
     try {
@@ -1391,7 +1191,8 @@ app.get('/admin/api/views/last24hours', async (req, res) => {
             return view ? view.quantidade : 0;
         }));
 
-        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i - 4 + 24) % 24).toString().padStart(2, '0')).reverse();  // Linha para server
+        let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i - 4 + 48) % 24).toString().padStart(2, '0')).reverse();  // Linha para server
+        // let hours = Array.from({length: 24}, (_, i) => ((new Date().getHours() - i - 1 + 48) % 24).toString().padStart(2, '0')).reverse();
 
         views.reverse();
 
@@ -1418,8 +1219,6 @@ app.get('/admin/api/views/last48hours', async (req, res) => {
             return view ? view.quantidade : 0;
         }));
 
-        // let hours = Array.from({length: 48}, (_, i) => ((new Date().getUTCHours() - i - 4 + 24) % 24).toString().padStart(2, '0')).reverse();
-        // let hours = Array.from({length: 48}, (_, i) => ((new Date().getUTCHours() - i - 4 + 48) % 24).toString().padStart(2, '0')).reverse();
         let hours = Array.from({length: 48}, (_, i) => ((new Date().getUTCHours() - i - 4 + 72) % 24).toString().padStart(2, '0')).reverse();
 
         views.reverse();
