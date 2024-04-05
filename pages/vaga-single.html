@@ -6,6 +6,15 @@
     <title>EmpregosPB - <%=vaga.titulo%></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="../public/style_tela_cadastro.css"> -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X28D7CVFC0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-X28D7CVFC0');
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
@@ -127,20 +136,25 @@
         #titulo{
             position: absolute;
             width: 1080px;
-            top: 85px;
+            padding: 0 22px;
+            top: 110px;
             transform: translateY(-50%);
-            font-size: 48px;
+            font-size: 62px;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
             text-align: center;
             z-index: 3;
+            color: #ffffff;
         }
 
         #cidade{
             position: absolute;
-            width: 600px;
-            top: 213px;
-            right: 13px;
-            font-size: 34px;
-            font-weight: 600;
+            width: 620px;
+            top: 235px;
+            right: 3px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
             text-align: center;
             z-index: 3;
         }
@@ -156,17 +170,17 @@
             text-align: center;
             color: #222222;
             z-index: 3;
-            max-height: calc(72px * 7); /* Define a altura máxima em pixels (34px é a altura de uma linha) */
+            max-height: calc(72px * 8); /* Define a altura máxima em pixels (34px é a altura de uma linha) */
             overflow: hidden; /* Oculta o texto que estiver além da altura máxima */
         }
 
         #mais-detalhes{
             position: absolute;
             width: 830px;
-            bottom: 170px;
+            bottom: 118px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 40px;
+            font-size: 42px;
             font-weight: 500;
             color: #43146c;
             text-align: center;
@@ -254,6 +268,10 @@
                     <%
                     // Remover palavras do início do texto
                     function removerPalavrasIniciais(textoDecodificado) {
+                        // Verificar se o textoDecodificado é undefined
+                        if (!textoDecodificado) {
+                            return '';
+                        }
                         // Verificar se o texto começa com a tag <br>
                         var tagRemovida = false;
                         if (textoDecodificado.startsWith('<br>') || textoDecodificado.startsWith('<br />')) {

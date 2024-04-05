@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-        <title>Empregos CG</title>
+        <title>Empregos PB</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="../../public/style_panel.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
@@ -42,6 +42,7 @@
                             <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/filtro/vagas"><span><i class="fa fa-filter" aria-hidden="true"></i></span>Filtro de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/cadastrar-vaga"><span><i class="fa fa-plus" aria-hidden="true"></i></span>Cadastrar vaga</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                            <li><a class="a1" href="/admin/painel/metricas"><span><i class="fa fa-line-chart" aria-hidden="true"></i></span>Metricas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/usuarios"><span><i class="fa fa-user" aria-hidden="true"></i></span>Usuários</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/apoiadores"><span><i class="fa fa-handshake-o" aria-hidden="true"></i></span>Apoiadores</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                             <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
@@ -50,6 +51,7 @@
                                 <li><a class="a1" href="/admin/login"><span><i class="fa fa-home" aria-hidden="true"></i></span>Painel de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                                 <li><a class="a1" href="/filtro/vagas"><span><i class="fa fa-filter" aria-hidden="true"></i></span>Filtro de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                                 <li><a class="a1" href="/cadastrar-vaga"><span><i class="fa fa-plus" aria-hidden="true"></i></span>Cadastrar vaga</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
+                                <li><a class="a1" href="/admin/painel/metricas"><span><i class="fa fa-line-chart" aria-hidden="true"></i></span>Metricas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                                 <li><a class="a1" href="/usuarios"><span><i class="fa fa-user" aria-hidden="true"></i></span>Usuários</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                                 <li><a class="a1" href="/dados-pessoais"><span><i class="fa fa-id-card-o" aria-hidden="true"></i></span>Dados pessoais</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
                                 <li><a class="a1" href="/cargos-vagas"><span><i class="fa fa-building" aria-hidden="true"></i></span>Cargos de vagas</a><i class="fa fa-caret-left" aria-hidden="true"></i></li>
@@ -114,8 +116,16 @@
                             </div>
                             <div class="modal-body text-left">
                                 <% if(vagas[i].descricao) {%>
-                                    <% const textoDecodificado = decodeURIComponent(vagas[i].descricao).replace(/\n/g, '<br>'); %>
-                                    <p class="mt-4"><%- textoDecodificado %></p>
+                                <% var textoDecodificado;
+                                try {
+                                    const descricaoTemp = vagas[i].descricao.replace(/\n/g, 'QUEBRADELINHA');
+                                    const descricaoDecodificada = unescape(descricaoTemp);
+                                    textoDecodificado = descricaoDecodificada.replace(/QUEBRADELINHA/g, '<br>').replace(/-\s/g, '• ');
+                                } catch (e) {
+                                    console.error(e);  // Log the error
+                                    textoDecodificado = vagas[i].descricao;  // Use the original string as a fallback
+                                } %>
+                                <p><%- textoDecodificado %></p>
                                 <% } %>
                             </div><!-- modal-body -->
                             <div class="modal-footer">

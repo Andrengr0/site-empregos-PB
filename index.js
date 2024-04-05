@@ -33,8 +33,8 @@ const Apoiador = require('./Apoiador.js');
 const Views = require('./Views.js');
 
 // Conexão com o banco de dados MongoDB (produção)
-mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/EmpregosPB?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }).then(function(){
+mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/EmpregosPB?retryWrites=true&w=majority")
+    .then(function(){
         console.log('Conectado com sucesso!');
     }).catch(function(err){
         console.log(err.message);
@@ -1149,8 +1149,8 @@ app.get('/admin/api/views/last30days', async (req, res) => {
         let views = await Promise.all(days.map(async day => {
             let start = new Date();
             start.setDate(start.getDate() - day);
+            start.setHours(start.getHours() - 3, 0, 0, 0); // Subtrai 3 horas 
             start.setHours(0, 0, 0, 0); // Define a hora como 0
-            // start.setHours(start.getHours() - 3, 0, 0, 0); // Subtrai 3 horas 
             let isoStart = start.toISOString();
 
             let end = new Date(start);
@@ -1245,7 +1245,7 @@ app.get('/sair/painel/usuario', (req, res) => {
     });
 });
 
-// Inicia o servidor na porta 3000
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+// Inicia o servidor na porta 8080
+app.listen(8080, () => {
+    console.log('Servidor rodando na porta 8080');
 });
