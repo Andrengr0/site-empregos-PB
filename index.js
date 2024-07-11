@@ -40,6 +40,14 @@ mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.n
         console.log(err.message);
     });
 
+// // Conexão para testes
+// mongoose.connect("mongodb+srv://root:uTKJaYuRHvJuAN0C@cluster0.5glkwii.mongodb.net/test?retryWrites=true&w=majority")
+//     .then(function(){
+//         console.log('Conectado com sucesso ao banco de testes!');
+//     }).catch(function(err){
+//         console.log(err.message);
+//     });
+
 // Configuração do body-parser para parsear payloads JSON e codificados em URL com limite aumentado
 app.use(bodyParser.json({ limit: '200mb' }));
 app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
@@ -664,11 +672,36 @@ app.post('/admin/cadastro/cargo', upload.single('form_cargo'), async (req, res) 
     }
 });
 
+
+// Configuração do Nodemailer (configure conforme o seu provedor de e-mail)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'empregospbweb@gmail.com',
+        pass: 'opid xtkm vqxg nsmg'
+    }
+});
+
+function enviarNotificacaoPorEmail(destinatario, link) {
+    const mailOptions = {
+        from: 'empregospbweb@gmail.com',
+        to: destinatario,
+        subject: 'Nova Vaga Cadastrada',
+        text: `Uma nova vaga foi cadastrada. Confira no link: ${link}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Erro ao enviar o e-mail:', error);
+        } else {
+            console.log('E-mail de notificação enviado:', info.response);
+        }
+    });
+}
+
 // Rota para cadastrar uma nova vaga
 app.post('/admin/cadastro/vaga', async (req, res) => {
     try {
-        // // Extrai os dados do corpo da requisição
-        // const imagem = req.body.imagem_recortada;
         let date = new Date();
         date.setHours(date.getHours() - 3);
 
@@ -693,13 +726,20 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
 
         // Verifica o estado do switch antes de salvar a vaga
         const switchState = await Switch.findOne();
-        if(switchState.estado === '0'){
+        if (switchState.estado === '0') {
             // Se o switch estiver desligado, marca a versão da vaga como 1
-            vaga.__v = 1
+            vaga.__v = 1;
             // Salva a vaga com a versão marcada
             await vaga.save();
         }
 
+        // Verifica se o usuário é administrador
+        const usuario = await Usuarios.findById(req.body.id_usuario);
+        if (usuario && (usuario.adm !== "super" || usuario.adm !== "med")) {
+            // Envia notificação por e-mail
+            const linkVaga = `https://empregospb.com/${vaga.slug}`;
+            enviarNotificacaoPorEmail('empregospbweb@gmail.com', linkVaga);
+        }
         // Redireciona para a página de login do administrador após o cadastro da vaga
         res.redirect('/admin/login');
     } catch (err) {
@@ -959,17 +999,6 @@ app.get('/:slug/:user', async (req, res) => {
         // Em caso de erro, exibe uma mensagem de erro e status 500
         console.error("Ocorreu um erro:", err);
         res.status(500).send("Erro ao buscar a vaga.");
-    }
-});
-
-
-
-// Configuração do Nodemailer (configure conforme o seu provedor de e-mail)
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'empregospbweb@gmail.com',
-        pass: 'lsxh fswu pzjl jque'
     }
 });
 
