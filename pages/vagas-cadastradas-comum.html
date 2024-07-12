@@ -10,27 +10,24 @@
                     <div class="box-vagas">
 
                         <% if (vagas.length > 0) { %>
-                            <% for(let i = 0; i < vagas.length; i++){ %>
-                    
-                            <div class="row vaga-single mt-1 <%= vagas[i].usuarioType ? 'usuario-comum' : '' %>">
-                                <div class="col-sm-8 titulo-vaga">
-                                    <h5><%= vagas[i].titulo %><span>- <%= vagas[i].dataCriada %> </span>
-                                    <% if(vagas[i].status == 0) { %>
-                                        <span>-  Em análise, aguarde um pouco...</span>
-                                    <% } %>
-                                    </h5>
-                                </div>
+                            <% for(let i=0; i < vagas.length; i++){ %>
+        
+                            <div class="row vaga-single mt-1">
+                                <div class="col-sm-8 titulo-vaga"><h5><%= vagas[i].titulo%><span>- <%= vagas[i].dataCriada%> </span>
+                                <% if(vagas[i].status == 0) {%>
+                                    <span>-  Em análise, aguarde um pouco...</span>
+                                <% } %>
+                                </h5></div>
                                 <div class="col-sm-4">
-                                    <a href="/<%= vagas[i].slug + "/usuarioLog" %>">Detalhes</a>
-                                    <button class="deletar-vaga" id="<%= vagas[i].id %>"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    <a href="/<%=vagas[i].slug+"/usuarioLog"%>">Detalhes</a>
+                                    <button class="deletar-vaga" id="<%=vagas[i].id%>"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </div> <!-- col-md-6 -->
                             </div><!-- row -->
-                    
-                            <div class="janela-float <%= vagas[i].id %>" style="display: none;">
+        
+                            <div class="janela-float <%=vagas[i].id%>" style="display: none;">
                                 <div class="float-box">
                                     <h4>Deseja realmente excluir essa vaga?</h4>
-                                    <a href="/deletar/vaga/<%= vagas[i].id %>" id="btn-excluir">Excluir</a>   
-                                    <button class="btn-cancelar">Cancelar</button>
+                                    <a href="/deletar/vaga/<%=vagas[i].id%>" id="btn-excluir">Excluir</a>   <button class="btn-cancelar">Cancelar</button>
                                 </div>
                             </div>
                             <% } %>
@@ -38,7 +35,6 @@
                         <p>Nenhuma vaga disponível.</p>
                         <% } %>
                     </div>
-                    
                 </div><!-- container-site -->
             </section><!-- vagas-cadastradas -->
         </div><!-- box-content-painel -->

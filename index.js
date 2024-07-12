@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 var session = require('express-session');
 app.use(session({ 
     secret: 'keyboard cat', 
-    cookie: { maxAge: 720000 },
+    cookie: { maxAge: 1200000 },
     resave: false, 
     saveUninitialized: true  
 }));
@@ -243,7 +243,8 @@ app.get('/admin/login', async (req,res)=>{
                         // imagem: val.imagem,
                         slug: val.slug,
                         dataCriada: val.dataCriada,
-                        status: val.__v
+                        status: val.__v,
+                        usuarioType: val.usuarioType
                     }
                 })
                 res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario, totalViews: totalViews[0].total});
@@ -262,7 +263,7 @@ app.get('/admin/login', async (req,res)=>{
                         status: val.__v
                     }
                 })
-                res.render('vagas-cadastradas', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
+                res.render('vagas-cadastradas-comum', {vagas: vagas, nomeUsuario: usuario.nome, autUsuario});
             })
         }
     }
@@ -705,6 +706,9 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
         let date = new Date();
         date.setHours(date.getHours() - 3);
 
+        const usuario = await Usuarios.findById(req.body.id_usuario);
+        const comum = !usuario || (usuario.adm != 'super' && usuario.adm != 'med');
+
         // Cria uma nova vaga no banco de dados com base nos dados recebidos do formulário
         const vaga = await Vagas.create({
             titulo: req.body.titulo_vaga,
@@ -721,32 +725,28 @@ app.post('/admin/cadastro/vaga', async (req, res) => {
             // imagem: imagem,
             dataCriada: date.toLocaleString('pt-br').substr(0, 10),
             slug: new Date().getTime(),
-            idUsuario: req.body.id_usuario
+            idUsuario: req.body.id_usuario,
+            usuarioType: comum
         });
 
         // Verifica o estado do switch antes de salvar a vaga
         const switchState = await Switch.findOne();
         if (switchState.estado === '0') {
-            // Se o switch estiver desligado, marca a versão da vaga como 1
             vaga.__v = 1;
-            // Salva a vaga com a versão marcada
             await vaga.save();
         }
 
-        // Verifica se o usuário é administrador
-        const usuario = await Usuarios.findById(req.body.id_usuario);
-        if (usuario && (usuario.adm !== "super" || usuario.adm !== "med")) {
-            // Envia notificação por e-mail
+        if (comum) {
             const linkVaga = `https://empregospb.com/${vaga.slug}`;
             enviarNotificacaoPorEmail('empregospbweb@gmail.com', linkVaga);
         }
-        // Redireciona para a página de login do administrador após o cadastro da vaga
+
         res.redirect('/admin/login');
     } catch (err) {
-        // Em caso de erro, exibe uma mensagem de erro e status 500
         console.error('Erro ao cadastrar a vaga:', err);
         res.status(500).send('Erro ao cadastrar a vaga.');
     }
+
 });
 
 

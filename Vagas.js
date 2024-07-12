@@ -17,7 +17,8 @@ var vagaSchema = new Schema({
     imagem: String,
     dataCriada: String,
     slug: String,
-    idUsuario: String
+    idUsuario: String,
+    usuarioType: Boolean
 },{collection:'vagas'})
 
 var Vagas = mongoose.model("Vagas",vagaSchema);

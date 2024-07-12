@@ -244,6 +244,11 @@ section.vagas-cadastradas .container-site{
     border: 2px dashed #363636;
 }
 
+.box-vagas .vaga-single.usuario-comum{
+    border: 2px dashed #4437fc;
+    color: #4437fc;
+}
+
 .vaga-single h5{
     font-size: 16px;
     font-weight: bold;
