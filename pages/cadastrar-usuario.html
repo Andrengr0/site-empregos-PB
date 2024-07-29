@@ -31,7 +31,7 @@
         padding: 30px;
         border-radius: 4%;
         box-shadow: 3px 3px 1px 0px #00000060;
-        width: 400px;
+        max-width: 400px;
         }
 
         h2{
@@ -136,6 +136,19 @@
         #btnRedirectLogin{
             background-color: #0f1033;
             color: #f3f3f3;
+        }
+
+        @media (max-width: 580px) {
+
+            .container{
+                height: 100vh;
+                margin-top: 0;
+                overflow: hidden;
+            }
+            .card{
+                height: 100%;
+                border-radius: 0;
+            }
         }
     </style>
 </head>
